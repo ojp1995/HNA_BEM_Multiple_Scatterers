@@ -53,5 +53,5 @@ for j = 1:(length(N) - 1)
     
 end
 
-
+% test
 disp(EOC.')
