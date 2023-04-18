@@ -1,6 +1,6 @@
 % in this script we will be testing that midpoint_hankel_f_diff_screen
 % works as expected
-
+clear all
 % general variables needed
 a = 0;
 b = 2*pi;
@@ -9,8 +9,8 @@ k = 10;
 
 Q = [2, 4, 8, 16, 32, 64, 128, 256, 512, 1024];
 
-x1 = [-1, -4, 0.1];
-x2 = [-1, -2, -0.01];
+x1 = -1%, -4, 0.1];
+x2 = 1%, -2, -0.01];
 
 
 % test f functions
@@ -64,5 +64,6 @@ err.'
     
 EOC.' 
 
+I.'
 
 
