@@ -6,7 +6,7 @@ clear all
 clear classes
 
 % adding path to Andrews code
-addpath('/Users/ojp18/Dropbox/PhD_DB/MATLAB/Andrew_Gibbs_new/HNABEMLAB-master/Examples/OP_functions')
+% addpath('/Users/ojp18/Dropbox/PhD_DB/MATLAB/Andrew_Gibbs_new/HNABEMLAB-master/Examples/OP_functions')
 
 % adding path to integrators etc
 addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
@@ -16,7 +16,7 @@ addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/G
 % Geometric set up
 % vertices1 = [-2*pi 0;
 %     0 0];
-
+% 
 vertices1 = [-2*pi 2*pi;
     0, 0];
 Gamma1=Screen(vertices1);
@@ -33,8 +33,8 @@ Gamma2=Screen(vertices2);
 % General set up
 %wavenumber
 kwave=10;
-
-theta = pi/4; %% need to change so it is consistent
+theta = 0;
+% theta = pi/4; %% need to change so it is consistent
 d = [sin(theta) -cos(theta) ];
 uinc=planeWave(kwave,d);
 
@@ -103,7 +103,7 @@ title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 % Step 1
 N_approx_inner = N_approx/2;
-[x1_t_inner, y1_t_inner, ~, t1_mid_inner, h1_inner, ~, ~, ~] = discretisation_variables(G1, N_approx_inner, kwave);
+[x1_t_inner, y1_t_inner, ~, t1_mid_inner, h1_inner, ~, ~, ~] =  discretisation_variables(G1, N_approx_inner, kwave);
 [v_N_G2_r_1]  = multiple_scattering_2screen_step1(kwave, theta,...
     x2_col, y2_col, col_points2, vertices2, L2, x2, y2, t2_mid, t2, ...
     h2, C1, C2, d, vertices1, L1, x1, y1, h1, ...
