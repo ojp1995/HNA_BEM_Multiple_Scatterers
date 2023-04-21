@@ -65,8 +65,8 @@ y2_col = vertices2(1, 2) + col_points2*( vertices2(2, 2) - vertices2(1, 2) )/L1;
 G1 = [vertices1(1, 1), vertices1(1, 2), vertices1(2, 1), vertices1(2, 2)];
 G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
 
-n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)];
-n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)];
+n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)]/L1;
+n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
 
 % dui_dn1 = @(nodes) duidn(vertices1, L1, kwave, d, nodes);
 % dui_dn2 = @(nodes) duidn(vertices2, L2, kwave, d, nodes);
@@ -101,9 +101,23 @@ xlim([-0.05 1.05])
 title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 
-% Step 1
+% % Step 1
 N_approx_inner = N_approx/2;
 [x1_t_inner, y1_t_inner, ~, t1_mid_inner, h1_inner, ~, ~, ~] =  discretisation_variables(G1, N_approx_inner, kwave);
+
+% Q_max = 10;
+% %testing the convergence of the inner integral to see if it converges
+% [Psi_2_1_int, err, err_aver] = Psi_2_0_int_conv_test(kwave, d, Q_max, G1, vertices1, x2, y2, v_N_G1_r0, n2);
+% 
+% figure();
+% for q = 1:Q_max
+%     txt = ['#dof = ', num2str(2^q)];
+%     plot(t2_mid, real(Psi_2_1_int(q, :)), 'DisplayName', txt)
+%     hold on 
+% 
+% end
+% legend show
+
 [v_N_G2_r_1]  = multiple_scattering_2screen_step1(kwave, theta,...
     x2_col, y2_col, col_points2, vertices2, L2, x2, y2, t2_mid, t2, ...
     h2, C1, C2, d, vertices1, L1, x1, y1, h1, ...
@@ -112,9 +126,12 @@ N_approx_inner = N_approx/2;
 
 % constructing solution for plotting
 phi1_0_vec = v_N_G1_r0.eval(t1_mid.', 1) + 2*duidn(vertices1, L1, kwave, d, t1_mid.');
+
+LoB_int = 1i*kwave*midpoint_dphikdn_f_diff_screen( kwave, x2_plot, ...
+    y2_plot, h1, x1, y1, phi1_0_vec.', n2)/2;
+
 Psi2_1_vec = 2*duidn(vertices2, L2, kwave, d, x2_plot_1D.') ...
-    + 1i*kwave*midpoint_dphikdn_f_diff_screen( kwave, x2_plot, y2_plot,...
-    h1, x1, y1, phi1_0_vec.', n2)/2;
+    + LoB_int
 phi2_1 = v_N_G2_r_1.eval(x2_plot_1D.', 1) + Psi2_1_vec;
 
 figure()
@@ -125,6 +142,20 @@ legend show
 xlim([-0.05 1.05])
 title('Soluiton on the boundary for r=1, screens in line, long way away')
 
+figure()
+plot(t1_mid, real(phi1_0_vec))
+title('$\phi_{1}^{(0)}$ plot for integral')
+
+figure()
+plot(x2_plot_1D, real(Psi2_1_vec))
+title('$\Psi_{2}^{(1)}$')
+
+figure()
+plot(x2_plot_1D, real(LoB_int.'))
+title('Integral inside of $\Psi_{2}^{(1)}$')
+
+figure(); 
+plot(x2_plot_1D.', real(2*duidn(vertices2, L2, kwave, d, x2_plot_1D.') + 2*LoB_int))
 
 
 % Step 2

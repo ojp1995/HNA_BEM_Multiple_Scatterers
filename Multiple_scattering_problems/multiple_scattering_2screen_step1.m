@@ -36,8 +36,12 @@ LoB_1 = 2*PIM_int_hankel_f(kwave, col_points2, h2, nq2, f_duidn, tq2, C1, C2);
 % inner integral: "collocation points" = integration nodes for \Gamma_{2}
 %                   integration nodes = integration nodes are \Gamma_{1}
 phi1_0_int_inner = v_N_G1_r0.eval(nq1_inner.', 1) + 2*duidn(vertices1, L1, kwave, d, nq1_inner.');
-inner_int = 1i*kwave*midpoint_dphikdn_f_diff_screen(kwave, x2nq2, y2nq2, ...
-    h1_inner, x1_t_inner, y1_t_inner, phi1_0_int_inner.', n2 )/2;
+
+inner_int = midpoint_dphikdn_f_diff_screen(kwave, x2nq2, y2nq2, ...
+    h1_inner, x1_t_inner, y1_t_inner, phi1_0_int_inner.', n2 );
+% 
+% inner_int = 1i*kwave*midpoint_dphikdn_f_diff_screen(kwave, x2nq2, y2nq2, ...
+%     h1_inner, x1_t_inner, y1_t_inner, phi1_0_int_inner.', n2 )/2;
 
 LoB_2 = PIM_int_hankel_f(kwave, col_points2, h2, nq2, inner_int.', tq2, C1, C2);
 
