@@ -12,7 +12,7 @@ t_lower = tq(1:end - 1);
 t_upper = tq(2:end);
 
 % I = 0;
-
+I = zeros(length(s), 1);
 for j = 1:length(s)
 
     dist = abs(s(j) - nq);
@@ -20,6 +20,11 @@ for j = 1:length(s)
     I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
         +  h*fnq.*( 1i*besselh(0, k*dist)/4 + smoothing_function(nq, C1, C2).*besselj(0, k*dist).*log(k*dist)/(2*pi) ) );
 
+
+% Trying to introduce new function, doesn't really work yet
+% m2(k, s(j), nq, C1, C2)
+
+% 1i*besselh(0, k*dist)/4 + smoothing_function(nq, C1, C2).*besselj(0, k*dist).*log(k*dist)/(2*pi)
    
 
 end
