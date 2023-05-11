@@ -9,7 +9,7 @@ function z = duidn(G, L, k, d, t)
 % L is the length of the screen
 % k the wavenumber
 % d is the direction of the incident wave.
-% t is the vecotr of points we are evaluating this at, we are assuming that
+% t is the vector of points we are evaluating this at, we are assuming that
 % it has been parameterised before hand
 
 % Caution, not sure if this can handle vectors for the x yet.
