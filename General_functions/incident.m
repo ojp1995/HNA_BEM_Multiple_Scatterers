@@ -1,4 +1,4 @@
-function z = robhop_PW_incident(k, theta, x1, y1)
+function z = incident(k, theta, x1, y1)
 % robust adapting method
 %
 % here we will compute the plane wave incident for a screen with
