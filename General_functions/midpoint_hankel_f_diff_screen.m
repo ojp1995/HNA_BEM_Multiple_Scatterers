@@ -1,4 +1,4 @@
-function I = midpoint_hankel_f_diff_screen(k, x1, x2, y1t, y2t, h, nq, fnq)
+function I = midpoint_hankel_f_diff_screen(k, x1, x2, y1t, y2t, h, fnq)
 % Is this function we will be using the midpoint to approximate the
 % following integral:
 % 	i/4 \int_{0}^{L_2} H_{0}^{(1)}( k | \xb - \yb(t) | )f(t) d t
@@ -11,7 +11,6 @@ function I = midpoint_hankel_f_diff_screen(k, x1, x2, y1t, y2t, h, nq, fnq)
     % the integral at. Both scalar
     % (y1t, y2t) - Integration nodes Vector values.
     % h is the step size/integration weights
-    % nq is the integration nodes - vector value, maybe not needed
     % fnq - function evaluated at integration nodes, is a vector value.
 % Outputs:
     % I - approximation to integral 
