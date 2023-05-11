@@ -16,6 +16,6 @@ function phi_j_r = get_phi_j_r(coeffs, Gj, Lj, k, d, h_ell, y1_ell, ...
 % d, direction of incident wave
 
 LoB = midpoint_dphikdn_f_diff_screen(k, xj, yj, h_ell, y1_ell, y2_ell, ...
-    phi_jn1_rn1, nj);
+    phi_jn1_rn1.', nj);
 
-phi_j_r = coeffs.eval(t1d, 1) + 2*duidn(Gj, Lj, k, d, t1d) + LoB;
+phi_j_r = coeffs.eval(t1d, 1) + 2*duidn(Gj, Lj, k, d, t1d).' + LoB;
