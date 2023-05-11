@@ -24,7 +24,7 @@ function [v_N_G1_r0] = multiple_Scattering_2screen_step0(kwave, theta, ...
 % Need to compute the right hand side, two steps, leading order term
 % integrated and then also the incident wave
 
-u_inc = robhop_PW_incident(kwave, theta, x1_col, y1_col);
+u_inc = incident(kwave, theta, x1_col, y1_col);
 
 f_duidn = duidn(vertices1, L1, kwave, d, nq);
 LoB = 2*PIM_int_hankel_f(kwave, col_points1, h, nq, f_duidn, tq, C1, C2);

@@ -20,7 +20,7 @@ function [v_N_G2_r_1]  = multiple_scattering_2screen_step1(kwave, theta,...
 % Outputs
 
 % incident wave:
-u_inc = robhop_PW_incident(kwave, theta, x2_col, y2_col);
+u_inc = incident(kwave, theta, x2_col, y2_col);
 
 % Hankel function multiplied by phi_{1}^{(0)}
 phi_1_0_int1 = v_N_G1_r0.eval(nq1_outer.', 1) + 2*duidn(vertices1, L1, kwave, d, nq1_outer.');
