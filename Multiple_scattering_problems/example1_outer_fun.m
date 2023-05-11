@@ -131,7 +131,7 @@ LoB_int = 1i*kwave*midpoint_dphikdn_f_diff_screen( kwave, x2_plot, ...
     y2_plot, h1, x1, y1, phi1_0_vec.', n2)/2;
 
 Psi2_1_vec = 2*duidn(vertices2, L2, kwave, d, x2_plot_1D.') ...
-    + LoB_int
+    + LoB_int;
 phi2_1 = v_N_G2_r_1.eval(x2_plot_1D.', 1) + Psi2_1_vec;
 
 figure()
