@@ -113,6 +113,20 @@ f_ell2_r1 = compute_RHS_vec_given_coll_vec(vertices2, L2, kwave, d, ...
 
 % this part of the function is given f and A compute the coefficients and
 % then ideally provide a function for approximating 
+aj_2_r1 = colMatrix2\f_ell2_r1;
+v_N_G2_r1 = ProjectionFunction(aj_2_r1, VHNA2);
+
+phi2_r1 = @(t2_1da, x2a, y2a, t1_1da) v_N_G2_r1.eval(t2_1da, 1) ...
+    + 2*duidn(vertices2, L2, kwave, d, t2_1da).'...
+    + midpoint_dphikdn_f_diff_screen(kwave, x2a, y2a, h1, x1, ...
+    y1, phi1_0(t1_1da.').', n2);
+
+figure()
+plot(x2_plot_1D/L2, real( phi2_r1( x2_plot_1D, x2_plot, y2_plot, t1_mid ) ))
+
+
+
+
 
 
 
