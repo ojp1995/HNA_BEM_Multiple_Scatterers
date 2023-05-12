@@ -19,7 +19,15 @@ for j = 1:length(s)
 
     I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
         +  h*fnq.*( 1i*besselh(0, k*dist)/4 + smoothing_function(nq, C1, C2).*besselj(0, k*dist).*log(k*dist)/(2*pi) ) );
+    
+    % work around for if we get log(0), overridden as 0, may need to be
+    % changed
+    if (sum(dist == 0)>0)
 
+        I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
+            + h*fnq*( 1i/4 - 2*log(1/2)/pi - (-psi(1)) ));
+                    
+    end
 
 % Trying to introduce new function, doesn't really work yet
 % m2(k, s(j), nq, C1, C2)
