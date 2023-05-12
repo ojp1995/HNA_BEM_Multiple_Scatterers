@@ -5,6 +5,7 @@ clear classes
 
 addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 
+% TODO: check what order the coefficients need to be in!
 % General set up
 
 % Geometric set up
@@ -99,24 +100,50 @@ xlim([-0.05 1.05])
 title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 %%
-% % Step 1
-N_approx_inner = N_approx/2;
-[y1nq_1_inner, y2nq_1_inner, ~, t1_mid_inner, h1_inner, ~, ~, ~] =  discretisation_variables(G1, N_approx_inner, kwave);
+% % Step 1 - Convergence test
+N_max = 20;
+for j = 1:N_max
+    disp(j)
+    N_approx = 2^(-j);
+    [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
+    [x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
+
+
+    N_approx_inner = N_approx/2;
+    [y1nq_1_inner, y2nq_1_inner, ~, t1_mid_inner, h1_inner, ~, ~, ~] =  discretisation_variables(G1, N_approx_inner, kwave);
 
 % This all needs to be wrapped up in an outer function ideally
 % in this case ell = 2, j = 1
-phi_1_outer = phi1_0(t1_mid.');
-phi_1_inner = phi1_0(t1_mid_inner.');
-f_ell2_r1 = compute_RHS_vec_given_coll_vec(vertices2, L2, kwave, d, ...
-    theta, n1, col_points2, x2_col, y2_col, C1, C2, x1, y1, ...
-    h1, phi_1_outer, x2, y2, t2_mid, ...
-    t2, h2, y1nq_1_inner, y2nq_1_inner, h1_inner, ...
-    phi_1_inner);
+    phi_1_outer = phi1_0(t1_mid.');
+    phi_1_inner = phi1_0(t1_mid_inner.');
+    [f_2_r1(j, :), ~, S21phi1_0(j, :), S22Psi_2_1(j, :)]...
+    = compute_RHS_vec_given_coll_vec(vertices2, L2, kwave, d, ...
+        theta, n1, col_points2, x2_col, y2_col, C1, C2, x1, y1, ...
+        h1, phi_1_outer, x2, y2, t2_mid, ...
+        t2, h2, y1nq_1_inner, y2nq_1_inner, h1_inner, ...
+        phi_1_inner);
 
+end
+
+% error computation
+% we are wanting the overall error and the max values in each
+for j = 1:N_max - 1
+    err_f_2_r1(j) = sum(f_2_r1(end, 1) - f_2_r1(j, 1)./f_2_r1(end, 1));
+    err_ddn_S21phi1_0(j) = sum(ddn_S21phi1_0(end, 1) - ddn_S21phi1_0(j, 1)./ddn_S21phi1_0(end, 1));
+    err_S21phi1_0(j) = sum(S21phi1_0(end, 1) - S21phi1_0(j, 1)./S21phi1_0(end, 1));
+    err_S22Psi_2_1(j) = sum(S22Psi_2_1(end, 1) - S22Psi_2_1(j, 1)./S22Psi_2_1(end, 1));
+
+    % max values real
+    max_real_f_2_r1(j) = max(real(f_2_r1(j, 1)));
+    max__real_ddn_S21phi1_0(j) = max(real(ddn_S21phi1_0(j, 1)));
+    max_real_S21phi1_0(j) = max(real(S21phi1_0(j, 1)));
+    max_real_S22Psi_2_1(j) = max(real(S22Psi_2_1(j, 1)));
+
+end
 %%
 % this part of the function is given f and A compute the coefficients and
 % then ideally provide a function for approximating 
-v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2, f_ell2_r1, VHNA2);
+v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2, f_2_r1, VHNA2);
 
 % phi2_r1 = @(t2_1da, x2a, y2a, t1_1da) v_N_G2_r1.eval(t2_1da, 1) ...
 %     + 2*duidn(vertices2, L2, kwave, d, t2_1da).'...
