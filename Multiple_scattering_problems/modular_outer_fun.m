@@ -101,8 +101,9 @@ title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 %%
 % % Step 1 - Convergence test
-N_max = 20;
-for j = 1:N_max
+N_min = 1;
+N_max = 10;
+for j = N_min:N_max
     disp(j)
     N_approx = 2^(-j);
     [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
@@ -124,26 +125,34 @@ for j = 1:N_max
         phi_1_inner);
 
 end
-
+%%
 % error computation
 % we are wanting the overall error and the max values in each
-for j = 1:N_max - 1
-    err_f_2_r1(j) = sum(f_2_r1(end, 1) - f_2_r1(j, 1)./f_2_r1(end, 1));
-    err_ddn_S21phi1_0(j) = sum(ddn_S21phi1_0(end, 1) - ddn_S21phi1_0(j, 1)./ddn_S21phi1_0(end, 1));
-    err_S21phi1_0(j) = sum(S21phi1_0(end, 1) - S21phi1_0(j, 1)./S21phi1_0(end, 1));
-    err_S22Psi_2_1(j) = sum(S22Psi_2_1(end, 1) - S22Psi_2_1(j, 1)./S22Psi_2_1(end, 1));
+
+
+for j = N_min:N_max - 1
+    err_f_2_r1(j) = sum((f_2_r1(end, :) - f_2_r1(j, :))./f_2_r1(end, :));
+%     err_ddn_S21phi1_0(j) = sum((ddn_S21phi1_0(end, :) - ddn_S21phi1_0(j, :))./ddn_S21phi1_0(end, :));
+    err_S21phi1_0(j) = sum((S21phi1_0(end, :) - S21phi1_0(j, :))./S21phi1_0(end, :));
+    err_S22Psi_2_1(j) = sum((S22Psi_2_1(end, :) - S22Psi_2_1(j, :))./S22Psi_2_1(end, :));
 
     % max values real
-    max_real_f_2_r1(j) = max(real(f_2_r1(j, 1)));
-    max__real_ddn_S21phi1_0(j) = max(real(ddn_S21phi1_0(j, 1)));
-    max_real_S21phi1_0(j) = max(real(S21phi1_0(j, 1)));
-    max_real_S22Psi_2_1(j) = max(real(S22Psi_2_1(j, 1)));
-
+    max_real_f_2_r1(j) = max(real(f_2_r1(j, :)));
+%     max__real_ddn_S21phi1_0(j) = max(real(ddn_S21phi1_0(j, :)));
+    max_real_S21phi1_0(j) = max(real(S21phi1_0(j, :)));
+    max_real_S22Psi_2_1(j) = max(real(S22Psi_2_1(j, :)));
+ 
 end
+
+[err_f_2_r1.', err_S21phi1_0.', err_S22Psi_2_1.']
+
+
+[max_real_f_2_r1.', max_real_S21phi1_0.', max_real_S22Psi_2_1.']
+
 %%
 % this part of the function is given f and A compute the coefficients and
 % then ideally provide a function for approximating 
-v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2, f_2_r1, VHNA2);
+v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2, f_2_r1(end, :).', VHNA2);
 
 % phi2_r1 = @(t2_1da, x2a, y2a, t1_1da) v_N_G2_r1.eval(t2_1da, 1) ...
 %     + 2*duidn(vertices2, L2, kwave, d, t2_1da).'...
@@ -155,6 +164,7 @@ phi_2_r1 = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
 
 figure()
 plot(x2_plot_1D/L2, real( phi_2_r1 ))
+title('Approximation of $\phi_{2}^{(1)}$')
 
 
 
