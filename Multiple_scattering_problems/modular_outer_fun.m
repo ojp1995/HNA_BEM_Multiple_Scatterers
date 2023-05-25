@@ -125,29 +125,6 @@ for j = N_min:N_max
         phi_1_inner);
 
 end
-%%
-% error computation
-% we are wanting the overall error and the max values in each
-
-
-for j = N_min:N_max - 1
-    err_f_2_r1(j) = sum((f_2_r1(end, :) - f_2_r1(j, :))./f_2_r1(end, :));
-%     err_ddn_S21phi1_0(j) = sum((ddn_S21phi1_0(end, :) - ddn_S21phi1_0(j, :))./ddn_S21phi1_0(end, :));
-    err_S21phi1_0(j) = sum((S21phi1_0(end, :) - S21phi1_0(j, :))./S21phi1_0(end, :));
-    err_S22Psi_2_1(j) = sum((S22Psi_2_1(end, :) - S22Psi_2_1(j, :))./S22Psi_2_1(end, :));
-
-    % max values real
-    max_real_f_2_r1(j) = max(real(f_2_r1(j, :)));
-%     max__real_ddn_S21phi1_0(j) = max(real(ddn_S21phi1_0(j, :)));
-    max_real_S21phi1_0(j) = max(real(S21phi1_0(j, :)));
-    max_real_S22Psi_2_1(j) = max(real(S22Psi_2_1(j, :)));
- 
-end
-
-[err_f_2_r1.', err_S21phi1_0.', err_S22Psi_2_1.']
-
-
-[max_real_f_2_r1.', max_real_S21phi1_0.', max_real_S22Psi_2_1.']
 
 %%
 % this part of the function is given f and A compute the coefficients and
@@ -165,6 +142,81 @@ phi_2_r1 = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
 figure()
 plot(x2_plot_1D/L2, real( phi_2_r1 ))
 title('Approximation of $\phi_{2}^{(1)}$')
+
+%%
+% error computation
+% we are wanting the overall error and the max values in each
+figure()
+N_min_plot = 5;
+
+for j = N_min:N_max
+    err_f_2_r1(j) = sum((abs(f_2_r1(end, :) - f_2_r1(j, :)))./f_2_r1(end, :))/length(col_points2);
+%     err_ddn_S21phi1_0(j) = sum((ddn_S21phi1_0(end, :) - ddn_S21phi1_0(j, :))./ddn_S21phi1_0(end, :));
+    err_S21phi1_0(j) = sum((abs(S21phi1_0(end, :) - S21phi1_0(j, :))./S21phi1_0(end, :)))/length(col_points2);
+    err_S22Psi_2_1(j) = sum((abs(S22Psi_2_1(end, :) - S22Psi_2_1(j, :))./S22Psi_2_1(end, :)))/length(col_points2);
+
+    % max values real
+    max_real_f_2_r1(j) = max(real(f_2_r1(j, :)));
+%     max__real_ddn_S21phi1_0(j) = max(real(ddn_S21phi1_0(j, :)));
+    max_real_S21phi1_0(j) = max(real(S21phi1_0(j, :)));
+    max_real_S22Psi_2_1(j) = max(real(S22Psi_2_1(j, :)));
+    
+   
+ 
+end
+
+for j = N_min_plot:N_max
+     txt1 = [ 'dof = 2^', num2str(j)];
+    plot(col_points2/L2, real(f_2_r1(j, :)), 'DisplayName', txt1)
+    hold on
+
+end
+title('RHS vector $f_{2}^{(1)}$')
+hold off
+legend show
+
+figure()
+for l = N_min_plot:N_max
+    txt2 = ['dof = 2^', num2str(l)];
+    plot(col_points2, real(S21phi1_0(l, :)), 'DisplayName', txt2)
+    hold on
+    
+end
+title('Plot of $S_{21} \phi_{1}^{(0)}$ for increasing order dof')
+hold off
+legend show
+
+
+figure()
+for xx= N_min_plot:N_max
+
+    txt3 = ['dof = 2^', num2str(xx)];
+    plot(col_points2, real(S22Psi_2_1(xx, :)), 'DisplayName', txt3)
+    hold on
+
+end
+title('Plot of $S_{22} \Psi_{2}^{(1)}$ for increasing dof')
+hold off
+legend show
+
+% estimated order of convergence
+
+for j = N_min+1:N_max - 1
+
+    EOC_f_2_r1(j) = log2(err_f_2_r1(j-1)/err_f_2_r1(j));
+
+    EOC_S21phi1_0(j) = log2(err_S21phi1_0(j-1)/err_S21phi1_0(j));
+
+    EOC_S22Psi_2_1(j) = log2(err_S22Psi_2_1(j-1)/err_S22Psi_2_1(j));
+
+end
+
+[err_f_2_r1.', err_S21phi1_0.', err_S22Psi_2_1.']
+
+[EOC_f_2_r1.', EOC_S21phi1_0.', EOC_S22Psi_2_1.']
+
+[max_real_f_2_r1.', max_real_S21phi1_0.', max_real_S22Psi_2_1.']
+
 
 
 
