@@ -23,7 +23,7 @@ w = (s - tj_1).*log( k*abs(s - tj_1) ) + (tj - s).*log(k*abs( tj - s )) + tj_1 -
 % is 0 and would cause a blow up and just override the weights with 0.
 % 
 % lower_zero = ( (s - tj_1) == 0);
-% upper_zero = (  (s - tj) == 0);
+% upper_zero = (   (s - tj) == 0);
 % 
 
 if (sum((s - tj_1) == 0))> 0 || (sum((s - tj) == 0)>0)

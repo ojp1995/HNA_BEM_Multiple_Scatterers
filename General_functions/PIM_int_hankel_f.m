@@ -11,7 +11,6 @@ function I = PIM_int_hankel_f(k, s, h, nq, fnq, tq, C1, C2)
 t_lower = tq(1:end - 1);
 t_upper = tq(2:end);
 
-% I = 0;
 I = zeros(length(s), 1);
 for j = 1:length(s)
 
@@ -25,7 +24,7 @@ for j = 1:length(s)
     if (sum(dist == 0)>0)
 
         I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
-            + h*fnq*( 1i/4 - 2*log(1/2)/pi - (-psi(1)) ));
+            + h*fnq*( 1i/4 + (-psi(1)) - 2*log(1/2)/pi  ));
                     
     end
 

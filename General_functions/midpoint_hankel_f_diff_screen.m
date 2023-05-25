@@ -18,7 +18,6 @@ function I = midpoint_hankel_f_diff_screen(k, x1, x2, y1t, y2t, h, fnq)
 % first computing |\xb - \yb(n_{q})|
 
 
-
 for s = 1:length(x1)
     dist = sqrt( ( x1(s) - y1t ).^2  + (x2(s) - y2t).^2 );
     
