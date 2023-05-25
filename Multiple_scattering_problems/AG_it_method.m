@@ -89,7 +89,15 @@ beam_inc_S21_phi1_0 = beamSol(kwave, density_samples, weights, param_vals, Gamma
 S2=singleLayer(kwave,Gamma2);
 [v_N_beam1, GOA_beam1, colMatrix_beam1, colRHS_beam1, T_beam1] = ColHNA(S2, VHNA2, beam_inc_S21_phi1_0.', Gamma2, 'oversample', OverSample, 'progress');
 
+f_2_1_RHS = incident(kwave, theta, x2_col, y2_col) ...
+    - beam_inc_S21_phi1_0.eval(x2_col, y2_col) - GOA2.eval(col_points2, 1)...
+    - GOA_beam1.eval(col_points2, 1);
 
+
+v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2,f_2_1_RHS , VHNA2);
+
+phi2_1_manual = v_N_G2_r1.eval(x2_plot_1D.', 1) - GOA2.eval(x2_plot_1D.', 1)...
+    - GOA_beam1.eval(x2_plot_1D.', 1);
 %% Plotting different parts of the solution.
 figure()
 plot(x2_plot_1D, real(v_N2.eval(x2_plot_1D.', 1) ...
