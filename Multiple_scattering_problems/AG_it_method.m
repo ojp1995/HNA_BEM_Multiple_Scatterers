@@ -71,18 +71,56 @@ x1_plot_1D = [t1_mid(1): 0.001: t1_mid(end)];
 x1_plot = linspace(x1_col(1), x1_col(end), length(x1_plot_1D)).';
 y1_plot = linspace(y1_col(1), y1_col(end), length(x1_plot_1D)).'; 
 
-x2_plot_1D = [t2_mid(1): 0.001: t2_mid(end)];
+away_edge = 3;
+x2_plot_1D = [t2_mid(away_edge): 0.001: t2_mid(end - away_edge)];
 
 % x2_plot_1D = linspace(t2_mid(1), t2_mid(1), 1e4).';
-x2_plot = linspace(x2_col(1), x2_col(end), length(x2_plot_1D)).';
-y2_plot = linspace(y2_col(1), y2_col(end), length(x2_plot_1D)).';
+x2_plot = linspace(x2_col(away_edge), x2_col(end - away_edge), length(x2_plot_1D)).';
+y2_plot = linspace(y2_col(away_edge), y2_col(end - away_edge), length(x2_plot_1D)).';
 
 
-phi1_0_weights = v_N1.eval(col_points1, 1) + GOA1.eval(col_points1, 1);
-beam_inc_S21_phi1_0 = beamSol(kwave, col_points1, phi1_0_weights, col_points2, Gamma1);
+
+weights = v_N1.edgeComponent.nodes;
+param_vals = v_N1.edgeComponent.weights;
+density_samples = v_N1.eval(param_vals, 1) + GOA1.eval(param_vals, 1);
+
+beam_inc_S21_phi1_0 = beamSol(kwave, density_samples, weights, param_vals, Gamma1);
 
 S2=singleLayer(kwave,Gamma2);
-[v_N_beam1, GOA_beam1, colMatrix_beam1, colRHS_beam1, T_beam1] = ColHNA(S2, VHNA1, beam_inc_S21_phi1_0.', Gamma2, 'oversample', OverSample, 'progress');
+[v_N_beam1, GOA_beam1, colMatrix_beam1, colRHS_beam1, T_beam1] = ColHNA(S2, VHNA2, beam_inc_S21_phi1_0.', Gamma2, 'oversample', OverSample, 'progress');
 
+
+%% Plotting different parts of the solution.
+figure()
+plot(x2_plot_1D, real(v_N2.eval(x2_plot_1D.', 1) ...
+    + GOA2.eval(x2_plot_1D.', 1)))
+title('Plot of solution on $\Gamma_{2}$ just due to plane wave incident')
+
+figure()
+plot(x2_plot_1D, real(v_N_beam1.eval(x2_plot_1D.', 1) ...
+    + GOA_beam1.eval(x2_plot_1D.', 1)));
+title('Plot of beam source, $S_{21}\phi_{1}^{0}$')
+
+figure()
+plot(x2_plot_1D, real(v_N_beam1.eval(x2_plot_1D.', 1)));
+title('Plot of beam source, $S_{21}\phi_{1}^{0}$, Oscil part only')
+
+figure()
+plot(x2_plot_1D, real(GOA_beam1.eval(x2_plot_1D.', 1)));
+title('Plot of beam source, $S_{21}\phi_{1}^{0}$, Leading order part only')
+
+
+% combine the solutions
+phi2_1 = v_N2.eval(x2_plot_1D.', 1) + GOA2.eval(x2_plot_1D.', 1) ...
+    - (v_N_beam1.eval(x2_plot_1D.', 1) + GOA_beam1.eval(x2_plot_1D.', 1));
+
+figure()
+plot(x2_plot_1D, real(phi2_1));
+title('Solution from single screen of uinc - beam source')
+
+figure(); domainPlot(Gamma2, beam_inc_S21_phi1_0, GOA_beam1, v_N_beam1, kwave, 10000);
+title('Plot in domain of $S_{21}\phi_{1}^{(0)}$ incident on $\Gamma_{2}$')
+figure(); domainPlot(Gamma2, uinc, GOA2, v_N2, kwave, 10000);
+title('Plot in domain of plane wave incident on $\Gamma_{2}$')
 
 
