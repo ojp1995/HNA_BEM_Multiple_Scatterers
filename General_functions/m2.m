@@ -6,10 +6,10 @@ function z = m2(k, s, nq, C1, C2)
 
 select = (s == nq);
 
-dist = s - nq;
+dist = abs(s - nq);
 
 z = 1i*besselh(0, k*dist)/4 ...
-    + m1(k, s, nq, C1, C2).*log(k*dist)/(2*pi); %% should this be w1_weights??
+    - m1(k, s, nq, C1, C2).*log(k*dist); %% should this be w1_weights??
 
-z(select) = 1i/4 - 2*(log(1/2) - (-psi(1)))/pi;
+z(select) = 1i/4 + (-psi(1)) - 2*(log(1/2))/pi;
 
