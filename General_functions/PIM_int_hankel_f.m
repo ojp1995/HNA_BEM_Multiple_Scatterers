@@ -13,9 +13,6 @@ t_upper = tq(2:end);
 
 I = zeros(length(s), 1);
 for j = 1:length(s)
-%     if j == 375
-%         keyboard
-%     end
 
     dist = abs(s(j) - nq);
 
