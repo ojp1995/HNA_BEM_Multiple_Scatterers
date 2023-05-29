@@ -2,6 +2,13 @@
 % 
 
 clear all
+%
+%
+%
+warning('PIM_hankel.m has been changed so that it containsm1 and m2 functions')
+%
+%
+%
 
 addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 k = 0.85;

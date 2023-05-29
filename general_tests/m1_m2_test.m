@@ -5,6 +5,7 @@
 % i*H_0^(1)(k|s - t|)/4 = sigma1(s, t)m1(s, t) + m2(s, t)
 clear all
 
+
 addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 k = 0.85;
 lambda = 2*pi/k;
