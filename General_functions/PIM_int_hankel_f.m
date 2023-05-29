@@ -13,6 +13,9 @@ t_upper = tq(2:end);
 
 I = zeros(length(s), 1);
 for j = 1:length(s)
+%     if j == 375
+%         keyboard
+%     end
 
     dist = abs(s(j) - nq);
 
@@ -24,12 +27,12 @@ for j = 1:length(s)
 %     
     % work around for if we get log(0), overridden as 0, may need to be
     % changed
-    if (sum(dist == 0)>0)
-
-        I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
-            + h*fnq*( 1i/4 + (-psi(1)) - 2*log(1/2)/pi  ));
-                    
-    end
+%     if (sum(dist == 0)>0)
+% 
+%         I(j, 1) = sum( -smoothing_function(nq, C1, C2).*besselj(0, k*dist).*fnq.*w1_weights(k, s(j), t_lower, t_upper)/(2*pi) ...
+%             + h*fnq*( 1i/4 + (-psi(1)) - 2*log(1/2)/pi  ));
+%                     
+%     end
 
 % Trying to introduce new function, doesn't really work yet
 % m2(k, s(j), nq, C1, C2)
