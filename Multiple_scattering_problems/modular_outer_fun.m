@@ -56,8 +56,8 @@ x1_col = vertices1(1, 1) + col_points1*(vertices1(2, 1) - vertices1(1, 1))/L1;
 y1_col = vertices1(1, 2) + col_points1*( vertices1(2, 2) - vertices1(1, 2) )/L1;
 
 L2 = sqrt( (vertices2(2, 1) - vertices2(1, 1))^2 + (vertices2(2, 2) - vertices2(1, 2))^2 );
-x2_col = vertices2(1, 1) + col_points2*(vertices2(2, 1) - vertices2(1, 1))/L1;
-y2_col = vertices2(1, 2) + col_points2*( vertices2(2, 2) - vertices2(1, 2) )/L1;
+x2_col = vertices2(1, 1) + col_points2*(vertices2(2, 1) - vertices2(1, 1))/L2;
+y2_col = vertices2(1, 2) + col_points2*( vertices2(2, 2) - vertices2(1, 2) )/L2;
 
 G1 = [vertices1(1, 1), vertices1(1, 2), vertices1(2, 1), vertices1(2, 2)];
 G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
@@ -178,7 +178,7 @@ legend show
 figure()
 for l = N_min_plot:N_max
     txt2 = ['dof = 2^', num2str(l)];
-    plot(col_points2, real(S21phi1_0(l, :)), 'DisplayName', txt2)
+    plot(col_points2/L2, real(S21phi1_0(l, :)), 'DisplayName', txt2)
     hold on
     
 end
@@ -191,7 +191,7 @@ figure()
 for xx= N_min_plot:N_max
 
     txt3 = ['dof = 2^', num2str(xx)];
-    plot(col_points2, real(S22Psi_2_1(xx, :)), 'DisplayName', txt3)
+    plot(col_points2/L2, real(S22Psi_2_1(xx, :)), 'DisplayName', txt3)
     hold on
 
 end
