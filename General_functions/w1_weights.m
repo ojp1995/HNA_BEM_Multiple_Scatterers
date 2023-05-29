@@ -18,6 +18,10 @@ w = (s - tj_1).*(log( k*abs(s - tj_1) )) + (tj - s).*(log(k*abs( tj - s )))...
 select1 = (s - tj_1) == 0;
 select2 = (s - tj) == 0;
 
+% if sum(select1 + select2)>0
+%     keyboard
+% end
+
 w(select1) = tj_1(select1) - tj(select1);
 w(select2) = tj_1(select2) - tj(select2);
 
