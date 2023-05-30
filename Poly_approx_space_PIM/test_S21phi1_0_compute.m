@@ -11,7 +11,7 @@ G1 = [-2*pi, 2*pi, 0, 0];
 
 G2 = [2*pi, 0, 5*pi, 3*pi]; 
 
-C_wl= 1/20;
+C_wl= 2^-10;
 
 k = 10;  % wavenumber
 

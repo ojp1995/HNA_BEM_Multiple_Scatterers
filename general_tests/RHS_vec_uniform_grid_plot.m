@@ -153,7 +153,7 @@ title('Soluiton on the boundary for r=0, screens in line, long way away')
 % 
 % To start with we will use a uniform grid.
 keyboard
-N_RHS = 1000;
+N_RHS = 2^10;
 
 h_RHS = L2/N_RHS;
 s_RHS = [0: h_RHS: L2 ];
@@ -195,3 +195,14 @@ figure()
 plot(t2_mid/L2, real(Psi21))
 title('Plot of $\Psi_{2}^{(1)}$')
 
+%% loading in the data from the poly solver and comparing S21phi1_0
+
+poly_S21phi1_0 = load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_S21_phi1_0.mat');
+
+figure()
+plot(s_RHS/L2, real(S21phi1_0), 'DisplayName', 'HNA approach')
+hold on
+plot(s_RHS/L2, real(poly_S21phi1_0), 'DisplayName', 'Poly approach')
+hold off
+legend show
+title('Comparison of $S_{21} \phi_{1}^{(0)}$ computed using polynomial and HNA code')
