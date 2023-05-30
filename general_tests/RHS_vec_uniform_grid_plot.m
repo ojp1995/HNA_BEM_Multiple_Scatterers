@@ -10,8 +10,8 @@ clear all
 
 clear all
 clear classes
-
-addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('../General_functions')
+% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 addpath('../Multiple_scattering_problems/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA
@@ -97,9 +97,9 @@ y2_plot = linspace(y2_col(1), y2_col(end), length(x2_plot_1D)).';
 % % % Step 0
 N_f1_test = 1000;
 h_f1_test = L1/N_f1_test;
-col_points1_test = [0:h_f1_test:L1];
-x1_col_test = vertices1(1, 1) + col_points1_test*(vertices1(2, 1) - vertices1(1, 1))/L1;
-y1_col_test = vertices1(1, 2) + col_points1_test*( vertices1(2, 2) - vertices1(1, 2) )/L1;
+col_points1_test = [0:h_f1_test:L1].';
+x1_col_test = vertices1(1, 1) + col_points1_test*(vertices1(2, 1) - vertices1(1, 1))/L1.';
+y1_col_test = vertices1(1, 2) + col_points1_test*( vertices1(2, 2) - vertices1(1, 2) )/L1.';
 
 
 N_step0_test = 10;
@@ -108,21 +108,19 @@ for j = N_step0_test:N_step0_test
     N_approx = 2^(-j);
     [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
 %     [x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
-    [f1_0(:, 1), LoB(:, 1), u_inc(:, 1)] = Step0_compute_RHS_given_coll_vec(kwave, theta, ...
+    [f1_0_test(:, 1), LoB_test(:, 1), u_inc_test(:, 1)] = Step0_compute_RHS_given_coll_vec(kwave, theta, ...
     col_points1_test, x1_col_test, y1_col_test, L1, vertices1, d, h1, t1_mid, t1, C1, C2 );
 % 
-%     [f1_0(:, 1), LoB(:, 1), u_inc(:, 1)] = Step0_compute_RHS_given_coll_vec(kwave, theta, ...
-%     col_points1, x1_col, y1_col, L1, vertices1, d, h1, t1_mid, t1, C1, C2 );
-
+%     
 %     [v_N_G1_r0, f1_0] = multiple_Scattering_2screen_step0(kwave, theta, ...
 %         d, vertices1, L1, col_points1, x1_col, y1_col, h1, t1_mid, t1, colMatrix1, VHNA1, C1, C2);
     txt1 = ['Whole RHS vec#dof = 2^-', num2str(j)];
     txt2 = ['LoB vec#dof = 2^-', num2str(j)];
     txt3 = ['uinc'];
-    plot(col_points1_test, real(f1_0), 'DisplayName', txt1)
+    plot(col_points1_test, real(f1_0_test), 'DisplayName', txt1)
     hold on
-    plot(col_points1_test, real(LoB), 'DisplayName', txt2)
-    plot(col_points1_test, real(u_inc), 'DisplayName', txt3)
+    plot(col_points1_test, real(LoB_test), 'DisplayName', txt2)
+    plot(col_points1_test, real(u_inc_test), 'DisplayName', txt3)
     
     
 end
@@ -130,11 +128,13 @@ title('Increasing quadrature approx plot of RHS vector $f_{1}^{(0)}$. Fixed coll
 legend show
 
 %%
+[f1_0(:, 1), LoB(:, 1), u_inc(:, 1)] = Step0_compute_RHS_given_coll_vec(kwave, theta, ...
+    col_points1, x1_col, y1_col, L1, vertices1, d, h1, t1_mid, t1, C1, C2 );
 
 v_N_G1_r0 = Step0_compute_coeffs_given_A_and_f(colMatrix1, f1_0, VHNA1);
 phi1_0 = @(x) v_N_G1_r0.eval(x, 1) + 2*duidn(vertices1, L1, kwave, d, x);
 
-% phi1_0 = v_N_G1_r0.eval(x1_plot_1D.', 1) + 2*duidn(vertices1, L1, kwave, d, x1_plot_1D.');
+phi1_0_vec = v_N_G1_r0.eval(x1_plot_1D.', 1) + 2*duidn(vertices1, L1, kwave, d, x1_plot_1D.');
 figure()
 plot(x1_plot_1D/L1, real(phi1_0(x1_plot_1D.')), 'DisplayName', 'OP code', 'LineStyle', '--')
 hold on
@@ -173,13 +173,15 @@ phi_1_inner = phi1_0(t1_mid_inner.');
         t2, h2, y1nq_1_inner, y2nq_1_inner, h1_inner, ...
         phi_1_inner);
 
+   figure()
+plot(s_RHS/L2, real(S21phi1_0))
+title('Plot of $S_{21}\phi_{1}^{(0)}$ on a uniform grid of points')
+
+keyboard
 figure()
 plot(s_RHS/L2, real(f_2_r1))
 title('Plot of $f_{2}^{(1)}$ on a uniform grid of points')
 
-figure()
-plot(s_RHS/L2, real(S21phi1_0))
-title('Plot of $S_{21}\phi_{1}^{(0)}$ on a uniform grid of points')
 
 figure()
 plot(s_RHS/L2, real(S22Psi_2_1))
