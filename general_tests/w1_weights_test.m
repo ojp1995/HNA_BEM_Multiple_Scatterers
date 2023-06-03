@@ -47,9 +47,9 @@ plot(s, err)
 title('Plot of the difference between Matlabs integrator and our approximation')
 
 figure()
-plot(s, log(matlab_val), 'DisplayName', 'Matlabs approximation')
+plot(s, matlab_val, 'DisplayName', 'Matlabs approximation')
 hold on
-plot(s, log(our_approx), 'DisplayName', 'Our approximation')
+plot(s, our_approx, 'DisplayName', 'Our approximation')
 legend show
 title('Comparison between our approximation and matlabs')
 
@@ -75,9 +75,9 @@ for j = 1:length(s)
 end
 
 figure()
-plot(s, (matlab_val_a_b), 'DisplayName', 'Matlabs approximation')
+plot(s, matlab_val_a_b, 'DisplayName', 'Matlabs approximation')
 hold on
-plot(s, (our_approx_a_b), 'DisplayName', 'Our approximation')
+plot(s, our_approx_a_b, 'DisplayName', 'Our approximation')
 legend show
 title('Singular part only - Comparison between our approximation and matlabs')
 
@@ -89,9 +89,9 @@ title('Singgular part only - Plot of the difference between Matlabs integrator a
 
 % looking at an even smaller subset, values (435:445)
 figure()
-plot(s(435:445), (matlab_val_a_b(435:445)), 'DisplayName', 'Matlabs approximation')
+plot(s(435:445), matlab_val_a_b(435:445), 'DisplayName', 'Matlabs approximation')
 hold on
-plot(s(435:445), (our_approx_a_b(435:445)), 'DisplayName', 'Our approximation')
+plot(s(435:445), our_approx_a_b(435:445), 'DisplayName', 'Our approximation')
 legend show
 title('Small subset of singular intergal - Comparison between our approximation and matlabs')
 
@@ -121,9 +121,9 @@ for j = 1:length(s_sing_test)
 end
 
 figure()
-plot(s_sing_test, (matlab_sing_test), 'DisplayName', 'Matlabs approximation')
+plot(s_sing_test, matlab_sing_test, 'DisplayName', 'Matlabs approximation')
 hold on
-plot(s_sing_test, (our_approx_sing_test), 'DisplayName', 'Our approximation')
+plot(s_sing_test, our_approx_sing_test, 'DisplayName', 'Our approximation')
 legend show
 title('Higher discretisation Small subset of singular intergal - Comparison between our approximation and matlabs')
 
