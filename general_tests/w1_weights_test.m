@@ -34,7 +34,7 @@ for j = 1:length(s)
 
     our_approx(j) = sum(w1_weights(k, s(j), t_grid(1:end - 1), t_grid(2:end)));
 
-    err(j) = sum(matlab_val(j) - our_approx(j));
+    err(j) = matlab_val(j) - our_approx(j);
 
 end
 
@@ -70,7 +70,7 @@ for j = 1:length(s)
 
     our_approx_a_b(j) = sum(w1_weights(k, s(j), t_grid(1:end - 1), t_grid(2:end)));
 
-    err_a_b(j) = sum(matlab_val(j) - our_approx(j));
+    err_a_b(j) = matlab_val(j) - our_approx(j);
 
 end
 
@@ -97,5 +97,37 @@ title('Small subset of singular intergal - Comparison between our approximation 
 
 
 figure()
-plot(s, err_a_b)
-title('Singgular part only - Plot of the difference between Matlabs integrator and our approximation')
+plot(s(435:445), err_a_b(435:445))
+title('Singular part only - Plot of the difference between Matlabs integrator and our approximation')
+
+%%
+% How are we sure that we are right and this isn't correc, lets throw more
+% points at it:
+a_test = s(435);
+b_test = s(445);
+s_sing_test = linspace(a_test, b_test, 1000);
+err_sing_test = zeros(size(s_sing_test));
+
+t = [a_test+h/2:h:b_test- h/2];
+t_grid = [a_test:h:b_test];
+
+for j = 1:length(s_sing_test)
+    
+    matlab_sing_test(j) = integral(@(y) f(s_sing_test(j), y), a_test, b_test);
+
+    our_approx_sing_test(j) = sum(w1_weights(k, s_sing_test(j), t_grid(1:end - 1), t_grid(2:end)));
+
+    err_sing_test(j) = matlab_val(j) - our_approx(j);
+end
+
+figure()
+plot(s_sing_test, (matlab_sing_test), 'DisplayName', 'Matlabs approximation')
+hold on
+plot(s_sing_test, (our_approx_sing_test), 'DisplayName', 'Our approximation')
+legend show
+title('Higher discretisation Small subset of singular intergal - Comparison between our approximation and matlabs')
+
+
+figure()
+plot(s_sing_test, err_sing_test)
+title('Higher discretisation Singular part only - Plot of the difference between Matlabs integrator and our approximation')
