@@ -39,7 +39,10 @@ end
 
 figure()
 plot(s, err)
-title('Plot of the difference between Matlabs bessel function and our deconstruction')
+title('Difference between Matlabs Bessel \\ function and deconstruction','fontsize',15,'interpreter','latex')
+xlim([-0.1, 10.1])
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('$\frac{i}{4}H_{0}^{(1)}(k \vert s - t \vert) - (m_{1}(s, t)\sigma_{1}(s, t) + m_{2}(s, t) \sigma_{2}(s, t))$', 'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s, hankel, 'DisplayName', 'Matlab approximation', 'LineStyle', '--')
@@ -47,4 +50,6 @@ hold on
 plot(s, our_approx, 'DisplayName', 'Deconstruction', 'LineStyle', '-.')
 hold off
 legend show
-title('Comparison between our approx of bessel function and Matlabs')
+title('Comparison between our approx of bessel function and Matlabs', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('$f(s, t)$' , 'fontsize',15,'interpreter','latex')
