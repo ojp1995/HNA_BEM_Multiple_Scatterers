@@ -33,17 +33,17 @@ f = @(x, y) 1i*besselh(0, k*abs(x - y))/4;
 
 for j = 1:length(s)
     
-    mat_approx = integral(@(y) f(s(j), y), a, b);
+    mat_approx(j) = integral(@(y) f(s(j), y), a, b);
 
-    our_approx = sum(m1(k, s(j), t, C1, C2).*w1_weights(k, s(j), ...
+    our_approx(j) = sum(m1(k, s(j), t, C1, C2).*w1_weights(k, s(j), ...
         t_grid(1:end - 1), t_grid(2:end))...
         + h*m2(k, s(j), t, C1, C2));
 
     PIM_fun = PIM_int_hankel_f(k, s(j), h, t, 1, t_grid, C1, C2);
 
-    err1(j) = mat_approx - our_approx;
+    err1(j) = mat_approx(j) - our_approx(j);
 
-    err2(j) = mat_approx - PIM_fun;
+    err2(j) = mat_approx(j) - PIM_fun;
 
 
 end
@@ -54,3 +54,85 @@ hold on
 plot(s, err2, 'DisplayName', 'Not modular code', 'LineStyle', '-.')
 legend show
 title('Plot of error difference')
+
+figure()
+plot(s, mat_approx, 'DisplayName', 'Matlab approximation')
+hold on 
+plot(s, our_approx, 'DisplayName', 'Our approximation')
+hold off
+legend show
+title('Comparison plot')
+
+%% narrowing down the potential error region
+
+clear s
+s = linspace(a-0.0001, b+0.0001, 1000);
+
+err_a_b = zeros(size(s));
+
+
+for j = 1:length(s)
+    
+    mat_approx_a_b(j) = integral(@(y) f(s(j), y), a, b);
+
+    our_approx_a_b(j) = sum(m1(k, s(j), t, C1, C2).*w1_weights(k, s(j), ...
+        t_grid(1:end - 1), t_grid(2:end))...
+        + h*m2(k, s(j), t, C1, C2));
+
+
+    err_a_b(j) = mat_approx_a_b(j) - our_approx_a_b(j);
+
+
+end
+
+figure()
+plot(s, err_a_b, 'DisplayName', 'Modular code', 'LineStyle', '--')
+legend show
+title('Sing part only - Plot of error difference')
+
+figure()
+plot(s, mat_approx_a_b, 'DisplayName', 'Matlab approximation')
+hold on 
+plot(s, our_approx_a_b, 'DisplayName', 'Our approximation')
+hold off
+legend show
+title('Sing part only - Comparison plot')
+
+
+%% looking at a smaller subset still
+a_test = s(435);
+b_test = s(445);
+s_sing_test = linspace(a_test, b_test, 1000);
+err_sing_test = zeros(size(s_sing_test));
+
+% t = [a_test+h/2:h:b_test- h/2];
+% t_grid = [a_test:h:b_test];
+
+
+
+for j = 1:length(s)
+    
+    mat_approx_sing_test(j) = integral(@(y) f(s_sing_test(j), y), a, b);
+
+    our_approx_sing_test(j) = sum(m1(k, s_sing_test(j), t, C1, C2).*w1_weights(k, s_sing_test(j), ...
+        t_grid(1:end - 1), t_grid(2:end))...
+        + h*m2(k, s_sing_test(j), t, C1, C2));
+
+
+    err_sing_test(j) = mat_approx_sing_test(j) - our_approx_sing_test(j);
+
+
+end
+
+figure()
+plot(s_sing_test, err_sing_test, 'LineStyle', '--')
+legend show
+title('Sing part only - Plot of error difference')
+
+figure()
+plot(s_sing_test, mat_approx_sing_test, 'DisplayName', 'Matlab approximation')
+hold on 
+plot(s_sing_test, our_approx_sing_test, 'DisplayName', 'Our approximation')
+hold off
+legend show
+title('Sing part only - Comparison plot')
