@@ -44,14 +44,18 @@ end
 
 figure()
 plot(s, err)
-title('Plot of the difference between Matlabs integrator and our approximation')
+title('Difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s, matlab_val, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s, our_approx, 'DisplayName', 'Our approximation')
 legend show
-title('Comparison between our approximation and matlabs')
+title('Comparison between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel( '$s$',  'fontsize',15,'interpreter','latex')
+ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 %%
 % what if we look at a really short subset, specifically within the bounds
@@ -79,13 +83,16 @@ plot(s, matlab_val_a_b, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s, our_approx_a_b, 'DisplayName', 'Our approximation')
 legend show
-title('Singular part only - Comparison between our approximation and matlabs')
+title('Comparison between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel( '$s$',  'fontsize',15,'interpreter','latex')
+ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 
 figure()
 plot(s, err_a_b)
-title('Singgular part only - Plot of the difference between Matlabs integrator and our approximation')
-
+title('Difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
 % looking at an even smaller subset, values (435:445)
 figure()
@@ -93,12 +100,16 @@ plot(s(435:445), matlab_val_a_b(435:445), 'DisplayName', 'Matlabs approximation'
 hold on
 plot(s(435:445), our_approx_a_b(435:445), 'DisplayName', 'Our approximation')
 legend show
-title('Small subset of singular intergal - Comparison between our approximation and matlabs')
+title('Small subset of singular intergal - Comparison between our approximation and matlabs', 'fontsize',15,'interpreter','latex')
+xlabel( '$s$',  'fontsize',15,'interpreter','latex')
+ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 
 figure()
 plot(s(435:445), err_a_b(435:445))
-title('Singular part only - Plot of the difference between Matlabs integrator and our approximation')
+title('Singular part only - Plot of the difference between Matlabs integrator and our approximation', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
 %%
 % How are we sure that we are right and this isn't correc, lets throw more
@@ -125,9 +136,12 @@ plot(s_sing_test, matlab_sing_test, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s_sing_test, our_approx_sing_test, 'DisplayName', 'Our approximation')
 legend show
-title('Higher discretisation Small subset of singular intergal - Comparison between our approximation and matlabs')
-
+title('Isolating a problem area and comparing between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel( '$s$',  'fontsize',15,'interpreter','latex')
+ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s_sing_test, err_sing_test)
-title('Higher discretisation Singular part only - Plot of the difference between Matlabs integrator and our approximation')
+title('Isolating a problem area and showing the difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
