@@ -86,9 +86,10 @@ for j = 1:length(s)
 end
 
 figure()
-plot(s, err_a_b, 'DisplayName', 'Modular code', 'LineStyle', '--')
-legend show
-title('Sing part only - Plot of error difference')
+plot(s, err_a_b)
+title('Differnce between Matlab and our approximation to  $\frac{i}{4} \int_{a}^{b} H_{0}^{(1)}(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s, mat_approx_a_b, 'DisplayName', 'Matlab approximation')
@@ -96,7 +97,9 @@ hold on
 plot(s, our_approx_a_b, 'DisplayName', 'Our approximation')
 hold off
 legend show
-title('Sing part only - Comparison plot')
+title('Comparison of different approximations to $\frac{i}{4} \int_{a}^{b} H_{0}^{(1)}(k \vert s - t \vert) \mathrm{d} t$','fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('I(s)', 'fontsize',15,'interpreter','latex')
 
 
 %% looking at a smaller subset still
@@ -125,9 +128,10 @@ for j = 1:length(s)
 end
 
 figure()
-plot(s_sing_test, err_sing_test, 'LineStyle', '--')
-legend show
-title('Sing part only - Plot of error difference')
+plot(s_sing_test, err_sing_test)
+title('Isolating a problem case showing differnce between Matlab and our approximation to  $\frac{i}{4} \int_{a}^{b} H_{0}^{(1)}(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s_sing_test, mat_approx_sing_test, 'DisplayName', 'Matlab approximation')
@@ -135,4 +139,6 @@ hold on
 plot(s_sing_test, our_approx_sing_test, 'DisplayName', 'Our approximation')
 hold off
 legend show
-title('Sing part only - Comparison plot')
+title('Isolating a problem case comparing different approximations to $\frac{i}{4} \int_{a}^{b} H_{0}^{(1)}(k \vert s - t \vert) \mathrm{d} t$','fontsize',15,'interpreter','latex')
+xlabel('$s$', 'fontsize',15,'interpreter','latex')
+ylabel('I(s)', 'fontsize',15,'interpreter','latex')
