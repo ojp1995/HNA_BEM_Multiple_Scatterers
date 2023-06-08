@@ -11,7 +11,7 @@ G1 = [-2*pi, 2*pi, 0, 0];
 
 G2 = [2*pi, 0, 5*pi, 3*pi]; 
 
-C_wl= 2^-10;
+C_wl= 2^-6;
 
 k = 10;  % wavenumber
 
@@ -37,11 +37,13 @@ R_true = 5;
 %% Looking at the computation of S21 \phi_1^(0)
 S21 = S21_op_robhop(x1, y1, x2, y2, k, h1vector);
 
-S21_phi1_0 = S21*coeff_2soln_midpoint(aj_1_r(:, 1), L1, N1-1, N1);
+phi1_0 = coeff_2soln_midpoint(aj_1_r(:, 1), L1, N1-1, N1);
+
+S21_phi1_0 = S21*phi1_0;
 
 figure()
 plot(real(S21_phi1_0))
 title('Plot of $S_{21} \phi_{1}^{(0)}$ using polynomial code')
 
 savefile = 'polycode_S21_phi1_0.mat';
-save(savefile, 'S21_phi1_0', 'G1', 'G2', 'C_wl', 'k', 'theta');
+save(savefile, 'S21_phi1_0', 'phi1_0', 'S21', 'G1', 'G2', 'C_wl', 'k', 'theta');
