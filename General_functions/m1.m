@@ -14,6 +14,6 @@ function z = m1(k, s, nq, C1, C2)
 % Outputs:
 % z, approximation of m1
 
-z = -smoothing_function(nq, C1, C2).*besselj(0, k*abs(s - nq))/(2*pi);
+z = -smoothing_function(k*abs(s - nq), C1, C2).*besselj(0, k*abs(s - nq))/(2*pi);
 
 end
