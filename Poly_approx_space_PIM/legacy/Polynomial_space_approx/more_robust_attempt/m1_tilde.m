@@ -11,6 +11,5 @@ function z = m1_tilde( k, s, C1, C2)
 % smoothing function = 0.
 
  z = -smoothing_fun(k*s, C1, C2).*besselj(0, k*s)/(2*pi);
-% z = -besselj(0, k*s)/(2*pi);
-%z = besselj(0, k*s);
-
+ 
+end
