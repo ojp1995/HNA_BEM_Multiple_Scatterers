@@ -44,4 +44,4 @@ plot(real(S21_phi1_0))
 title('Plot of $S_{21} \phi_{1}^{(0)}$ using polynomial code')
 
 savefile = 'polycode_S21_phi1_0.mat';
-save(savefile, 'S21_phi1_0');
+save(savefile, 'S21_phi1_0', 'G1', 'G2', 'C_wl', 'k', 'theta');
