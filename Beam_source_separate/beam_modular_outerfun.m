@@ -89,7 +89,7 @@ title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 %% Step 1
 N_min = 1;
-N_max = 10;
+N_max = 8;
 for j = N_min:N_max
     disp(j)
     N_approx = 2^(-j);
@@ -131,6 +131,16 @@ for j = N_min:N_max
     
 end
 title('RHS vec combined')
+
+figure()
+for j = N_min:N_max
+    plot(col_points2/L2, real(S21_phi1_0(j, :)))
+    hold on
+    
+end
+title('S21 phi1_0')
+
+
 %%
 
 v_N_G2_r1 = compute_coeffs_given_A_and_f(colMatrix2, f_2_1(end, :).', VHNA2);
@@ -142,3 +152,128 @@ figure()
 plot(x2_plot_1D/L2, real( phi_2_r1 ))
 title('Approximation of $\phi_{2}^{(1)}$')
 
+%%
+
+f_test = f_2_1_uinc - f_2_1_beam;
+figure()
+for j = N_min:N_max
+    plot(col_points2/L2, real(f_test(j, :)))
+    hold on
+    
+end
+title('RHS vec combined test')
+
+%% computing beam indicent in the field
+
+% compute the solution in the domain
+% Makr a square grid around the screens
+X_coordinates = [G1(1), G1(3), G2(1), G2(3)];
+X_min = min(X_coordinates);
+X_max = max(X_coordinates);
+X_diff = abs(X_max - X_min);
+
+Y_coordinates = [G1(2), G1(4), G2(2), G2(4)];
+Y_min = min(Y_coordinates);
+Y_max = max(Y_coordinates);
+Y_diff = abs(Y_max - Y_min);
+
+% maybe also change this part
+N_diff = max(abs(Y_diff - X_diff)) + 5*pi;  % largest distance either x direction or y + 4*pi (2*pi in either direction)
+
+N_d = 500;
+
+min_leftorbottom = min(X_min, Y_min);
+max_toporright = max(X_max, Y_max);
+h_d = N_diff/N_d;
+% need to change this bit so that it is closer zoomed in on the picture
+X = [min_leftorbottom - 5: h_d: max_toporright + 5];
+Y = [min_leftorbottom - 5: h_d: max_toporright + 5];
+
+%% Computing incident plane wave
+ui = incident2d(kwave, theta, X, Y);
+
+figure()
+pcolor(X, Y, real(ui))
+shading interp; colorbar
+%% 0th step
+
+N_approx = 2^-6;
+
+[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
+
+
+phi1_0_vec = phi1_0(t1_mid.');
+[us_1_0] = compute_scattered_field_beam(kwave, X, Y, x1, y1, h1, phi1_0_vec);
+
+figure()
+pcolor(X, Y, real(us_1_0))
+shading interp; colorbar
+
+%% Now looking at beam only problem, beam source is us_1_0, solving only for beam incident not PW.
+% v_N_G2_r1_beam_only = compute_coeffs_given_A_and_f(colMatrix2, f_2_1_beam(end, :).', VHNA2);
+
+% LoB = 
+
+
+%% Complete problem
+[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
+
+phi_2_r1 = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
+    y1, n2, t2_mid, x2, y2, phi1_0(t1_mid.'));
+
+[us_2_1] = compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi_2_r1);
+
+figure()
+pcolor(X, Y, real(us_2_1))
+shading interp; colorbar
+
+
+figure(); pcolor(X, Y, real(ui - us_1_0)); shading interp; colorbar
+figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1)); shading interp; colorbar
+
+%% Step 2
+N_approx = 2^(-j);
+[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
+[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
+
+
+N_approx_inner = N_approx/2;
+[y1nq_2_inner, y2nq_2_inner, ~, t2_mid_inner, h2_inner, ~, ~, ~] =  discretisation_variables(G2, N_approx_inner, kwave);
+
+
+
+phi_2_1_outer = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
+y1, n2, t2_mid, x2, y2, phi1_0(t1_mid.'));
+phi_2_1_inner = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
+y1, n2, t2_mid_inner, y1nq_2_inner, y2nq_2_inner, phi1_0(t1_mid.'));
+
+[f_1_2, f_1_2_uinc, f_1_2_beam,...
+    ~,S12_phi2_1, LoB_uinc_2, ...
+    LoB_beam_2,~, ~] ...
+= beam_compute_RHS_vec_given_coll_vec(vertices1, L1, kwave, d, ...
+    theta, n2, col_points1, x1_col, y1_col, C1, C2, x2, y2, ...
+    h2, phi_2_1_outer, x1, y1, t1_mid, ...
+    t1, h1, y1nq_2_inner, y2nq_2_inner, h2_inner, ...
+    phi_2_1_inner);
+
+%% 
+v_N_G1_r2 = compute_coeffs_given_A_and_f(colMatrix1, f_1_2, VHNA1);
+
+phi_1_r2 = get_phi_j_r(v_N_G1_r2, vertices1, L1, kwave, d, h2, x2, ...
+    y2, n1, x1_plot_1D, x1_plot, y1_plot, phi_2_1_outer);
+
+figure()
+plot(x1_plot_1D/L1, real( phi_1_r2 ))
+title('Approximation of $\phi_{1}^{(2)}$')
+
+phi_1_r2 = get_phi_j_r(v_N_G1_r2, vertices1, L1, kwave, d, h2, x2, ...
+    y2, n1, t1_mid, x1, y1, phi_2_1_outer);
+    
+[us_1_2] = compute_scattered_field_beam(kwave, X, Y, x1, y1, h1, phi_1_r2);
+
+figure()
+pcolor(X, Y, real(us_2_1))
+shading interp; colorbar  
+
+
+figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2)); shading interp; colorbar
