@@ -261,6 +261,11 @@ v_N_G1_r2 = compute_coeffs_given_A_and_f(colMatrix1, f_1_2, VHNA1);
 
 phi_1_r2 = get_phi_j_r(v_N_G1_r2, vertices1, L1, kwave, d, h2, x2, ...
     y2, n1, x1_plot_1D, x1_plot, y1_plot, phi_2_1_outer);
+%%
+
+N_approx = 2^(-6);
+[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
+[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
 
 figure()
 plot(x1_plot_1D/L1, real( phi_1_r2 ))
@@ -277,3 +282,13 @@ shading interp; colorbar
 
 
 figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2)); shading interp; colorbar
+
+%% various attempts of plotting
+% Following is good behind Gamma_{1} not behind Gamma_2.
+figure(); pcolor(X, Y, real(ui - us_1_0./2 - us_2_1./2 - us_1_2./2)); shading interp; colorbar
+
+
+% Following is good for Gamma 2 but not gamma1. Think we need the wave to
+% leave the system for it to look reasonable or somehow compute both??
+
+figure(); pcolor(X, Y, real(ui - us_1_0./1 - us_2_1./1 )); shading interp; colorbar
