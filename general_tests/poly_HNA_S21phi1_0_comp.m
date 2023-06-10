@@ -157,6 +157,11 @@ err_poly_vs_HNA_S21phi1_0_adapted = abs(S21poly_phi1_0_HNA - S21phi1_0_HNA);
 
 figure()
 plot(t2_mid/L2, err_poly_vs_HNA_S21phi1_0_adapted)
+xlabel('$s/L_{2}$', 'fontsize',15,'interpreter','latex')
+ylabel('Absolute difference', 'fontsize',15,'interpreter','latex')
+title('Absolute difference between the HNA code and polynomial code of $ \frac{i}{4} \int_{0}^{L_{1}} H_{0}^{(1)}(k \vert \mathbf{x}_{1}(s) - \mathbf{y}(t) ) \phi_{1}^{(0)}(t) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+xlim([-0.1 1.1])
 
+%% Max compairison
 
-
+[max(real(S21phi1_0_HNA)) max(real(S21poly_phi1_0_HNA)) max(real(S21phi1_0_poly))]
