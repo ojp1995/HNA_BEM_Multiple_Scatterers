@@ -7,8 +7,9 @@
 clear all
 clear classes
 
-addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-
+% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
 vertices1 = [-2*pi 2*pi;
     0, 0];
 Gamma1=Screen(vertices1);
@@ -232,7 +233,7 @@ figure(); pcolor(X, Y, real(ui - us_1_0)); shading interp; colorbar
 figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1)); shading interp; colorbar
 
 %% Step 2
-N_approx = 2^(-j);
+N_approx = 2^(-6);
 [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
 [x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
 
@@ -283,6 +284,48 @@ shading interp; colorbar
 
 figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2)); shading interp; colorbar
 
+%% Step 3 computing phi2_3
+phi_1_2_outer = get_phi_j_r(v_N_G1_r2, vertices1, L1, kwave, d, h2, x2, ...
+y2, n1, t1_mid, x1, y1, phi_2_1_outer);
+
+phi_2_1_inner = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
+y1, n2, t2_mid, x2, y2, phi1_0(t1_mid.'));
+
+phi_1_2_inner = get_phi_j_r(v_N_G1_r2, vertices1, L1, kwave, d, h2, x2, ...
+y2, n1, t1_mid_inner, y1nq_1_inner, y2nq_1_inner, phi_2_1_inner);
+
+[f_2_3, f_2_3_uinc, f_2_3_beam,...
+    ~,S21_phi1_2, LoB_uinc_3, ...
+    LoB_beam_3,~, ~] ...
+= beam_compute_RHS_vec_given_coll_vec(vertices2, L2, kwave, d, ...
+    theta, n1, col_points2, x2_col, y2_col, C1, C2, x1, y1, ...
+    h1, phi_1_2_outer, x2, y2, t2_mid, ...
+    t2, h2, y1nq_1_inner, y2nq_1_inner, h1_inner, ...
+    phi_1_2_inner);
+
+v_N_G2_r3 = compute_coeffs_given_A_and_f(colMatrix2, f_2_3, VHNA2);
+
+phi_2_r3 = get_phi_j_r(v_N_G2_r3, vertices2, L2, kwave, d, h1, x1, ...
+    y1, n2, x2_plot_1D, x2_plot, y2_plot, phi_1_2_outer);
+
+figure()
+plot(x2_plot_1D/L2, real( phi_2_r3 ))
+title('Approximation of $\phi_{2}^{(3)}$')
+
+phi_2_r3 = get_phi_j_r(v_N_G2_r3, vertices2, L2, kwave, d, h1, x1, ...
+    y1, n2, t2_mid, x2, y2, phi_1_2_outer);
+    
+[us_2_3] = compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi_2_r3);
+
+figure()
+pcolor(X, Y, real(us_2_3))
+shading interp; colorbar  
+
+
+figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2 - us_2_3)); shading interp; colorbar
+
+
+
 %% various attempts of plotting
 % Following is good behind Gamma_{1} not behind Gamma_2.
 figure(); pcolor(X, Y, real(ui - us_1_0./2 - us_2_1./2 - us_1_2./2)); shading interp; colorbar
@@ -292,3 +335,7 @@ figure(); pcolor(X, Y, real(ui - us_1_0./2 - us_2_1./2 - us_1_2./2)); shading in
 % leave the system for it to look reasonable or somehow compute both??
 
 figure(); pcolor(X, Y, real(ui - us_1_0./1 - us_2_1./1 )); shading interp; colorbar
+
+figure(); pcolor(X, Y, real(ui - us_2_1 - us_1_2)); shading interp; colorbar
+
+figure(); pcolor(X, Y, real(ui - us_1_2 - us_2_3)); shading interp; colorbar
