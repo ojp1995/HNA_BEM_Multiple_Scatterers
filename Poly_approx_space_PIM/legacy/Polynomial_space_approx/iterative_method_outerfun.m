@@ -40,7 +40,7 @@ L2 = sqrt( (G2(3) - G2(1))^2 + (G2(4) - G2(2))^2 );  % length of G2
 
 C_wl= 1/40
 
-k = 5;  % wavenumber
+k = 10;  % wavenumber
 
 
 N1 = ceil(k*L1./(C_wl*2*pi)) % number of itervals on G1
@@ -217,7 +217,7 @@ set(legend,'fontsize',17);
 % figure(); plot(x_sample1, real(phi2_1), x_sample3, real(phi2_3), x_sample5, real(phi2_5)); legend('\phi_{2}^{(1)}', '\phi_{2}^{(3)}', '\phi_{2}^{(5)}');legend show; title('Solutions on \Gamma_{2}')
 
 %%
-
+keyboard
 % compute the solution in the domain
 % Makr a square grid around the screens
 X_coordinates = [G1(1), G1(3), G2(1), G2(3)];
