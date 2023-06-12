@@ -96,6 +96,7 @@ xlim([-0.05, 1.05])
 legend show
 
 %% Plotting in the domain
+error('Long time beyond this point, not 100% neccessary unless you really want to see what is happening.')
 disp('This is the slow part! Do you want to plot each step?')
 keyboard
 
@@ -144,7 +145,7 @@ for r = 1:R+1
     us_phi2_r(:, :, r) =  ...
         compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi2_r_outer(r, :).');
     
-    u_r(:, :, r) = ui - ( us_phi1_r(:, :, r) - us_phi2_r(:, :, r) );
+    u_r(:, :, r) = ui - ( us_phi1_r(:, :, r) + us_phi2_r(:, :, r) );
     toc
     
     figure()
@@ -153,6 +154,4 @@ for r = 1:R+1
     title(['Total solution in the domain with r = ', num2str(r)])
 
 end
-
-
 
