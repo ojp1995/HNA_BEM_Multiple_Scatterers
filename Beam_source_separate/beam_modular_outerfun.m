@@ -10,6 +10,8 @@ clear classes
 % addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
 addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+addPathsHNA
 vertices1 = [-2*pi 2*pi;
     0, 0];
 Gamma1=Screen(vertices1);
@@ -322,7 +324,7 @@ pcolor(X, Y, real(us_2_3))
 shading interp; colorbar  
 
 
-figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2 - us_2_3)); shading interp; colorbar
+% figure(); pcolor(X, Y, real(ui - us_1_0 - us_2_1 - us_1_2 - us_2_3)); shading interp; colorbar
 
 
 
