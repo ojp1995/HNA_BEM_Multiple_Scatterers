@@ -94,3 +94,65 @@ xlabel('$s/L$')
 ylabel('$\phi_{2}^{(2r+1)}(s)$')
 xlim([-0.05, 1.05])
 legend show
+
+%% Plotting in the domain
+disp('This is the slow part! Do you want to plot each step?')
+keyboard
+
+[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
+[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
+
+% compute the solution in the domain
+% Makr a square grid around the screens
+X_coordinates = [G1(1), G1(3), G2(1), G2(3)];
+X_min = min(X_coordinates);
+X_max = max(X_coordinates);
+X_diff = abs(X_max - X_min);
+
+Y_coordinates = [G1(2), G1(4), G2(2), G2(4)];
+Y_min = min(Y_coordinates);
+Y_max = max(Y_coordinates);
+Y_diff = abs(Y_max - Y_min);
+
+% maybe also change this part
+N_diff = max(abs(Y_diff - X_diff)) + 5*pi;  % largest distance either x direction or y + 4*pi (2*pi in either direction)
+
+N_d = 500;
+
+min_leftorbottom = min(X_min, Y_min);
+max_toporright = max(X_max, Y_max);
+h_d = N_diff/N_d;
+% need to change this bit so that it is closer zoomed in on the picture
+X = [min_leftorbottom - 5: h_d: max_toporright + 5];
+Y = [min_leftorbottom - 5: h_d: max_toporright + 5];
+
+%% Computing incident plane wave
+ui = incident2d(kwave, theta, X, Y);
+
+figure()
+pcolor(X, Y, real(ui))
+shading interp; colorbar
+
+us_phi1_r = zeros(length(X), length(Y), R+1);
+us_phi2_r = zeros(length(X), length(Y), R+1);
+u_r = zeros(length(X), length(Y), R+1);
+for r = 1:R+1
+    tic
+    us_phi1_r(:, :, r) =  ...
+        compute_scattered_field_beam(kwave, X, Y, x1, y1, h1, phi1_r_outer(r, :).');
+    
+    us_phi2_r(:, :, r) =  ...
+        compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi2_r_outer(r, :).');
+    
+    u_r(:, :, r) = ui - ( us_phi1_r(:, :, r) - us_phi2_r(:, :, r) );
+    toc
+    
+    figure()
+    pcolor(X, Y, real(u_r(:, :, r)));
+    shading interp; colorbar
+    title(['Total solution in the domain with r = ', num2str(r)])
+
+end
+
+
+
