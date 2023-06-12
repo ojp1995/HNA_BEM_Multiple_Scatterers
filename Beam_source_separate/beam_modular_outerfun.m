@@ -91,8 +91,8 @@ xlim([-0.05 1.05])
 title('Soluiton on the boundary for r=0, screens in line, long way away')
 
 %% Step 1
-N_min = 1;
-N_max = 8;
+N_min = 6;
+N_max = 6;
 for j = N_min:N_max
     disp(j)
     N_approx = 2^(-j);
@@ -244,9 +244,9 @@ N_approx_inner = N_approx/2;
 [y1nq_2_inner, y2nq_2_inner, ~, t2_mid_inner, h2_inner, ~, ~, ~] =  discretisation_variables(G2, N_approx_inner, kwave);
 
 
-
 phi_2_1_outer = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
 y1, n2, t2_mid, x2, y2, phi1_0(t1_mid.'));
+
 phi_2_1_inner = get_phi_j_r(v_N_G2_r1, vertices2, L2, kwave, d, h1, x1, ...
 y1, n2, t2_mid_inner, y1nq_2_inner, y2nq_2_inner, phi1_0(t1_mid.'));
 
