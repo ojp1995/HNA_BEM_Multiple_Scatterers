@@ -3,24 +3,38 @@
 clear all
 clear classes
 
+load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
+
+phi1_r_poly = phi1_r;
+phi2_r_poly = phi2_r;
 % addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
 addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
 addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
 addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
 addPathsHNA
-vertices1 = [-2*pi 2*pi;
-    0, 0];
-Gamma1=Screen(vertices1);
 
-vertices2 = [2*pi 0;
-    5*pi 3*pi];
-            
-Gamma2=Screen(vertices2);
+vertices1 = [G1(1), G1(2) ;
+    G1(3), G1(4)];
+Gamma1 = Screen(vertices1);
+
+vertices2 = [G2(1), G2(2) ;
+    G2(3), G2(4)];
+Gamma2 = Screen(vertices2);
+
+kwave = k;
+
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% Gamma1=Screen(vertices1);
+
+% vertices2 = [2*pi 0;
+%     5*pi 3*pi];
+% Gamma2=Screen(vertices2);
 
 % General set up
 %wavenumber
-kwave=10;
-theta = 0;
+% kwave=10;
+% theta = 0;
 % theta = pi/4; %% need to change so it is consistent
 d = [sin(theta) -cos(theta) ];
 uinc=planeWave(kwave,d);
@@ -55,7 +69,7 @@ G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
 n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)]/L1;
 n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
 
-R = 10;
+% R = 20; 
 %%
 N_approx = 2^(-6);
 
@@ -94,6 +108,84 @@ xlabel('$s/L$')
 ylabel('$\phi_{2}^{(2r+1)}(s)$')
 xlim([-0.05, 1.05])
 legend show
+
+%% compare to the polynomial code
+
+% error calculations
+for r = 1:R
+    
+    err_HNAvspoly_phi1(r, :) = abs(phi1_r_outer(r, :) - phi1_r_poly(r, :));
+    sum_err_phi1(r) = sum(err_HNAvspoly_phi1(r, :))/length(phi1_r_outer(r, :));
+    
+    err_HNAvspoly_phi2(r, :) = abs(phi2_r_outer(r, :) - phi2_r_poly(r, :));
+    sum_err_phi2(r) = sum(err_HNAvspoly_phi2(r, :))/length(phi2_r_outer(r, :));
+    
+end
+
+% first compare directly with plots one over the other
+% comparing \phi1
+R_min_plot = 1;
+R_max_plot = 5;
+figure()
+for r = R_min_plot:R_max_plot
+    plot(phi1_x, real(phi1_r_outer(r, :)), 'DisplayName', strcat('HNA, r = ', num2str(2*r - 2)));
+    hold on
+    plot(phi1_x, real(phi1_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 2)), 'LineStyle', '--');
+    
+
+end
+legend show
+title('Comparison between poly and HNA aproximation of $\phi_{1}^{(r)}$')
+xlabel('$s/L$')
+ylabel('$\phi_{1}^{r}(s)$')
+xlim([-0.05 1.05])
+
+figure()
+for r = R_min_plot:R_max_plot
+    plot(phi2_x, real(phi2_r_outer(r, :)), 'DisplayName', strcat('HNA, r = ', num2str(2*r - 1)));
+    hold on
+    plot(phi2_x, real(phi2_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 1)), 'LineStyle', '--');
+    
+end
+legend show
+title('Comparison between poly and HNA aproximation of $\phi_{2}^{(r)}$')
+xlabel('$s/L$')
+ylabel('$\phi_{2}^{r}(s)$')
+xlim([-0.05 1.05])
+
+% Now compute and plot errors
+figure()
+for r = R_min_plot:R_max_plot
+    plot(phi1_x, real(err_HNAvspoly_phi1(r, :)), 'DisplayName', strcat('r = ', num2str(2*r - 2)));
+    hold on
+    
+end
+legend show
+title('Absolute error between HNA and polynomial approximation of $\phi_{1}^{(r)}$')
+xlabel('$s/L$')
+ylabel('Difference')
+xlim([-0.05 1.05])
+
+figure()
+for r = R_min_plot:R_max_plot
+    plot(phi2_x, real(err_HNAvspoly_phi2(r, :)), 'DisplayName', strcat('r = ', num2str(2*r - 1)));
+    hold on
+    
+end
+legend show
+title('Absolute error between HNA and polynomial approximation of $\phi_{2}^{(r)}$')
+xlabel('$s/L$')
+ylabel('Difference')
+xlim([-0.05 1.05])
+
+figure()
+plot(sum_err_phi1, 'DisplayName', 'Averaged error in $\phi_{1}^{(r)}$')
+hold on
+plot(sum_err_phi2, 'DisplayName', 'Averaged error in $\phi_{2}^{(r)}$')
+legend show
+title('Summed average between HNA and poly computation for different R')
+xlabel('r')
+ylabel('Summed difference')
 
 %% Plotting in the domain
 error('Long time beyond this point, not 100% neccessary unless you really want to see what is happening.')
