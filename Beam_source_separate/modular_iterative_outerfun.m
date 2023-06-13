@@ -83,8 +83,10 @@ phi1_x = linspace(0, 1, length(phi1_r_outer(1, :)));
 phi2_x = linspace(0, 1, length(phi2_r_outer(1, :)));
 
 %%
+R_min_plot = 1;
+R_max_plot = 4;
 figure()
-for r = 1:R+1
+for r = R_min_plot:R_max_plot
     subplot(2, 1, 1)
     plot(phi1_x, real(phi1_r_outer(r, :)), 'DisplayName', strcat('r = ', num2str(2*r - 2)))
     hold on
@@ -96,16 +98,16 @@ for r = 1:R+1
 end
 
 subplot(2, 1, 1)
-title('Approximation of $\phi_{1}^{(2r)}$')
-xlabel('$s/L$')
-ylabel('$\phi_{1}^{(2r)}(s)$')
+title('Approximation of $\phi_{1}^{(2r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{1}^{(2r)}(s)$', 'fontsize',18,'interpreter','latex')
 xlim([-0.05 1.05])
 legend show
 
 subplot(2, 1, 2)
-title('Approximation of $\phi_{2}^{(2r+1)}$')
-xlabel('$s/L$')
-ylabel('$\phi_{2}^{(2r+1)}(s)$')
+title('Approximation of $\phi_{2}^{(2r+1)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{2}^{(2r+1)}(s)$', 'fontsize',18,'interpreter','latex')
 xlim([-0.05, 1.05])
 legend show
 
@@ -125,19 +127,19 @@ end
 % first compare directly with plots one over the other
 % comparing \phi1
 R_min_plot = 1;
-R_max_plot = 5;
+R_max_plot = 4;
 figure()
 for r = R_min_plot:R_max_plot
     plot(phi1_x, real(phi1_r_outer(r, :)), 'DisplayName', strcat('HNA, r = ', num2str(2*r - 2)));
     hold on
-    plot(phi1_x, real(phi1_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 2)), 'LineStyle', '--');
+    plot(phi1_x, real(phi1_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 2)),  'LineStyle', '--');
     
 
 end
 legend show
-title('Comparison between poly and HNA aproximation of $\phi_{1}^{(r)}$')
-xlabel('$s/L$')
-ylabel('$\phi_{1}^{r}(s)$')
+title('Comparison between poly and HNA aproximation of $\phi_{1}^{(r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{1}^{r}(s)$', 'fontsize',18,'interpreter','latex')
 xlim([-0.05 1.05])
 
 figure()
@@ -148,9 +150,9 @@ for r = R_min_plot:R_max_plot
     
 end
 legend show
-title('Comparison between poly and HNA aproximation of $\phi_{2}^{(r)}$')
-xlabel('$s/L$')
-ylabel('$\phi_{2}^{r}(s)$')
+title('Comparison between poly and HNA aproximation of $\phi_{2}^{(r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{2}^{r}(s)$', 'fontsize',18,'interpreter','latex')
 xlim([-0.05 1.05])
 
 % Now compute and plot errors
@@ -161,9 +163,9 @@ for r = R_min_plot:R_max_plot
     
 end
 legend show
-title('Absolute error between HNA and polynomial approximation of $\phi_{1}^{(r)}$')
-xlabel('$s/L$')
-ylabel('Difference')
+title('Absolute error between HNA and polynomial approximation of $\phi_{1}^{(r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('Difference', 'fontsize',18,'interpreter','latex')
 xlim([-0.05 1.05])
 
 figure()
@@ -173,9 +175,9 @@ for r = R_min_plot:R_max_plot
     
 end
 legend show
-title('Absolute error between HNA and polynomial approximation of $\phi_{2}^{(r)}$')
-xlabel('$s/L$')
-ylabel('Difference')
+title('Absolute error between HNA and polynomial approximation of $\phi_{2}^{(r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('Difference', 'fontsize',18,'interpreter','latex')
 xlim([-0.05 1.05])
 
 figure()
@@ -183,9 +185,9 @@ plot(sum_err_phi1, 'DisplayName', 'Averaged error in $\phi_{1}^{(r)}$')
 hold on
 plot(sum_err_phi2, 'DisplayName', 'Averaged error in $\phi_{2}^{(r)}$')
 legend show
-title('Summed average between HNA and poly computation for different R')
-xlabel('r')
-ylabel('Summed difference')
+title('Summed average between HNA and poly computation for different R', 'fontsize',18,'interpreter','latex')
+xlabel('r', 'fontsize',18,'interpreter','latex')
+ylabel('Summed difference', 'fontsize',18,'interpreter','latex')
 
 %% Plotting in the domain
 error('Long time beyond this point, not 100% neccessary unless you really want to see what is happening.')
@@ -243,7 +245,7 @@ for r = 1:R+1
     figure()
     pcolor(X, Y, real(u_r(:, :, r)));
     shading interp; colorbar
-    title(['Total solution in the domain with r = ', num2str(r)])
+    title(['Total solution in the domain with r = ', num2str(r)], 'fontsize',18,'interpreter','latex')
 
 end
 
