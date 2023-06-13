@@ -190,10 +190,6 @@ xlabel('r', 'fontsize',18,'interpreter','latex')
 ylabel('Summed difference', 'fontsize',18,'interpreter','latex')
 
 %% Plotting in the domain
-error('Long time beyond this point, not 100% neccessary unless you really want to see what is happening.')
-disp('This is the slow part! Do you want to plot each step?')
-keyboard
-
 [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
 [x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
 
@@ -227,6 +223,23 @@ ui = incident2d(kwave, theta, X, Y);
 figure()
 pcolor(X, Y, real(ui))
 shading interp; colorbar
+
+us_phi1 = ...
+    compute_scattered_field_beam(kwave, X, Y, x1, y1, h1, phi1_r_outer(end, :).');
+
+us_phi2 = ...
+    compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi2_r_outer(end, :).');
+
+u_best_approx = ui - (us_phi1 + us_phi2);
+
+figure()
+pcolor(X, Y, real(u_best_approx));
+shading interp; colorbar
+title('Total solution in the field', 'fontsize',18,'interpreter','latex')
+xlabel('$x$', 'fontsize',18,'interpreter','latex')
+ylabel('$y$', 'fontsize',18,'interpreter','latex')
+%%
+error('Seriously slow code ahead!')
 
 us_phi1_r = zeros(length(X), length(Y), R+1);
 us_phi2_r = zeros(length(X), length(Y), R+1);
