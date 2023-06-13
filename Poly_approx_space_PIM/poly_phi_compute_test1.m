@@ -36,7 +36,7 @@ R_true = 20;
 % computing variables for G2:
 [x2, y2, t2, h2, h2vector, N2, L2] = discretisation_variables(G2, C_wl, k);
 
-R_true = R;
+R = R_true;
 
 phi1_r = zeros(R, length(x1));
 phi2_r = zeros(R, length(x2));
