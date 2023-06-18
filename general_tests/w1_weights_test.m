@@ -23,6 +23,9 @@ C2 = 2*pi;
 t = [a+h/2:h:b- h/2];
 t_grid = [a:h:b];
 
+for j = 1:length(s)
+    t_in_s_q1(j) = sum(s(j) == t_grid);
+end
 
 err = zeros(size(s));
 
@@ -44,7 +47,7 @@ end
 
 figure()
 plot(s, err)
-title('Difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Difference between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel('$s$', 'fontsize',15,'interpreter','latex')
 ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
@@ -53,7 +56,7 @@ plot(s, matlab_val, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s, our_approx, 'DisplayName', 'Our approximation')
 legend show
-title('Comparison between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Comparison between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel( '$s$',  'fontsize',15,'interpreter','latex')
 ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
@@ -67,6 +70,9 @@ s = linspace(a-0.0001, b+0.0001, 1000);
 
 err_a_b = zeros(size(s));
 
+for j = 1:length(s)
+    t_in_s_q2(j) = sum(s(j) == t_grid);
+end
 
 for j = 1:length(s)
 
@@ -83,14 +89,14 @@ plot(s, matlab_val_a_b, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s, our_approx_a_b, 'DisplayName', 'Our approximation')
 legend show
-title('Comparison between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Comparison between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel( '$s$',  'fontsize',15,'interpreter','latex')
 ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 
 figure()
 plot(s, err_a_b)
-title('Difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Difference between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel('$s$', 'fontsize',15,'interpreter','latex')
 ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
@@ -100,14 +106,14 @@ plot(s(435:445), matlab_val_a_b(435:445), 'DisplayName', 'Matlabs approximation'
 hold on
 plot(s(435:445), our_approx_a_b(435:445), 'DisplayName', 'Our approximation')
 legend show
-title('Small subset of singular intergal - Comparison between our approximation and matlabs', 'fontsize',15,'interpreter','latex')
+title('Small subset of singular intergal - Comparison between analytic evaluation and Matlab integrator', 'fontsize',15,'interpreter','latex')
 xlabel( '$s$',  'fontsize',15,'interpreter','latex')
 ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 
 figure()
 plot(s(435:445), err_a_b(435:445))
-title('Singular part only - Plot of the difference between Matlabs integrator and our approximation', 'fontsize',15,'interpreter','latex')
+title('Singular part only - Plot of the difference between Matlab integrator and analytic evaluation', 'fontsize',15,'interpreter','latex')
 xlabel('$s$', 'fontsize',15,'interpreter','latex')
 ylabel('Difference', 'fontsize',15,'interpreter','latex')
 
@@ -123,6 +129,10 @@ t = [a_test+h/2:h:b_test- h/2];
 t_grid = [a_test:h:b_test];
 
 for j = 1:length(s_sing_test)
+    t_in_s_q3(j) = sum(s_sing_test(j) == t_grid);
+end
+
+for j = 1:length(s_sing_test)
     
     matlab_sing_test(j) = integral(@(y) f(s_sing_test(j), y), a_test, b_test);
 
@@ -136,12 +146,14 @@ plot(s_sing_test, matlab_sing_test, 'DisplayName', 'Matlabs approximation')
 hold on
 plot(s_sing_test, our_approx_sing_test, 'DisplayName', 'Our approximation')
 legend show
-title('Isolating a problem area and comparing between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Isolating a problem area and comparing between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel( '$s$',  'fontsize',15,'interpreter','latex')
 ylabel('$\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$' ,  'fontsize',15,'interpreter','latex')
 
 figure()
 plot(s_sing_test, err_sing_test)
-title('Isolating a problem area and showing the difference between Matlab and our approximation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
+title('Isolating a problem area and showing the difference between Matlab integrator and analytic evaluation of $\int_{a}^{b}\ln(k \vert s - t \vert) \mathrm{d} t$', 'fontsize',15,'interpreter','latex')
 xlabel('$s$', 'fontsize',15,'interpreter','latex')
 ylabel('Difference', 'fontsize',15,'interpreter','latex')
+
+disp([sum(t_in_s_q1), sum(t_in_s_q2), sum(t_in_s_q3)])
