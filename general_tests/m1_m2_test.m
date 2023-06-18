@@ -6,7 +6,9 @@
 clear all
 
 
-addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+
 k = 0.85;
 lambda = 2*pi/k;
 a = 1.35;
@@ -19,13 +21,10 @@ h = (b - a)/N;
 C1 = 1;
 C2 = 2*pi;
 
-t = a + 0.3;
-
-
+t = s(randi(1000, 1, 1));
 
 err = zeros(size(s));
 
-% f = @(x, y) 1i*besselh()
 for j = 1:length(s)
     dist = abs(s(j) - t);
 
@@ -39,7 +38,7 @@ end
 
 figure()
 plot(s, err)
-title('Difference between Matlabs Bessel \\ function and deconstruction','fontsize',15,'interpreter','latex')
+title('Difference between Matlabs Bessel function and deconstruction','fontsize',15,'interpreter','latex')
 xlim([-0.1, 10.1])
 xlabel('$s$', 'fontsize',15,'interpreter','latex')
 ylabel('$\frac{i}{4}H_{0}^{(1)}(k \vert s - t \vert) - (m_{1}(s, t)\sigma_{1}(s, t) + m_{2}(s, t) \sigma_{2}(s, t))$', 'fontsize',15,'interpreter','latex')
