@@ -3,8 +3,10 @@
 clear all
 clear classes
 
-addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-
+% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+addPathsHNA
 % TODO: check what order the coefficients need to be in!
 % General set up
 
@@ -102,7 +104,7 @@ title('Soluiton on the boundary for r=0, screens in line, long way away')
 %%
 % % Step 1 - Convergence test
 N_min = 1;
-N_max = 10;
+N_max = 8;
 for j = N_min:N_max
     disp(j)
     N_approx = 2^(-j);
