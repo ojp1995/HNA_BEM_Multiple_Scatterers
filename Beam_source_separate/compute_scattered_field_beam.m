@@ -1,5 +1,5 @@
-function [us] = compute_scattered_field_beam(k, X, Y, nqx, nqy,...
-    h, fnq)
+function [us, x1, y1] = compute_scattered_field_beam(k, X, Y, nqx, nqy,...
+    h, fnq, G, nq_1D)
 % In this function we will compute the scattered field from a beam source.
 % This could be an incident source or it could be the scattered field that
 % we then minus the plane wave from to find the total field
@@ -19,3 +19,7 @@ for ix = 1:length(X)
     end
     
 end
+
+L = sqrt( (G(3) - G(1))^2 + (G(4) - G(2))^2 );
+x1 = G(1) + nq_1D*(G(3) - G(1))/L;
+y1 = G(2) + nq_1D*( G(4) - G(2) )/L;

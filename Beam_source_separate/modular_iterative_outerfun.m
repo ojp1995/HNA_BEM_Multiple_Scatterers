@@ -3,14 +3,17 @@
 clear all
 clear classes
 
-load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
-
+% load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
+load('../Poly_approx_space_PIM/polycode_test1_R_20.mat')
 phi1_r_poly = phi1_r;
 phi2_r_poly = phi2_r;
 % addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+addpath('../General_functions/')
+addpath('../Multiple_scattering_problems/')
+addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA
 
 vertices1 = [G1(1), G1(2) ;
@@ -224,20 +227,32 @@ figure()
 pcolor(X, Y, real(ui))
 shading interp; colorbar
 
-us_phi1 = ...
-    compute_scattered_field_beam(kwave, X, Y, x1, y1, h1, phi1_r_outer(end, :).');
+[us_phi1, x1, y1] = ...
+    compute_scattered_field_beam(kwave, X, Y, x1, y1, h1,...
+    phi1_r_outer(end, :).', G1, t1_mid);
 
-us_phi2 = ...
-    compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, phi2_r_outer(end, :).');
+[us_phi2, x2, y2] = ...
+    compute_scattered_field_beam(kwave, X, Y, x2, y2, h2, ...
+    phi2_r_outer(end, :).', G2, t2_mid);
 
 u_best_approx = ui - (us_phi1 + us_phi2);
 
 figure()
 pcolor(X, Y, real(u_best_approx));
+hold on
+Gamma_1 = plot(x1, y1);
+Gamma_1.LineWidth = 2;
+Gamma_1.Color = [0 0 0];
+Gamma_2 = plot(x2, y2);
+Gamma_2.LineWidth = 2;
+Gamma_2.Color = [0 0 0];
 shading interp; colorbar
-title('Total solution in the field', 'fontsize',18,'interpreter','latex')
-xlabel('$x$', 'fontsize',18,'interpreter','latex')
-ylabel('$y$', 'fontsize',18,'interpreter','latex')
+txt_title = ['Total solution in the field, $k = $', num2str(k),...
+    '\theta = ', num2str(theta), '$R = $', num2str(R)];
+title('Total solution in the field, $k = 10$, $\theta = 0$, R = 20.',...
+    'fontsize',18)
+xlabel('$x$', 'fontsize',18)
+ylabel('$y$', 'fontsize',18)
 %%
 error('Seriously slow code ahead!')
 
