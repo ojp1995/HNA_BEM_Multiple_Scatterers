@@ -48,11 +48,11 @@ v_N2, GOA2, colMatrix2, colRHS2, col_points2, VHNA1, VHNA2] ...
 
 %% isolating the discretisation points
 
-mesh1_p = VHNA1.mesh{1}{1}.points;
-mesh1_n = VHNA1.mesh{1}{2}.points;
+mesh1_p = VHNA1.mesh{1}{1}.points(end - 2:end);
+mesh1_n = VHNA1.mesh{1}{2}.points(1:3);
 
-mesh2_p = VHNA2.mesh{1}{1}.points;
-mesh2_n = VHNA2.mesh{1}{2}.points;
+mesh2_p = VHNA2.mesh{1}{1}.points(end - 2:end);
+mesh2_n = VHNA2.mesh{1}{2}.points(1:3);
 
 %%
 
@@ -86,7 +86,7 @@ n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
 % y2_plot = linspace(y2_col(1), y2_col(end), length(x2_plot_1D)).';
 % R = 20; 
 %%
-N_approx = 2^(-6);
+N_approx = 2^-6;
 
 [aj_1_r, aj_2_r, phi1_r_outer, phi2_r_outer] = ...
     compute_coeff_LOB_for_R_iterations(kwave, N_approx, G1, G2, ...
