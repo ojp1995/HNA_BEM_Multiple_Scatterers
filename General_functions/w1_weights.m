@@ -22,8 +22,10 @@ select2 = (s - tj) == 0;
 %     keyboard
 % end
 
-w(select1) = tj_1(select1) - tj(select1);
-w(select2) = tj_1(select2) - tj(select2);
+w(select1) = (tj(select1) - tj_1(select1)).*log(k*(tj(select1) ...
+    - tj_1(select1))) + tj_1(select1) - tj(select1);
+w(select2) = (tj(select2) - tj_1(select2)).*log(k*(tj(select2) ...
+    - tj_1(select2))) + tj_1(select2) - tj(select2);
 
 
 
