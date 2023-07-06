@@ -5,15 +5,13 @@
 
 clear all
 
-% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
 
 k = 0.85;
 lambda = 2*pi/k;
 a = 1.35;
 b = 1 + lambda/10;
-
-s = linspace(a - 0.2, b+0.2, 1000);
 
 N = 2^20;
 h = (b - a)/N;
@@ -22,6 +20,10 @@ C2 = 2*pi;
 
 t = [a+h/2:h:b- h/2];
 t_grid = [a:h:b];
+
+
+s = linspace(a + h/2, b+h/2, 1000);
+
 
 for j = 1:length(s)
     t_in_s_q1(j) = sum(s(j) == t_grid);
