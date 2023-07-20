@@ -1,4 +1,5 @@
 %PIM using midpoint rule test, singular kernel
+
 clear all
 a = 0;  % start of interval
 b = 1;
