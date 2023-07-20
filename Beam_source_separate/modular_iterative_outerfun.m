@@ -3,17 +3,17 @@
 clear all
 clear classes
 
-% load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
-load('../Poly_approx_space_PIM/polycode_test1_R_20.mat')
+load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
+% load('../Poly_approx_space_PIM/polycode_test1_R_20.mat')
 phi1_r_poly = phi1_r;
 phi2_r_poly = phi2_r;
 % addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
-% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
-% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
-addpath('../General_functions/')
-addpath('../Multiple_scattering_problems/')
-addpath('../../BEAM_HNABEMLAB/')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+% addpath('../General_functions/')
+% addpath('../Multiple_scattering_problems/')
+% addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA
 
 vertices1 = [G1(1), G1(2) ;
