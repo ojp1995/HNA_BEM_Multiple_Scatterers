@@ -64,7 +64,7 @@ nq_ell_PIM, LoB_kernel_beam, tq_ell_PIM, C1, C2);
 
 f_ell_uinc = incident(k, theta, x1s_ell, x2s_ell) - LoB_uinc;
 
-f_ell_beam = S_ell_j_phi_j - LoB_beam;
+f_ell_beam = - S_ell_j_phi_j + LoB_beam;
 
 f_ell = f_ell_uinc + f_ell_beam;
 
