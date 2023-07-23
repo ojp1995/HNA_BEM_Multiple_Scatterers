@@ -14,12 +14,36 @@ addPathsHNA
 
 R = 20; 
 % general geometrical set up
-vertices1 = [-2*pi 2*pi;
-    0, 0];
-Gamma1=Screen(vertices1);
+% Case 1
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     5*pi 3*pi];
+
+% % Case 2
+% vertices1 = [-2*pi 0;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     3*pi 3*pi];
+
+% Case 3
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     2*pi 3*pi];
+
+% Case 4 - Screens facing away from each other - makes a difference which
+% order things are put in. How can we fix this?
+vertices1 = [-2*pi -2*pi;
+    0 0];
 
 vertices2 = [2*pi 0;
-    5*pi 3*pi];
+    4*pi -3*pi];
+
+Gamma1=Screen(vertices1);
 Gamma2=Screen(vertices2);
 
 
@@ -130,9 +154,9 @@ Y = [min_leftorbottom - 5: h_d: max_toporright + 5];
 %% Computing incident plane wave
 ui = incident2d(kwave, theta, X, Y);
 
-figure()
-pcolor(X, Y, real(ui))
-shading interp; colorbar
+% figure()
+% pcolor(X, Y, real(ui))
+% shading interp; colorbar
 
 [us_phi1, x1, y1] = ...
     compute_scattered_field_beam(kwave, X, Y, x1, y1, h1,...
