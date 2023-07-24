@@ -130,15 +130,16 @@ end
 % first compare directly with plots one over the other
 % comparing \phi1
 R_min_plot = 1;
-R_max_plot = 4;
+R_max_plot = 3;
 figure()
 for r = R_min_plot:R_max_plot
-    plot(phi1_x, real(phi1_r_outer(r, :)), 'DisplayName', strcat('HNA, r = ', num2str(2*r - 2)));
+    plot(phi1_x, real(phi1_r_outer(r, :)), '-.',  'DisplayName', strcat('HNA, r = ', num2str(2*r - 2)));
     hold on
     plot(phi1_x, real(phi1_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 2)),  'LineStyle', '--');
     
 
 end
+plot(phi1_x, real(phi1_r_poly(end, :)), 'DisplayName', strcat('poly, r = ', num2str(2*R - 2)),  'LineStyle', '--');
 legend show
 title('Comparison between poly and HNA aproximation of $\phi_{1}^{(r)}$', 'fontsize',18,'interpreter','latex')
 xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
@@ -147,11 +148,12 @@ xlim([-0.05 1.05])
 
 figure()
 for r = R_min_plot:R_max_plot
-    plot(phi2_x, real(phi2_r_outer(r, :)), 'DisplayName', strcat('HNA, r = ', num2str(2*r - 1)));
+    plot(phi2_x, real(phi2_r_outer(r, :)), '-.', 'DisplayName', strcat('HNA, r = ', num2str(2*r - 1)));
     hold on
     plot(phi2_x, real(phi2_r_poly(r, :)), 'DisplayName', strcat('poly, r = ', num2str(2*r - 1)), 'LineStyle', '--');
     
 end
+plot(phi2_x, real(phi2_r_poly(end, :)), 'DisplayName', strcat('poly, r = ', num2str(2*R - 1)), 'LineStyle', '--');
 legend show
 title('Comparison between poly and HNA aproximation of $\phi_{2}^{(r)}$', 'fontsize',18,'interpreter','latex')
 xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
@@ -193,6 +195,7 @@ xlabel('r', 'fontsize',18,'interpreter','latex')
 ylabel('Summed difference', 'fontsize',18,'interpreter','latex')
 
 %% Plotting in the domain
+error('Why??')
 [x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
 [x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
 
