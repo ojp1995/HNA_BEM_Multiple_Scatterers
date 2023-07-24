@@ -4,9 +4,15 @@ function I = midpoint_dphikdn_f_diff_screen(k, x1, x2, h, y1t, y2t, fnq, n)
 % a function. Specifically:
 %
 % Inputs:
-%
+% k is the wavenumber
+% (x1, x2) each a vector of the collocation points
+% h, midpoint weights
+% (y1t, y2t), integration nodes
+% fnq, function evaluated at the integration nodes
+% n, normal from the screen
+
 % Outputs:
-%
+% I , approximation to the integral.
 
 
 
