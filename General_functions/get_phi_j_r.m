@@ -20,5 +20,5 @@ LoB = midpoint_dphikdn_f_diff_screen(k, xj, yj, h_ell, y1_ell, y2_ell, ...
 
 phi_j_r = coeffs.eval(t1d, 1) + 2*duidn(Gj, Lj, k, d, t1d).' + LoB;
 
-% think it might need to be -LoB, need to double check this, the plot it
-% gives is interesting to say the least
+% LoB sign is correct, it is a minus until the derivative comes into play
+% as the d/dx (H_0^(1)(x)) = -H_1^(1)(x) giving the plus overall.
