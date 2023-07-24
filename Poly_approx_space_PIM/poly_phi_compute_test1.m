@@ -6,6 +6,7 @@ addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatter
 % introducing the screens
 
 
+
 % switch and things get interesting
 G1 = [-2*pi, 2*pi, 0, 0];
 
@@ -46,7 +47,39 @@ for r = 1:R
     phi2_r(r, :) = coeff_2soln_midpoint(aj_2_r(:, r), L2, N2-1, N2);
     
 end
+%%
+h1 = h1vector(1);
+t1_mid = [t1(1) + h1/2:h1 : t1(end) - h1/2];
+h2 = h2vector(1);
+t2_mid = [t2(1) + h2/2:h2 : t2(end) - h2/2];
+figure()
 
-savefile = 'polycode_test1_R_20.mat';
-save(savefile, 'phi1_r', 'phi2_r', 'R', 'G1', 'G2', 'C_wl', 'k', 'theta');
+
+for r = 1:4
+    subplot(2, 1, 1)
+    plot(t1_mid/L1, real(phi1_r(r, :)), 'DisplayName', strcat('r = ', num2str(2*r - 2)))
+    hold on
+    
+    subplot(2, 1, 2)
+    plot(t2_mid/L2, real(phi2_r(r, :)), 'DisplayName', strcat('r = ', num2str(2*r - 1)))
+    hold on
+    
+end
+
+subplot(2, 1, 1)
+title('Approximation of $\phi_{1}^{(2r)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{1}^{(2r)}(s)$', 'fontsize',18,'interpreter','latex')
+xlim([-0.05 1.05])
+legend show
+
+subplot(2, 1, 2)
+title('Approximation of $\phi_{2}^{(2r+1)}$', 'fontsize',18,'interpreter','latex')
+xlabel('$s/L$', 'fontsize',18,'interpreter','latex')
+ylabel('$\phi_{2}^{(2r+1)}(s)$', 'fontsize',18,'interpreter','latex')
+xlim([-0.05, 1.05])
+legend show
+
+% savefile = 'polycode_test1_R_20.mat';
+% save(savefile, 'phi1_r', 'phi2_r', 'R', 'G1', 'G2', 'C_wl', 'k', 'theta');
 
