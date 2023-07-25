@@ -10,7 +10,7 @@ addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatter
 % switch and things get interesting
 G1 = [-2*pi, 2*pi, 0, 0];
 
-G2 = [2*pi, 0, 5*pi, 3*pi]; 
+G2 = [2*pi, 0,  5*pi, 3*pi]; 
 
 C_wl= 2^-6;
 
@@ -80,6 +80,6 @@ ylabel('$\phi_{2}^{(2r+1)}(s)$', 'fontsize',18,'interpreter','latex')
 xlim([-0.05, 1.05])
 legend show
 
-% savefile = 'polycode_test1_R_20.mat';
-% save(savefile, 'phi1_r', 'phi2_r', 'R', 'G1', 'G2', 'C_wl', 'k', 'theta');
+savefile = 'polycode_test1_R_20_dof2_6.mat';
+save(savefile, 'phi1_r', 'phi2_r', 'R', 'G1', 'G2', 'C_wl', 'k', 'theta');
 
