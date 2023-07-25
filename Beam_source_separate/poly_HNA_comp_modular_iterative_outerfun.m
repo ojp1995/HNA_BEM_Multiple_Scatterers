@@ -120,7 +120,7 @@ legend show
 % intergation nodes for L1 error computations
 L1_temp = L1;
 
-N_L1_err = 2^10;
+N_L1_err = 2^6;
 h1_L1_err = L1/N_L1_err;
 t1_L1_err_grid = [0: h1_L1_err: L1];
 tq1 = [h1_L1_err/2 : h1_L1_err: L1 - h1_L1_err];
@@ -138,9 +138,19 @@ yq1 = G1(2) + tq1*(G1(4) - G1(2))/(L1);
 
 
 % error computations for last iteration
-L1_err_G1 = L1_err_poly_HNA(tq1, xq1, yq1, h1_L1_err, vertices1, L1, k, d, n1,...
+[L1_err_G1, phi_poly, phi_HNA] = L1_err_poly_HNA(tq1, xq1, yq1, h1_L1_err, vertices1, L1, k, d, n1,...
     phi1_r_poly(end, :), aj_1_r{end},  h2_in, x2_in, ...
     y2_in, phi2_r_outer(end - 1, :).');
+
+figure()
+plot(tq1/L1, real(phi_poly), 'DisplayName', 'Poly approx')
+hold on
+plot(tq1/L1, real(phi_HNA), 'DisplayName', 'HNA approx')
+legend show
+xlim([-0.05 1.05])
+
+keyboard
+
 
 L1 = L1_temp;
 % error calculations
