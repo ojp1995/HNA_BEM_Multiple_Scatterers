@@ -29,19 +29,26 @@ R = 20;
 %     3*pi 3*pi];
 
 % Case 3
-% vertices1 = [-2*pi 2*pi;
-%     0, 0];
-% 
-% vertices2 = [2*pi 0;
-%     2*pi 3*pi];
+vertices1 = [-2*pi 2*pi;
+    0, 0];
+
+vertices2 = [2*pi 0;
+    2*pi 3*pi];
+
+% Case 3a
+vertices1 = [-2*pi 2*pi;
+    0, 0];
+
+vertices2 = [2*pi 0;
+    (2*pi + 0.5) 3*pi];
 
 % Case 4 - Screens facing away from each other - makes a difference which
 % order things are put in. How can we fix this?
-vertices1 = [-2*pi -2*pi;
-    0 0];
-
-vertices2 = [2*pi 0;
-    4*pi -3*pi];
+% vertices1 = [-2*pi -2*pi;
+%     0 0];
+% 
+% vertices2 = [2*pi 0;
+%     4*pi -3*pi];
 
 Gamma1=Screen(vertices1);
 Gamma2=Screen(vertices2);
@@ -82,6 +89,10 @@ G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
 
 n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)]/L1;
 n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
+
+[dot(n1, d), dot(n2, d)]
+
+keyboard
 
 N_approx = 2^(-6);
 
