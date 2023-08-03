@@ -3,18 +3,19 @@
 clear all
 clear classes
 
-load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20.mat')
-% load('../Poly_approx_space_PIM/polycode_test1_R_20.mat')
+% load('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Poly_approx_space_PIM/polycode_test1_R_20_dof2_6.mat')
+load('../Poly_approx_space_PIM/polycode_test_knifeedge_R_20_dof2_6.mat')
 phi1_r_poly = phi1_r;
 phi2_r_poly = phi2_r;
-% addpath('/Users/ojp18/Dropbox/Mac/Documents/GitHub/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/general_tests')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
-% addpath('../General_functions/')
-% addpath('../Multiple_scattering_problems/')
-% addpath('../../BEAM_HNABEMLAB/')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/general_tests')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+addpath('../general_tests/')
+addpath('../General_functions/')
+addpath('../Multiple_scattering_problems/')
+addpath('../../BEAM_HNABEMLAB/')
+addpath('../Poly_approx_space_PIM/')
 addPathsHNA
 
 vertices1 = [G1(1), G1(2) ;
@@ -120,7 +121,7 @@ legend show
 % intergation nodes for L1 error computations
 L1_temp = L1;
 
-N_L1_err = 2^6;
+N_L1_err = 2^12;
 h1_L1_err = L1/N_L1_err;
 t1_L1_err_grid = [0: h1_L1_err: L1];
 tq1 = [h1_L1_err/2 : h1_L1_err: L1 - h1_L1_err];
@@ -135,22 +136,48 @@ yq1 = G1(2) + tq1*(G1(4) - G1(2))/(L1);
 [x2_in, y2_in, ~, ~, h2_in, ~, ~, ~] = ...
     discretisation_variables(G2, N_approx, kwave);
 
+% N_L1_err = 2^6;
+h2_L1_err = L2/N_L1_err;
+t2_L1_err_grid = [0: h2_L1_err: L2];
+tq2 = [h2_L1_err/2 : h2_L1_err: L2 - h2_L1_err];
+% computing the midpoints coordinates for \Gamma
+xq2 = G2(1) + tq2*(G2(3) - G2(1))/(L2);
+yq2 = G2(2) + tq2*(G2(4) - G2(2))/(L2);
+
+% xq1 = G1(1)+((1:N_L1_err)-0.5)*(G1(3)-G1(1))/N_L1_err;
+% yq1 = G1(2)+((1:N_L1_err)-0.5)*(G1(4)-G1(2))/N_L1_err;
+
+% inner variables
+[x1_in, y1_in, ~, ~, h1_in, ~, ~, ~] = ...
+    discretisation_variables(G1, N_approx, kwave);
 
 
 % error computations for last iteration
-[L1_err_G1, phi_poly, phi_HNA] = L1_err_poly_HNA(tq1, xq1, yq1, h1_L1_err, vertices1, L1, k, d, n1,...
+[L1_err_G1_no_norm, L1_err_norm_poly_true_G1, L1_err_norm_HNA_true_G1, phi_poly1, phi_HNA1] = L1_err_poly_HNA(tq1, xq1, yq1, h1_L1_err, vertices1, L1, k, d, n1,...
     phi1_r_poly(end, :), aj_1_r{end},  h2_in, x2_in, ...
     y2_in, phi2_r_outer(end - 1, :).');
 
+[L1_err_G2_no_norm, L1_err_norm_poly_true_G2, L1_err_norm_HNA_true_G2, phi_poly2, phi_HNA2] = L1_err_poly_HNA(tq2, xq2, yq2, h2_L1_err, vertices2, L2, k, d, n2,...
+    phi2_r_poly(end, :), aj_2_r{end},  h1_in, x1_in, ...
+    y1_in, phi1_r_outer(end - 1, :).');
+
 figure()
-plot(tq1/L1, real(phi_poly), 'DisplayName', 'Poly approx')
+plot(tq1/L1, real(phi_poly1), 'DisplayName', 'Poly approx')
 hold on
-plot(tq1/L1, real(phi_HNA), 'DisplayName', 'HNA approx')
+plot(tq1/L1, real(phi_HNA1), 'DisplayName', 'HNA approx')
 legend show
 xlim([-0.05 1.05])
 
-keyboard
+figure()
+plot(tq2/L2, real(phi_poly2), 'DisplayName', 'Poly approx')
+hold on
+plot(tq2/L2, real(phi_HNA2), 'DisplayName', 'HNA approx')
+legend show
+xlim([-0.05 1.05])
 
+L1_err_G1_no_norm, L1_err_norm_poly_true_G1, L1_err_norm_HNA_true_G1
+L1_err_G2_no_norm, L1_err_norm_poly_true_G2, L1_err_norm_HNA_true_G2
+%%
 
 L1 = L1_temp;
 % error calculations
