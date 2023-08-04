@@ -4,12 +4,12 @@ clear all
 clear classes
 
 % adding paths, dependent on computer and matlab version
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
-addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
-% addpath('../General_functions/')
-% addpath('../Multiple_scattering_problems/')
-% addpath('../../BEAM_HNABEMLAB/')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/Multiple_scattering_problems')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/HNA_BEM_Multiple_Scatterers/General_functions')
+% addpath('/Users/Oliver/Dropbox/Mac (2)/Documents/Github/BEAM_HNABEMLAB')
+addpath('../General_functions/')
+addpath('../Multiple_scattering_problems/')
+addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA
 
 R = 20; 
