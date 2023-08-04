@@ -19,6 +19,7 @@ h = (b - a)/N_init;
 
 f = @(t) 1./sqrt(t.*(2 - t));
 
+matlab_int = integral(f, 0, 2);
 for h_n = 1:N_it_max  % loop for h stepping
 
     for a_n = 1:length(alpha)
