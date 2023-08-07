@@ -31,7 +31,7 @@ for j = 1:Q1
     t_grid_end(j) = t_grid(j);
 %     t_grid(end-Q1 + j) = t_grid(j);
 end
-
+t_grid_end(Q1+1) = Lgrad;
 for j = 0: Q2 
     t_grid(Q1 + j + 1) = Lgrad + j*h;
 end
