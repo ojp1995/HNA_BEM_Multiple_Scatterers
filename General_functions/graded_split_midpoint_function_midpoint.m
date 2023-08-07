@@ -1,14 +1,16 @@
-% graded midpoint testing
+% graded split midpoint testing
 
 clear all
 addpath('../General_functions/')
 
 L = 2;
 Lgrad = 0.15*L;
-h = 1e-6;
+h = 0.2;
 alpha = 2;
 
-[t_grid, t_mid, w, Q] = get_graded_midpoint_quad_points(L, Lgrad, h, alpha);
+[t_grid, t_mid, w, Q, t_grid_end, t_mid_end, w_end] = ...
+    get_graded_midpoint_quad_points_split(L, Lgrad, ...
+    h, alpha)
 
 figure()
 plot(t_grid, zeros(length(t_grid), 1), '*', 'DisplayName', 'Grid points')

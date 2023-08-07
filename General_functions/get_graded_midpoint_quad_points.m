@@ -33,4 +33,32 @@ end
 
 % computing midpoints and weights.
 t_mid  = (t_grid(2:end) + t_grid(1:end-1))/2;
-w = t_grid(2:end) - t_grid(1:end-1);
+% w = t_grid(2:end) - t_grid(1:end-1);
+
+% t_mid = zeros(2*Q1 + Q2, 1);
+% % computing the midpoints and weights
+% for j = 1:Q1
+%     t_mid(j) = t_grid(j + 1) - t_grid(j);
+%     t_mid(end - j + 1) = t_mid(j);
+% 
+% end
+% 
+% for j = Q1+1 : Q1 + Q2
+%     t_mid(j) = t_grid(j + 1) - t_grid(j);
+% end
+
+w = zeros(length(t_mid), 1);
+
+for j = 1:Q1
+    w(j) = t_grid(j + 1) - t_grid(j);
+    w(end - j + 1) = w(j);
+
+end
+
+for j = Q1+1:Q1+Q2
+
+    w(j) = t_grid(j + 1) - t_grid(j);
+
+end
+
+% w = t_grid(2:end) - t_grid(1:end-1);
