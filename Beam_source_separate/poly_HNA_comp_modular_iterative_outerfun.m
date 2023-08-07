@@ -74,6 +74,9 @@ G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
 n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)]/L1;
 n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
 
+alpha1 = -sign(dot(d, n1));
+alpha2 = -sign(dot(d, n2));
+
 % R = 20; 
 %%
 N_approx = 2^(-6);
@@ -82,7 +85,7 @@ N_approx = 2^(-6);
     compute_coeff_LOB_for_R_iterations(kwave, N_approx, G1, G2, ...
     vertices1, vertices2, R, theta,...
     col_points1, x1_col, y1_col, col_points2, x2_col, y2_col, VHNA1,...
-    VHNA2, colMatrix1, colMatrix2, d, n1, n2, C1, C2);
+    VHNA2, colMatrix1, colMatrix2, d, n1, n2, C1, C2, alpha1, alpha2);
 
 phi1_x = linspace(0, 1, length(phi1_r_outer(1, :)));
 phi2_x = linspace(0, 1, length(phi2_r_outer(1, :)));
@@ -155,11 +158,11 @@ yq2 = G2(2) + tq2*(G2(4) - G2(2))/(L2);
 % error computations for last iteration
 [L1_err_G1_no_norm, L1_err_norm_poly_true_G1, L1_err_norm_HNA_true_G1, phi_poly1, phi_HNA1] = L1_err_poly_HNA(tq1, xq1, yq1, h1_L1_err, vertices1, L1, k, d, n1,...
     phi1_r_poly(end, :), aj_1_r{end},  h2_in, x2_in, ...
-    y2_in, phi2_r_outer(end - 1, :).');
+    y2_in, phi2_r_outer(end - 1, :).', alpha1);
 
 [L1_err_G2_no_norm, L1_err_norm_poly_true_G2, L1_err_norm_HNA_true_G2, phi_poly2, phi_HNA2] = L1_err_poly_HNA(tq2, xq2, yq2, h2_L1_err, vertices2, L2, k, d, n2,...
     phi2_r_poly(end, :), aj_2_r{end},  h1_in, x1_in, ...
-    y1_in, phi1_r_outer(end - 1, :).');
+    y1_in, phi1_r_outer(end - 1, :).', alpha2);
 
 figure()
 plot(tq1/L1, real(phi_poly1), 'DisplayName', 'Poly approx')

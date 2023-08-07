@@ -36,11 +36,11 @@ vertices2 = [2*pi 0;
     2*pi 3*pi];
 
 % Case 3a
-vertices1 = [-2*pi 2*pi;
-    0, 0];
-
-vertices2 = [2*pi 0;
-    (2*pi + 0.5) 3*pi];
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     (2*pi + 0.5) 3*pi];
 
 % Case 4 - Screens facing away from each other - makes a difference which
 % order things are put in. How can we fix this?
@@ -90,9 +90,12 @@ G2 = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
 n1 = [-(G1(4) - G1(2)), G1(3) - G1(1)]/L1;
 n2 = [-(G2(4) - G2(2)), G2(3) - G2(1)]/L2;
 
-[dot(n1, d), dot(n2, d)]
+alpha1 = -sign(dot(d, n1));
+alpha2 = -sign(dot(d, n2));
 
-keyboard
+% [dot(n1, d), dot(n2, d)]
+
+% keyboard
 
 N_approx = 2^(-6);
 
@@ -100,7 +103,7 @@ N_approx = 2^(-6);
     compute_coeff_LOB_for_R_iterations(kwave, N_approx, G1, G2, ...
     vertices1, vertices2, R, theta,...
     col_points1, x1_col, y1_col, col_points2, x2_col, y2_col, VHNA1,...
-    VHNA2, colMatrix1, colMatrix2, d, n1, n2, C1, C2);
+    VHNA2, colMatrix1, colMatrix2, d, n1, n2, C1, C2, alpha1, alpha2);
 
 phi1_x = linspace(0, 1, length(phi1_r_outer(1, :)));
 phi2_x = linspace(0, 1, length(phi2_r_outer(1, :)));
@@ -135,8 +138,11 @@ xlim([-0.05, 1.05])
 legend show
 
 %% Plotting in the domain
-[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = discretisation_variables(G1, N_approx, kwave);
-[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = discretisation_variables(G2, N_approx, kwave);
+keyboard
+[x1, y1, t1, t1_mid, h1, h1vector, N1, L1] = ...
+    discretisation_variables(G1, N_approx, kwave);
+[x2, y2, t2, t2_mid, h2, h2vector, N2, L2] = ...
+    discretisation_variables(G2, N_approx, kwave);
 
 % compute the solution in the domain
 % Makr a square grid around the screens

@@ -1,5 +1,5 @@
 function [err_no_norm, err_norm_poly_true, err_norm_HNA_true, phi_poly, phi_HNA] = L1_err_poly_HNA(tq, xq, yq, w, G, L, k, d, n,...
-    poly_coeffs, HNA_coeffs,  h_in_int, y1_in_int, y2_in_int, phi_jn1_rn1)
+    poly_coeffs, HNA_coeffs,  h_in_int, y1_in_int, y2_in_int, phi_jn1_rn1, alpha)
 % In this function we will be computing the L1 error between the polynomial
 % approximation (g(x)) and the HNA approximation (f(x)), specifically,
 %
@@ -37,7 +37,7 @@ for j = 1:length(tq)
 end
 % computing the HNA approximation
 phi_HNA = get_phi_j_r(HNA_coeffs, G, L, k, d, h_in_int, y1_in_int, ...
-    y2_in_int, n, tq, xq, yq, phi_jn1_rn1);
+    y2_in_int, n, tq, xq, yq, phi_jn1_rn1, alpha);
 
 % integration/error computation step
 
