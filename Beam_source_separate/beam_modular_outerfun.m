@@ -17,7 +17,7 @@ vertices1 = [-2*pi 2*pi;
 Gamma1=Screen(vertices1);
 
 vertices2 = [2*pi 0;
-    5*pi 3*pi];
+    2*pi 3*pi];
             
 Gamma2=Screen(vertices2);
 

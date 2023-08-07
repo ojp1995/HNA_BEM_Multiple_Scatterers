@@ -15,11 +15,11 @@ addPathsHNA
 R = 20; 
 % general geometrical set up
 % Case 1
-% vertices1 = [-2*pi 2*pi;
-%     0, 0];
-% 
-% vertices2 = [2*pi 0;
-%     5*pi 3*pi];
+vertices1 = [-2*pi 2*pi;
+    0, 0];
+
+vertices2 = [2*pi 0;
+    5*pi 3*pi];
 
 % % Case 2
 % vertices1 = [-2*pi 0;
@@ -29,11 +29,11 @@ R = 20;
 %     3*pi 3*pi];
 
 % Case 3
-vertices1 = [-2*pi 2*pi;
-    0, 0];
-
-vertices2 = [2*pi 0;
-    2*pi 3*pi];
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     2*pi 3*pi];
 
 % Case 3a
 % vertices1 = [-2*pi 2*pi;
