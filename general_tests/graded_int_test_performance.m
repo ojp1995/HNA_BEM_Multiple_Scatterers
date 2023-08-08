@@ -12,9 +12,9 @@ Lgrad = L*0.15;  % is this reasonable/may need to be tweaked!
 
 int_true = pi;
 
-alpha = linspace(1, 10, 10);
+alpha = linspace(1, 5, 5);
 N_init = 160;
-N_it_max = 13;
+N_it_max = 15;
 h = (b - a)/N_init;
 
 f = @(t) 1./sqrt(t.*(2 - t));

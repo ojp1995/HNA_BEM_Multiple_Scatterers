@@ -19,18 +19,23 @@ k = 10;
 C1 = 1;
 C2 = pi;
 
-s = L/2;  % may change to being vector or a range of different points later
+
 
 Lgrad = L*0.15;  % is this reasonable/may need to be tweaked!
 
+s = L - Lgrad + 0.367 ;  % may change to being vector or a range of different points later
 
-f = @(t) (1i/4)*besselh(0, k*abs(s - t)); %./sqrt(t.*(L - t));
+f = @(t) (1i/4)*besselh(0, k*abs(s - t))./sqrt(t.*(L - t));
 
 int_mat= integral(@(t) f(t), a, b);
 
 % int_WA = -0.12382106204002354372091606659770831438124999253547176499371697401508783434823130097297493804577529998680421785666968663001...
 %     +1i*0.67376315733699508561573656398060748211027002613870528634210843805787874105337575848695338655363343713758030633756225240020;
 
+% int_WA = -0.12382106204002354372091606659770831438124999253547176499371697...
+%     + 1i*0.67376315733699508561573656398060748211027002613870528634210843;
+
+int_WA_k10_singularites = 1i*(0.0626194 - 0.0636219*1i)/4;
 alpha = linspace(1, 6, 6);
 N_init = 160;
 N_it_max = 13;
@@ -41,21 +46,23 @@ PIM_graded = zeros(N_it_max, length(alpha));
 graded_PIM_abs_err = zeros(N_it_max, length(alpha));
 
 %% computing 'true solution'
-h_true = h_init*2^-15;
+% h_true = h_init*2^-15;
+h_true = 1e-7;
 ts_grid_true = [a:h_true:b];
-ts_mid_true = ts_grid_true(2:end) - ts_grid_true(1:end-1);
+ts_mid_true = (ts_grid_true(2:end) + ts_grid_true(1:end-1))/2;
 % ts_w_true = h_true;
 
 % midpoint approx part
 PIM_approx_standard_true = PIM_int_hankel_f(k, s, h_true, ts_mid_true, ...
     1, ts_grid_true, C1, C2);
 
+%% 
 h =zeros(N_it_max, 1);
 h(1) = h_init;
 for h_n = 1:N_it_max  % loop for h stepping
     % all info for standard midpoint approximation
     ts_grid = [a:h(h_n):b];
-    ts_mid = ts_grid(2:end) - ts_grid(1:end-1);
+    ts_mid = (ts_grid(2:end) + ts_grid(1:end-1))/2;
     ts_w = h(h_n);
 
     % midpoint approx part
@@ -79,7 +86,7 @@ for h_n = 1:N_it_max  % loop for h stepping
         % there is agreement with the above integral! That will let us know
         % that there is a substitution error here somewhere.
         PIM_graded2 = graded_PIM_int_hankel_f(k, s, w_graded2,...
-            t_mid_graded2, 1, t_grid_graded2, C1, C2);
+            L - t_mid_graded2, 1, t_grid_graded2, C1, C2);
 
         PIM_graded(h_n, a_n) = PIM_graded1 + PIM_graded2;
 
@@ -90,5 +97,21 @@ for h_n = 1:N_it_max  % loop for h stepping
     h(h_n+1) = h(h_n)/2;
 
 end
+graded_PIM_abs_err, PIM_abs_err %, abs(int_mat - PIM_graded), abs(int_mat - PIM_approx_standard)
+%% EOC computations
 
-PIM_graded, PIM_abs_err
+
+
+for h_n = 1:N_it_max-1  % loop for h stepping
+
+    EOC_standard(h_n) = log2(PIM_abs_err(h_n)/PIM_abs_err(h_n+1));
+
+    for a_n = 1:length(alpha)
+
+        EOC_graded(h_n, a_n) = log2(graded_PIM_abs_err(h_n, a_n)/...
+            graded_PIM_abs_err(h_n+1, a_n));
+
+    end
+end
+
+EOC_standard, EOC_graded
