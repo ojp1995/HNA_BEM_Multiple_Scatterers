@@ -38,7 +38,7 @@ int_mat= integral(@(t) f(t), a, b);
 int_WA_k10_singularites = 1i*(0.0626194 - 0.0636219*1i)/4;
 alpha = linspace(1, 6, 6);
 N_init = 160;
-N_it_max = 10;
+N_it_max = 13;
 h_init = (b - a)/N_init;
 
 PIM_approx_standard = zeros(N_it_max, 1);
@@ -47,7 +47,7 @@ graded_PIM_abs_err = zeros(N_it_max, length(alpha));
 
 %% computing 'true solution'
 % h_true = h_init*2^-15;
-h_true = 1e-6;
+h_true = 1e-7;
 ts_grid_true = [a:h_true:b];
 ts_mid_true = (ts_grid_true(2:end) + ts_grid_true(1:end-1))/2;
 % ts_w_true = h_true;
@@ -91,6 +91,9 @@ for h_n = 1:N_it_max  % loop for h stepping
         else
             PIM_graded2 = graded_rescalled_PIM_int_hankel_f(k, s, ...
                 w_graded2, t_mid_graded2, 1, t_grid_graded2, C1, C2, L);
+
+
+        end
 
         PIM_graded(h_n, a_n) = PIM_graded1 + PIM_graded2;
 

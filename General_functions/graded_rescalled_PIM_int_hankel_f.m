@@ -18,5 +18,5 @@ for j = 1:length(s)
 %     dist = abs(s(j) - nq);
 
     I(j, 1) = sum((m1(k, s(j), L - nq, C1, C2).*w1_weights_rescalled(k, ...
-        s(j), t_lower, t_upper) + w.*m2(k, s(j), L - nq, C1, C2)).*fnq );
+        s(j), t_lower, t_upper, L) + w.*m2(k, s(j), L - nq, C1, C2)).*fnq );
 end
