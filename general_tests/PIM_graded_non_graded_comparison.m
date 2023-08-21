@@ -25,7 +25,7 @@ Lgrad = L*0.15;  % is this reasonable/may need to be tweaked!
 
 s = L - Lgrad - 0.367 ;  % may change to being vector or a range of different points later
 
-f = @(t) (1i/4)*besselh(0, k*abs(s - t))./sqrt(t.*(L - t));
+f = @(t) (1i/4)*besselh(0, k*abs(s - t)); %./sqrt(t.*(L - t));
 
 int_mat= integral(@(t) f(t), a, b);
 
@@ -72,6 +72,8 @@ for h_n = 1:N_it_max  % loop for h stepping
     PIM_abs_err(h_n) = abs(PIM_approx_standard(h_n) - ...
         PIM_approx_standard_true);
 
+    PIM_abs_mat_err(h_n) = abs(int_mat - PIM_approx_standard(h_n));
+
     for a_n = 1:length(alpha)
 
         [t_grid_graded1, t_mid_graded1, w_graded1, ~, t_grid_graded2, ...
@@ -100,11 +102,13 @@ for h_n = 1:N_it_max  % loop for h stepping
         graded_PIM_abs_err(h_n, a_n) = abs(PIM_graded(h_n, a_n)...
             - PIM_approx_standard_true);
 
+        PIM_graded_mat_err(h_n, a_n) = abs(int_mat - PIM_graded(h_n, a_n));
+
     end 
     h(h_n+1) = h(h_n)/2;
 
 end
-graded_PIM_abs_err, PIM_abs_err %, abs(int_mat - PIM_graded), abs(int_mat - PIM_approx_standard)
+graded_PIM_abs_err, PIM_abs_err, abs(int_mat - PIM_graded), abs(int_mat - PIM_approx_standard)
 %% EOC computations
 
 
