@@ -12,7 +12,7 @@ Lgrad = L*0.15;  % is this reasonable/may need to be tweaked!
 
 int_true = pi;
 
-alpha = linspace(1, 6, 6);
+alpha = linspace(1, 10, 10);
 N_init = 160;
 N_it_max = 15;
 % h = (b - a)/N_init;
@@ -35,7 +35,8 @@ for h_n = 1:N_it_max  % loop for h stepping
             + w_graded_RHS.*f(t_mid_gradedRHS));
 
         midpoint_graded_rescalled(h_n, a_n) = sum( ...
-            w_graded_LHS.*f(t_mid_gradedLHS) +w_graded_LHS.*f(t_mid_gradedLHS));
+            w_graded_LHS.*f(t_mid_gradedLHS) ...
+            + w_graded_LHS.*f(t_mid_gradedLHS));
 %             + flipud(w_graded_LHS).*f(L/2 + flipud(t_mid_gradedLHS)));
 
         err_graded(h_n, a_n) = abs(matlab_int - midpoint_graded(h_n, a_n));
