@@ -32,17 +32,35 @@ Q = N_init;
 PIM_approx_standard = zeros(N_it_max, 1);
 PIM_graded = zeros(N_it_max, length(alpha));
 graded_PIM_abs_err = zeros(N_it_max, length(alpha));
+graded_PIM_abs_err_graded_true = zeros(N_it_max, length(alpha));
 
 %% computing 'true solution'
 % h_true = h_init*2^-15;
-h_true = 1e-6;
+h_true = 1e-7;
 ts_grid_true = [a:h_true:b];
 ts_mid_true = (ts_grid_true(2:end) + ts_grid_true(1:end-1))/2;
 % ts_w_true = h_true;
 
 % midpoint approx part
 PIM_approx_standard_true = PIM_int_hankel_f(k, s, h_true, ts_mid_true, ...
-    1, ts_grid_true, C1, C2);
+    f(ts_mid_true), ts_grid_true, C1, C2);
+
+% computing true solution using graded routine
+alpha_true = 6;
+Q_true =  N_init*2^(N_it_max + 2);
+[t_grid_graded_true, t_mid_graded_true, w_graded_true, h_true]...
+            = get_graded_midpoint_half_interval(L, Lgrad, Q_true, ...
+            alpha_true);
+
+ PIM_graded1_true = graded_PIM_int_hankel_f(k, s, w_graded_true,...
+     t_mid_graded_true, f(t_mid_graded_true), t_grid_graded_true, C1, C2 );
+%%
+ PIM_graded2_true = graded_PIM_int_hankel_f(k, L-s, w_graded_true, ...
+     t_mid_graded_true,  f(t_mid_graded_true), t_grid_graded_true, C1, C2 );
+
+PIM_graded_true = PIM_graded1_true + PIM_graded2_true;
+
+clear PIM_graded1_true PIM_graded2_true
 
 for h_n = 1:N_it_max
     h = L/Q(h_n);
@@ -51,8 +69,8 @@ for h_n = 1:N_it_max
     ts_w = h;
 
     % midpoint approx part
-    PIM_approx_standard(h_n) = PIM_int_hankel_f(k, s, h, ts_mid, 1,...
-        ts_grid, C1, C2);
+    PIM_approx_standard(h_n) = PIM_int_hankel_f(k, s, h, ts_mid, ...
+        f(ts_mid), ts_grid, C1, C2);
 
     PIM_abs_err(h_n) = abs(PIM_approx_standard(h_n) - ...
         PIM_approx_standard_true);
@@ -75,12 +93,15 @@ for h_n = 1:N_it_max
           graded_PIM_abs_err(h_n, a_n) = abs(PIM_approx_standard_true ...
               - PIM_graded(h_n, a_n));
 
+          graded_PIM_abs_err_graded_true(h_n, a_n) =abs(PIM_graded_true ...
+             - PIM_graded(h_n, a_n));
+
      end 
      Q(h_n + 1) = Q(h_n)*2;
 
 end
-
-graded_PIM_abs_err, PIM_abs_err, abs(int_mat - PIM_graded), abs(int_mat - PIM_approx_standard)
+ 
+PIM_abs_err, graded_PIM_abs_err, graded_PIM_abs_err_graded_true, abs(int_mat - PIM_graded), abs(int_mat - PIM_approx_standard)
 %% EOC computations
 
 
@@ -94,7 +115,11 @@ for h_n = 1:N_it_max-1  % loop for h stepping
         EOC_graded(h_n, a_n) = log2(graded_PIM_abs_err(h_n, a_n)/...
             graded_PIM_abs_err(h_n+1, a_n));
 
+         EOC_graded_graded_true(h_n, a_n) = log2(...
+             graded_PIM_abs_err_graded_true(h_n, a_n)/...
+            graded_PIM_abs_err_graded_true(h_n+1, a_n));
+
     end
 end
 
-EOC_standard, EOC_graded
+EOC_standard, EOC_graded, EOC_graded_graded_true
