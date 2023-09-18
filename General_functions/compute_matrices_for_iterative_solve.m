@@ -1,5 +1,5 @@
 function [S11, S12, S21, S22, u_inc1, u_inc2] = ...
-    compute_matrices_for_iterative_solve(G1, G2, k )
+    compute_matrices_for_iterative_solve(G1_struct, G2_struct, k, t1_bf_grid, t2_bf_grid, theta, C1, C2 )
 % In this function we will be computing the 4 matrices S11, S12, S21 and
 % S22 to either be used for the all in one or iterative solver, the
 % corresponding right hand side vector will also be given for the initial
@@ -9,22 +9,49 @@ function [S11, S12, S21, S22, u_inc1, u_inc2] = ...
 % where the intervals they are supported on will be given as an input.
 %
 % Input parameters:
-% G1 - Coordinates for Gamma1
-% G2 - coordinates for Gamma2
+% G1 - Structure for all information needed for Gamma1
+% G2 - Structure for all information needed for Gamma2
 % k wavenumber
-
-
+% theta, angle of incident wave  measured from downwards vertical ccw 
 % C1, C2, constants for product integration method
-
-% t1_grid - Grid of support for basis functions for Gamma1
-% t1_grid - Grid of support for basis functions for Gamma2
-
+% t1_bf_grid - Grid of support for basis functions for Gamma1
+% t2_bf_grid - Grid of support for basis functions for Gamma2
+%
 % Assumptions:
 %   1. 2D paramerterised Quadrature points given/computed for second are
 %   increasing, i.e., are as in the maths from L/2 -> L, not from L -> L/2.
+%
+%   2. Grid of support is split into half and only half is given  
+
 
 % need to either compute or unpack collocation points, Grid of support, mid
 % points etc and thetransformed version of either
+% unpacking structure
+% G1 = G1_struct.G1;
+x1_col = G1_struct.x1_col;
+y1_col = G1_struct.y1_col;
+s1 = G1_struct.s1;
+% unpacking quadrature points
+nq1 = G1_struct.nq1;
+t1_mid = G1_struct.t1_mid;
+t1_grid = G1_struct.t1_grid;
+x1_1_q = G1_struct.x1_1_q;
+y1_1_q = G1_struct.y1_1_q;
+x1_2_q = G1_struct.x1_2_q;
+y1_2_q = G1_struct.y1_2_q;
+
+% G2 = G2_struct.G2;
+x2_col = G2_struct.x2_col;
+y2_col = G2_struct.y2_col;
+s2 = G2_struct.s2;
+% unpacking quadrature points
+nq2 = G2_struct.nq2;
+t2_mid = G2_struct.t2_mid;
+t2_grid = G2_struct.t2_grid;
+x2_1_q = G2_struct.x2_1_q;
+y2_1_q = G2_struct.y2_1_q;
+x2_2_q = G2_struct.x2_2_q;
+y2_2_q = G2_struct.y2_2_q;
 
 
 % initialising arrays
