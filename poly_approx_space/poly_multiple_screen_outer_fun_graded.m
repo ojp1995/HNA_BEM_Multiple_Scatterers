@@ -14,9 +14,9 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 Lgrad_coeff = 0.15;
 alpha = 4;
 
-C_wl= 1/4;
+C_wl= 1/10;
 
-k = 1;  % wavenumber
+k = 5;  % wavenumber
 
 theta = 0;
 
@@ -53,20 +53,20 @@ C2 = pi;
     discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
 
 
-t1_bf_grid = linspace(0, G1_data.L/2, 10);
-t2_bf_grid = linspace(0, G2_data.L/2, 10);
+t1_bf_grid = linspace(0, G1_data.L/2, 50);
+t2_bf_grid = linspace(0, G2_data.L/2, 50);
 
 % Collocation points (using the same grid currently but will change)
 % col_choice1 = sort(randi(length(G1_data.t_mid(:)), 20, 1));
 
 G1_data.s = [ G1_data.t_mid(1:end) ; flip(G1_data.L - G1_data.t_mid(1:end)) ];
-G1_data.x_col = [ G1_data.x_1_q(1:end) ; G1_data.x_2_q(1:end) ];
-G1_data.y_col = [ G1_data.y_1_q(1:end) ; G1_data.y_2_q(1:end) ];
+G1_data.x_col = [ G1_data.x_1_q(1:end) ; flip(G1_data.x_2_q(1:end)) ];
+G1_data.y_col = [ G1_data.y_1_q(1:end) ; flip(G1_data.y_2_q(1:end)) ];
 
 % col_choice2 = sort(randi(length(G2_data.t_mid(:)), 20, 1));
 G2_data.s = [ G2_data.t_mid(1:end) ; flip(G2_data.L - G2_data.t_mid(1:end)) ];
-G2_data.x_col = [ G2_data.x_1_q(1:end) ; G2_data.x_2_q(1:end) ];
-G2_data.y_col = [ G2_data.y_1_q(1:end) ; G2_data.y_2_q(1:end) ];
+G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
+G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
 
 [S11, S12, S21, S22, u_inc1, u_inc2] = ...
     compute_matrices_for_iterative_solve(G1_data, G2_data, k, ...
@@ -93,3 +93,21 @@ phi1 = graded_coeff_2_solution(S11\u_inc1, t1_bf_grid, x1_plot, G1_data.L);
 
 figure()
 plot(x1_plotting, phi1)
+
+%%
+x1_plot = linspace(0.01, G1_data.L/2 - 0.01, 200);
+
+x1_plotting = [x1_plot(:) ; (G1_data.L/2 + x1_plot(:) )];
+
+x2_plot = linspace(0.01, G2_data.L/2 - 0.01, 200);
+
+x2_plotting = [x2_plot(:) ; (G2_data.L/2 + x2_plot(:) )];
+
+phi1 = graded_coeff_2_solution(aj_1, t1_bf_grid, x1_plot, G1_data.L);
+phi2 = graded_coeff_2_solution(aj_2, t2_bf_grid, x2_plot, G2_data.L);
+
+figure()
+plot(x1_plotting, phi1)
+
+figure()
+plot(x2_plotting, phi2)
