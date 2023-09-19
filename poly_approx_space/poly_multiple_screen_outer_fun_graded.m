@@ -14,7 +14,7 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 Lgrad_coeff = 0.15;
 alpha = 4;
 
-C_wl= 2^-6;
+C_wl= 1/4;
 
 k = 1;  % wavenumber
 
@@ -37,12 +37,13 @@ C2 = pi;
 % t2_grid = [0: h2: L2];
 
 % The support for the basis functions
-C_wl_bf1 = 1/20;
-C_wl_bf2 = 1/20;
-[~, ~, ~, ~, t1_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
-    G1_data.G, C_wl_bf1, k, Lgrad_coeff, alpha);
-[~, ~, ~, ~, t2_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
-    G2_data.G, C_wl_bf2, k, Lgrad_coeff, alpha);
+
+% C_wl_bf1 = 1/20;
+% C_wl_bf2 = 1/20;
+% [~, ~, ~, ~, t1_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+%     G1_data.G, C_wl_bf1, k, Lgrad_coeff, alpha);
+% [~, ~, ~, ~, t2_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+%     G2_data.G, C_wl_bf2, k, Lgrad_coeff, alpha);
 
 % quadrature nodes and other information needed
 [G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
@@ -51,14 +52,21 @@ C_wl_bf2 = 1/20;
 [G2_data.x_1_q, G2_data.y_1_q, G2_data.x_2_q, G2_data.y_2_q, G2_data.t_grid, G2_data.t_mid, G2_data.w, G2_data.N, G2_data.L] = ...
     discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
 
-% Collocation points (using the same grid currently but will change)
-G1_data.s = [ G1_data.t_mid(:) ; flip(G1_data.L - G1_data.t_mid(:)) ];
-G1_data.x_col = [ G1_data.x_1_q(:) ; G1_data.x_2_q(:) ];
-G1_data.y_col = [ G1_data.y_1_q(:) ; G1_data.y_2_q(:) ];
 
-G2_data.s = [ G2_data.t_mid(:) ; flip(G2_data.L - G2_data.t_mid(:)) ];
-G2_data.x_col = [ G2_data.x_1_q(:) ; G2_data.x_2_q(:) ];
-G2_data.y_col = [ G2_data.y_1_q(:) ; G2_data.y_2_q(:) ];
+t1_bf_grid = linspace(0, G1_data.L/2, 10);
+t2_bf_grid = linspace(0, G2_data.L/2, 10);
+
+% Collocation points (using the same grid currently but will change)
+% col_choice1 = sort(randi(length(G1_data.t_mid(:)), 20, 1));
+
+G1_data.s = [ G1_data.t_mid(1:end) ; flip(G1_data.L - G1_data.t_mid(1:end)) ];
+G1_data.x_col = [ G1_data.x_1_q(1:end) ; G1_data.x_2_q(1:end) ];
+G1_data.y_col = [ G1_data.y_1_q(1:end) ; G1_data.y_2_q(1:end) ];
+
+% col_choice2 = sort(randi(length(G2_data.t_mid(:)), 20, 1));
+G2_data.s = [ G2_data.t_mid(1:end) ; flip(G2_data.L - G2_data.t_mid(1:end)) ];
+G2_data.x_col = [ G2_data.x_1_q(1:end) ; G2_data.x_2_q(1:end) ];
+G2_data.y_col = [ G2_data.y_1_q(1:end) ; G2_data.y_2_q(1:end) ];
 
 [S11, S12, S21, S22, u_inc1, u_inc2] = ...
     compute_matrices_for_iterative_solve(G1_data, G2_data, k, ...
@@ -77,9 +85,11 @@ aj_2 = coeffs(2*length(t1_bf_grid) - 2+ 1: end);
 %%
 % now we need to find a way to plot these coefficients and also make sure
 % we don't lose information if they are too close to the edge
-x1_plot = [0.01: 0.0001: G1_data.L - 0.01];
+x1_plot = linspace(0.01, G1_data.L/2 - 0.01, 200);
+
+x1_plotting = [x1_plot(:) ; (G1_data.L/2 + x1_plot(:) )];
 
 phi1 = graded_coeff_2_solution(S11\u_inc1, t1_bf_grid, x1_plot, G1_data.L);
 
 figure()
-plot(x1_plot/G1_data.L, phi1)
+plot(x1_plotting, phi1)
