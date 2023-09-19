@@ -79,7 +79,7 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
 
     % Finding out which quadrature points are supported by specific basis
     % function
-    select1 = (t1_bf_grid(n) < t1_mid ); 
+    select1 = (t1_bf_grid(n) <= t1_mid ); 
     select2 = (t1_bf_grid(n+1) > t1_mid);
     select =  (select1 == select2);  
     clear select1 select2
@@ -138,7 +138,7 @@ end
 
 for n = 1:length(t2_bf_grid) - 1  % basis function loop
 
-    select1 = (t2_bf_grid(n) < t2_mid ); 
+    select1 = (t2_bf_grid(n) <= t2_mid ); 
     select2 = (t2_bf_grid(n+1) > t2_mid);
     select =  (select1 == select2);  
     clear select1 select2
