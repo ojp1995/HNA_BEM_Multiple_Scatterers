@@ -11,7 +11,7 @@ function z = m2(k, s, nq, C1, C2)
 % Output:
 % z, approximation to above integral
 
-select = (s == nq);
+select = (abs(s - nq) <= 1e-14);
 
 dist = abs(s - nq);
 
