@@ -1,5 +1,6 @@
 function [S11, S12, S21, S22, u_inc1, u_inc2] = ...
-    compute_matrices_for_iterative_solve(G1_struct, G2_struct, k, t1_bf_grid, t2_bf_grid, theta, C1, C2 )
+    compute_matrices_for_iterative_solve(G1_struct, G2_struct, k, ...
+    t1_bf_grid, t2_bf_grid, theta, C1, C2 )
 % In this function we will be computing the 4 matrices S11, S12, S21 and
 % S22 to either be used for the all in one or iterative solver, the
 % corresponding right hand side vector will also be given for the initial
@@ -28,38 +29,42 @@ function [S11, S12, S21, S22, u_inc1, u_inc2] = ...
 % points etc and thetransformed version of either
 % unpacking structure
 % G1 = G1_struct.G1;
-x1_col = G1_struct.x1_col;
-y1_col = G1_struct.y1_col;
-s1 = G1_struct.s1;
+x1_col = G1_struct.x_col;
+y1_col = G1_struct.y_col;
+s1 = G1_struct.s;
 % unpacking quadrature points
-nq1 = G1_struct.nq1;
-t1_mid = G1_struct.t1_mid;
-t1_grid = G1_struct.t1_grid;
-x1_1_q = G1_struct.x1_1_q;
-y1_1_q = G1_struct.y1_1_q;
-x1_2_q = G1_struct.x1_2_q;
-y1_2_q = G1_struct.y1_2_q;
+% nq1 = G1_struct.nq;
+t1_mid = G1_struct.t_mid;
+t1_grid = G1_struct.t_grid;
+x1_1_q = G1_struct.x_1_q;
+y1_1_q = G1_struct.y_1_q;
+x1_2_q = G1_struct.x_2_q;
+y1_2_q = G1_struct.y_2_q;
+w1 = G1_struct.w;
+L1 = G1_struct.L;
 
 % G2 = G2_struct.G2;
-x2_col = G2_struct.x2_col;
-y2_col = G2_struct.y2_col;
-s2 = G2_struct.s2;
+x2_col = G2_struct.x_col;
+y2_col = G2_struct.y_col;
+s2 = G2_struct.s;
 % unpacking quadrature points
-nq2 = G2_struct.nq2;
-t2_mid = G2_struct.t2_mid;
-t2_grid = G2_struct.t2_grid;
-x2_1_q = G2_struct.x2_1_q;
-y2_1_q = G2_struct.y2_1_q;
-x2_2_q = G2_struct.x2_2_q;
-y2_2_q = G2_struct.y2_2_q;
+% nq2 = G2_struct.nq2;
+t2_mid = G2_struct.t_mid;
+t2_grid = G2_struct.t_grid;
+x2_1_q = G2_struct.x_1_q;
+y2_1_q = G2_struct.y_1_q;
+x2_2_q = G2_struct.x_2_q;
+y2_2_q = G2_struct.y_2_q;
+w2 = G2_struct.w;
+L2 = G2_struct.L;
 
 
 % initialising arrays
-S11 = zeros(length(x1_col), 2*length(t1_bf_grid) - 1);
-S21 = zeros(length(x2_col), 2*length(t1_bf_grid) - 1);
+S11 = zeros(length(x1_col), 2*length(t1_bf_grid)-2 );
+S21 = zeros(length(x2_col), 2*length(t1_bf_grid) -2 );
 
-S12 = zeros(length(x1_col), 2*length(t2_bf_grid) - 1);
-S22 = zeros(length(x2_col), 2*length(t2_bf_grid) - 1);
+S12 = zeros(length(x1_col), 2*length(t2_bf_grid) -2 );
+S22 = zeros(length(x2_col), 2*length(t2_bf_grid) -2 );
 
 for n = 1:length(t1_bf_grid)- 1  % basis function loop
     % NOTE, currently this is just being coded as midpoint evaluated at
@@ -74,8 +79,8 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
 
     % Finding out which quadrature points are supported by specific basis
     % function
-    select1 = (t1_bf_grid(n) < nq1 ); 
-    select2 = (t1_bf_grid(n+1) > nq1);
+    select1 = (t1_bf_grid(n) < t1_mid ); 
+    select2 = (t1_bf_grid(n+1) > t1_mid);
     select =  (select1 == select2);  
     clear select1 select2
     % THOUGHT!! Instead of using fnq = select, could we use w1(select) etc?
@@ -84,7 +89,7 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
         t1_mid, select, t1_grid, C1, C2);
 
     % computing second half
-    S11(:, 2*length(t1_grid)-n+1) = graded_PIM_int_hankel_f(k, L1 - s1, ...
+    S11(:, 2*length(t1_bf_grid)-n-1) = graded_PIM_int_hankel_f(k, L1 - s1, ...
         w1, t1_mid, select, t1_grid, C1, C2);
 
     S21(:, n) = midpoint_hankel_f_diff_screen(k, x2_col, y2_col, x1_1_q,...
@@ -93,7 +98,7 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
     % this needs separate quadrature points, can't reuse as in S11 case.
     % Select may also need to be changed.
 
-    S21(:, 2*length(t1_grid)-n+1) = midpoint_hankel_f_diff_screen(k, ...
+    S21(:, 2*length(t1_bf_grid)-n-1) = midpoint_hankel_f_diff_screen(k, ...
         x2_col, y2_col, flip(x1_2_q), flip(y1_2_q), w1, select);
 
     
@@ -129,10 +134,12 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
 
 end
 
+
+
 for n = 1:length(t2_bf_grid) - 1  % basis function loop
 
-    select1 = (t2_bf_grid(n) < nq2 ); 
-    select2 = (t2_bf_grid(n+1) > nq2);
+    select1 = (t2_bf_grid(n) < t2_mid ); 
+    select2 = (t2_bf_grid(n+1) > t2_mid);
     select =  (select1 == select2);  
     clear select1 select2
 
@@ -141,7 +148,7 @@ for n = 1:length(t2_bf_grid) - 1  % basis function loop
         t2_grid, C1, C2);
 
      % second half
-    S22(:, length(t2_grid)-n + 1) = graded_PIM_int_hankel_f(k, L2 - s2, ...
+    S22(:, 2*length(t2_bf_grid)-n - 1) = graded_PIM_int_hankel_f(k, L2 - s2, ...
         w2, t2_mid, select, t2_grid, C1, C2);
 
 %     first half
@@ -150,8 +157,8 @@ for n = 1:length(t2_bf_grid) - 1  % basis function loop
     
         % second half - As above, this is a bit of a special case, will
         % need more thought.
-    S12(:, length(t2_grid)+1-n) =  midpoint_hankel_f_diff_screen(k, ...
-        x1_col, y1_col, flip(x2_2_q), flip(y2_2_q), w2(n), select);
+    S12(:, 2*length(t2_bf_grid)-n - 1) =  midpoint_hankel_f_diff_screen(k, ...
+        x1_col, y1_col, flip(x2_2_q), flip(y2_2_q), w2, select);
 
 
 
