@@ -11,7 +11,7 @@ addpath('./legacy/Polynomial_space_approx/more_robust_attempt/')
 % switch and things get interesting
 G1 = [-2*pi, 2*pi, 0, 0];
 
-G2 = [2*pi, 0,  2*pi, 3*pi]; 
+G2 = [2*pi, 0,  5*pi, 3*pi]; 
 
 C_wl= 2^-6;
 

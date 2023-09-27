@@ -16,7 +16,7 @@ alpha = 4;
 
 C_wl= 1/10;
 
-k = 5;  % wavenumber
+k = 10;  % wavenumber
 
 theta = 0;
 
@@ -37,13 +37,12 @@ C2 = pi;
 % t2_grid = [0: h2: L2];
 
 % The support for the basis functions
-
-% C_wl_bf1 = 1/20;
-% C_wl_bf2 = 1/20;
-% [~, ~, ~, ~, t1_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
-%     G1_data.G, C_wl_bf1, k, Lgrad_coeff, alpha);
-% [~, ~, ~, ~, t2_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
-%     G2_data.G, C_wl_bf2, k, Lgrad_coeff, alpha);
+C_wl_bf1 = 1/2;
+C_wl_bf2 = 1/2;
+[~, ~, ~, ~, t1_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+    G1_data.G, C_wl_bf1, k, Lgrad_coeff, alpha);
+[~, ~, ~, ~, t2_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+    G2_data.G, C_wl_bf2, k, Lgrad_coeff, alpha);
 
 % quadrature nodes and other information needed
 [G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
@@ -53,8 +52,8 @@ C2 = pi;
     discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
 
 
-t1_bf_grid = linspace(0, G1_data.L/2, 50);
-t2_bf_grid = linspace(0, G2_data.L/2, 50);
+% t1_bf_grid = linspace(0, G1_data.L/2, 50);
+% t2_bf_grid = linspace(0, G2_data.L/2, 50);
 
 % Collocation points (using the same grid currently but will change)
 % col_choice1 = sort(randi(length(G1_data.t_mid(:)), 20, 1));

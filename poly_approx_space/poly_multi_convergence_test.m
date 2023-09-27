@@ -45,7 +45,7 @@ G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
 
 N_bf = [10, 20, 40, 80, 160];
 
-parfor j = 1:length(N_bf)
+for j = 1:length(N_bf)
     disp(j)
     % The support for the basis functions
 %     C_wl_bf1 = 1/(j+1);
