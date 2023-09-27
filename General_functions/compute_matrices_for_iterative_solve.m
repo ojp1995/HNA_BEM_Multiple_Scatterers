@@ -144,21 +144,22 @@ for n = 1:length(t2_bf_grid) - 1  % basis function loop
     clear select1 select2
 
         % first half
-    S22(:, n) = graded_PIM_int_hankel_f(k, s2, w2, t2_mid, select, ...
-        t2_grid, C1, C2);
+    S22(:, n) = graded_PIM_int_hankel_f(k, s2, w2(select), t2_mid(select), 1, ...
+        [t2_grid(select); t2_grid(sum(select)+1)], C1, C2);
 
      % second half
     S22(:, 2*length(t2_bf_grid)-n - 1) = graded_PIM_int_hankel_f(k, L2 - s2, ...
-        w2, t2_mid, select, t2_grid, C1, C2);
+        w2(select), t2_mid(select), 1, [t2_grid(select); t2_grid(sum(select)+1)], C1, C2);
 
 %     first half
-    S12(:, n) = midpoint_hankel_f_diff_screen(k, x1_col, y1_col, x2_1_q,...
-        y2_1_q, w2, select);
+    S12(:, n) = midpoint_hankel_f_diff_screen(k, x1_col, y1_col, x2_1_q(select),...
+        y2_1_q(select), w2(select), 1);
     
         % second half - As above, this is a bit of a special case, will
         % need more thought.
+    xq = flip(x2_2_q); yq = flip(y2_2_q);
     S12(:, 2*length(t2_bf_grid)-n - 1) =  midpoint_hankel_f_diff_screen(k, ...
-        x1_col, y1_col, flip(x2_2_q), flip(y2_2_q), w2, select);
+        x1_col, y1_col, xq(select), yq(select), w2(select), 1);
 
 
 
