@@ -85,21 +85,21 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
     clear select1 select2
     % THOUGHT!! Instead of using fnq = select, could we use w1(select) etc?
     % first half due to way it is constructed
-    S11(:, n) = graded_PIM_int_hankel_f(k, s1, w1, ...
-        t1_mid, select, t1_grid, C1, C2);
+    S11(:, n) = graded_PIM_int_hankel_f(k, s1, w1(select), ...
+        t1_mid(select), 1, [t1_grid(select); t1_grid(sum(select)+1)], C1, C2);
 
     % computing second half
     S11(:, 2*length(t1_bf_grid)-n-1) = graded_PIM_int_hankel_f(k, L1 - s1, ...
-        w1, t1_mid, select, t1_grid, C1, C2);
+        w1(select), t1_mid(select), 1, [t1_grid(select); t1_grid(sum(select)+1)], C1, C2);
 
-    S21(:, n) = midpoint_hankel_f_diff_screen(k, x2_col, y2_col, x1_1_q,...
-        y1_1_q, w1, select);
+    S21(:, n) = midpoint_hankel_f_diff_screen(k, x2_col, y2_col, x1_1_q(select),...
+        y1_1_q(select), w1(select), 1);
     
     % this needs separate quadrature points, can't reuse as in S11 case.
     % Select may also need to be changed.
-
+    xq = flip(x1_2_q); yq = flip(y1_2_q);
     S21(:, 2*length(t1_bf_grid)-n-1) = midpoint_hankel_f_diff_screen(k, ...
-        x2_col, y2_col, flip(x1_2_q), flip(y1_2_q), w1, select);
+        x2_col, y2_col, xq(select), yq(select), w1(select), 1);
 
     
     % NOT tested, old, not composite rule
