@@ -15,7 +15,7 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 Lgrad_coeff = 0.15;
 alpha = 4;
 
-C_wl= 1/10;
+C_wl= 1/20;
 
 k = 10;  % wavenumber
 
@@ -43,9 +43,10 @@ G2_data.s = [ G2_data.t_mid(1:end) ; flip(G2_data.L - G2_data.t_mid(1:end)) ];
 G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
 G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
 
-N_bf = [10, 20, 40, 80, 160];
+N_bf = [10, 20, 40, 80, 160, 320, 640] %, 1280, 2560];
 
 for j = 1:length(N_bf)
+    
     disp(j)
     % The support for the basis functions
 %     C_wl_bf1 = 1/(j+1);
@@ -55,6 +56,25 @@ for j = 1:length(N_bf)
     [~, ~, ~, ~, t2_bf_grid, ~, ~, ~] = ...
     given_N_discretistion_vars_graded(G2_data.G, N_bf(j), Lgrad_coeff, alpha);
     
+    while length(G1_data.t_grid) < length(t1_bf_grid)  % case where there are more basis function than integration points, rendering the new bf useless
+        C_wl= C_wl/2;
+        % quadrature nodes and other information needed
+    [G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
+        discretistion_vars_graded(G1_data.G, C_wl, k, Lgrad_coeff, alpha);
+    
+    [G2_data.x_1_q, G2_data.y_1_q, G2_data.x_2_q, G2_data.y_2_q, G2_data.t_grid, G2_data.t_mid, G2_data.w, G2_data.N, G2_data.L] = ...
+        discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
+    
+    G1_data.s = [ G1_data.t_mid(1:end) ; flip(G1_data.L - G1_data.t_mid(1:end)) ];
+    G1_data.x_col = [ G1_data.x_1_q(1:end) ; flip(G1_data.x_2_q(1:end)) ];
+    G1_data.y_col = [ G1_data.y_1_q(1:end) ; flip(G1_data.y_2_q(1:end)) ];
+    
+    
+    G2_data.s = [ G2_data.t_mid(1:end) ; flip(G2_data.L - G2_data.t_mid(1:end)) ];
+    G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
+    G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
+    disp('Increasing number of quadrature points due to basis functions')
+    end
     [S11, S12, S21, S22, u_inc1, u_inc2] = ...
         compute_matrices_for_iterative_solve(G1_data, G2_data, k, ...
         t1_bf_grid, t2_bf_grid, theta, C1, C2 );
@@ -88,7 +108,7 @@ end
 % 
 % x2_plotting = [x2_plot(:) ; (G2_data.L/2 + x2_plot(:) )];
 
-C_wl_err = 1/20;
+C_wl_err = 1/40;
 
 [x1_1_q_err, y1_1_q_err, x1_2_q_err, y1_2_q_err, t1_grid_err, ...
     t1_mid_err, w1_err, N1_err, L1] = ...
@@ -112,9 +132,9 @@ phi_2 = zeros(length(N_bf), length(t2_mid_err)*2);
 
 for j = 1:length(N_bf)
 
-    phi_1(j, :) = graded_coeff_2_solution(aj_1{j, :}, t1_bf_grid_store{j, :},...
+    phi_1(j, :) = graded_coeff_2_solution(aj_1{j, :}, t1_bf_grid_store{j},...
         t1_mid_err, G1_data.L);
-    phi_2(j, :) =graded_coeff_2_solution(aj_2{j, :}, t2_bf_grid_store{j, :},...
+    phi_2(j, :) =graded_coeff_2_solution(aj_2{j, :}, t2_bf_grid_store{j},...
         t2_mid_err, G2_data.L);
 
 end
@@ -143,7 +163,7 @@ for j = 1:length(N_bf)
 end
 xlabel('$x/L_2$')
 ylabel('$\phi_{2}(x)$')
-title('Polynoial approximation solve, $\phi_{1}(x)$')
+title('Polynoial approximation solve, $\phi_{2}(x)$')
 legend show
 xlim([-0.05 1.05])
 
@@ -162,7 +182,7 @@ end
 
 %% EOC
 
-for j = 1:length(N_bf) - 1
+for j = 1:length(N_bf) - 2
 
     EOC_phi_1(j) = log2(err_phi_1(j)/err_phi_1(j+1));
 
@@ -174,7 +194,7 @@ err_phi_1, err_phi_2, EOC_phi_1, EOC_phi_2
 
 toc
 % 
-% filename = 'poly_solver_k10_Nbf_10_160.mat';
+% filename = 'poly_solver_k10_Nbf_10_640.mat';
 % 
 % save(filename, "G1_data", "G2_data", "N_bf", "aj_1", "aj_2", "t1_bf_grid_store", "t2_bf_grid_store")
-% 
+% % 
