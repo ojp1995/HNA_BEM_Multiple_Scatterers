@@ -1,7 +1,7 @@
 % polynomial all in one convergence test
 
 clear all
-tic
+
 % only adding one path to centralise solvers
 addpath('../General_functions/')
 
@@ -17,7 +17,7 @@ alpha = 4;
 
 C_wl= 1/20;
 
-k = 10;  % wavenumber
+k = 80;  % wavenumber
 
 theta = 0;
 
@@ -43,10 +43,10 @@ C2 = pi;
 % G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
 % G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
 
-N_bf = [10, 20, 40, 80, 160, 320, 640] %, 1280, 2560];
+N_bf = [10, 20, 40, 80, 160, 320, 640, 1280];
 
 for j = 1:length(N_bf)
-    
+    tic
     disp(j)
     % The support for the basis functions
 %     C_wl_bf1 = 1/(j+1);
@@ -69,11 +69,11 @@ for j = 1:length(N_bf)
     while length(G1_data.t_grid) < length(t1_bf_grid)  % case where there are more basis function than integration points, rendering the new bf useless
         C_wl= C_wl/2;
         % quadrature nodes and other information needed
-    [G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
-        discretistion_vars_graded(G1_data.G, C_wl, k, Lgrad_coeff, alpha);
-    
-    [G2_data.x_1_q, G2_data.y_1_q, G2_data.x_2_q, G2_data.y_2_q, G2_data.t_grid, G2_data.t_mid, G2_data.w, G2_data.N, G2_data.L] = ...
-        discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
+        [G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
+            discretistion_vars_graded(G1_data.G, C_wl, k, Lgrad_coeff, alpha);
+        
+        [G2_data.x_1_q, G2_data.y_1_q, G2_data.x_2_q, G2_data.y_2_q, G2_data.t_grid, G2_data.t_mid, G2_data.w, G2_data.N, G2_data.L] = ...
+            discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
     
 %     G1_data.s = [ G1_data.t_mid(1:end) ; flip(G1_data.L - G1_data.t_mid(1:end)) ];
 %     G1_data.x_col = [ G1_data.x_1_q(1:end) ; flip(G1_data.x_2_q(1:end)) ];
@@ -103,9 +103,10 @@ for j = 1:length(N_bf)
     aj_2{j, :} = coeffs(2*length(t1_bf_grid) - 2+ 1: end);
 
     clear A S11 S12 S21 S22 uinc u_inc1 u_inc2
-
+    toc
 end
 
+% keyboard
 
 %%
 % x1_plot = linspace(0.01, G1_data.L/2 - 0.01, 300);
@@ -160,9 +161,11 @@ for j = 1:length(N_bf)
 end
 xlabel('$x/L_1$')
 ylabel('$\phi_1(x)$')
-title('Polynoial approximation solve, $\phi_{1}(x)$')
+title('Polynoial approximation of $\phi_{1}(x)$')
 legend show
 xlim([-0.05 1.05])
+ylim([-50 80])
+fontsize(gca,18,"pixels")
 
 figure()
 for j = 1:length(N_bf)
@@ -173,9 +176,11 @@ for j = 1:length(N_bf)
 end
 xlabel('$x/L_2$')
 ylabel('$\phi_{2}(x)$')
-title('Polynoial approximation solve, $\phi_{2}(x)$')
+title('Polynoial approximation of $\phi_{2}(x)$')
 legend show
 xlim([-0.05 1.05])
+ylim([-40 80])
+fontsize(gca,18,"pixels")
 
 %% Error/ convergence plot
 phi_1_only_norm = sum(w1_err.'.*abs(phi_1(end, :)));
@@ -204,7 +209,7 @@ err_phi_1, err_phi_2, EOC_phi_1, EOC_phi_2
 
 toc
 % 
-filename = 'poly_solver_k10_Nbf_10_640.mat';
-
+filename = 'poly_solver_k80_Nbf_10_1280.mat';
+% 
 save(filename, "G1_data", "G2_data", "N_bf", "aj_1", "aj_2", "t1_bf_grid_store", "t2_bf_grid_store")
-% % 
+% % % 

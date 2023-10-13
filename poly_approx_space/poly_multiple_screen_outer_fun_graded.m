@@ -12,9 +12,9 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 % G2_data.L = sqrt( (G2(3) - G2(1))^2 +(G2(4) - G2(2))^2 );
 
 Lgrad_coeff = 0.15;
-alpha = 4;
+alpha = 2;
 
-C_wl= 1/10;
+C_wl= 1/2;
 
 k = 10;  % wavenumber
 
