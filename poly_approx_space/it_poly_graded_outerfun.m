@@ -1,0 +1,89 @@
+% outer function for iterative polynomial solver, graded PIM and graded
+% midpoint being used.
+
+clear all
+
+% only adding one path to centralise solvers
+addpath('../General_functions/')
+
+% introducing screens
+G1_data.G = [-2*pi, 2*pi, 0, 0];
+
+G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+
+Lgrad_coeff = 0.15;
+alpha = 2;
+
+C_wl= 1/2;
+
+k = 10;  % wavenumber
+
+theta = 0;
+
+% constants needed for the smoothing function
+C1 = 1;
+C2 = pi;
+
+% The support for the basis functions
+C_wl_bf1 = 1/2;
+C_wl_bf2 = 1/2;
+[~, ~, ~, ~, t1_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+    G1_data.G, C_wl_bf1, k, Lgrad_coeff, alpha);
+[~, ~, ~, ~, t2_bf_grid, ~, ~, ~, ~] = discretistion_vars_graded(...
+    G2_data.G, C_wl_bf2, k, Lgrad_coeff, alpha);
+
+% quadrature nodes and other information needed
+[G1_data.x_1_q, G1_data.y_1_q, G1_data.x_2_q, G1_data.y_2_q, ...
+    G1_data.t_grid, G1_data.t_mid, G1_data.w, G1_data.N, G1_data.L] = ...
+    discretistion_vars_graded(G1_data.G, C_wl, k, Lgrad_coeff, alpha);
+
+[G2_data.x_1_q, G2_data.y_1_q, G2_data.x_2_q, G2_data.y_2_q, ...
+    G2_data.t_grid, G2_data.t_mid, G2_data.w, G2_data.N, G2_data.L] = ...
+    discretistion_vars_graded(G2_data.G, C_wl, k, Lgrad_coeff, alpha);
+
+G1_data.s = [ G1_data.t_mid(1:end) ; flip(G1_data.L - ...
+    G1_data.t_mid(1:end)) ];
+G1_data.x_col = [ G1_data.x_1_q(1:end) ; flip(G1_data.x_2_q(1:end)) ];
+G1_data.y_col = [ G1_data.y_1_q(1:end) ; flip(G1_data.y_2_q(1:end)) ];
+
+% col_choice2 = sort(randi(length(G2_data.t_mid(:)), 20, 1));
+G2_data.s = [ G2_data.t_mid(1:end) ; flip(G2_data.L - ...
+    G2_data.t_mid(1:end)) ];
+G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
+G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
+
+[S11, S12, S21, S22, u_inc1, u_inc2] = ...
+    compute_matrices_for_iterative_solve(G1_data, G2_data, k, ...
+    t1_bf_grid, t2_bf_grid, theta, C1, C2 );
+
+% iterative solve
+R_max = 20;
+
+[aj_1_R, aj_2_R, phi_1_r, phi_2_r] = iterative_poly_graded_PIM_solve(...
+    S11, S12, S21, S22, u_inc1, u_inc2, R_max, t1_bf_grid, t2_bf_grid,...
+    G1_data, G2_data);
+
+%%
+figure();
+for r = 1:R_max
+    txt1 = ['r = ', mat2str(2*r-2)];
+    plot(G1_data.s/G1_data.L, phi_1_r(:, r), 'DisplayName', txt1);
+    hold on
+
+end
+legend show
+xlabel('$x/L_{1}$')
+ylabel('$\phi_{1}^{(r)}$')
+title('Iterative approximation to $\phi_{1}$ ')
+
+figure();
+for r = 1:R_max
+    txt1 = ['r = ', mat2str(2*r - 1)];
+    plot(G2_data.s/G2_data.L, phi_2_r(:, r), 'DisplayName', txt1);
+    hold on
+
+end
+legend show
+xlabel('$x/L_{2}$')
+ylabel('$\phi_{2}^{(r)}$')
+title('Iterative approximation to $\phi_{2}$ ')
