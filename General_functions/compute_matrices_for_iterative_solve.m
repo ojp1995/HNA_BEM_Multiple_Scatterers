@@ -34,7 +34,7 @@ y1_col = G1_struct.y_col;
 s1 = G1_struct.s;
 % unpacking quadrature points
 % nq1 = G1_struct.nq;
-t1_mid = G1_struct.t_mid;
+t1_mid_q = G1_struct.t_mid_q;
 t1_grid = G1_struct.t_grid;
 x1_1_q = G1_struct.x_1_q;
 y1_1_q = G1_struct.y_1_q;
@@ -49,7 +49,7 @@ y2_col = G2_struct.y_col;
 s2 = G2_struct.s;
 % unpacking quadrature points
 % nq2 = G2_struct.nq2;
-t2_mid = G2_struct.t_mid;
+t2_mid_q = G2_struct.t_mid_q;
 t2_grid = G2_struct.t_grid;
 x2_1_q = G2_struct.x_1_q;
 y2_1_q = G2_struct.y_1_q;
@@ -79,8 +79,8 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
 
     % Finding out which quadrature points are supported by specific basis
     % function
-    select1 = (t1_bf_grid(n) <= t1_mid ); 
-    select2 = (t1_bf_grid(n+1) > t1_mid);
+    select1 = (t1_bf_grid(n) <= t1_mid_q ); 
+    select2 = (t1_bf_grid(n+1) > t1_mid_q);
     select =  (select1 == select2); 
     grid_select = find(select); 
     ii = max(grid_select); 
@@ -90,7 +90,7 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
     % first half due to way it is constructed
     
     S11(:, n) = graded_PIM_int_hankel_f(k, s1, w1(select), ...
-        t1_mid(select), 1, t1_grid(grid_select), C1, C2);
+        t1_mid_q(select), 1, t1_grid(grid_select), C1, C2);
 
 %     S11_old = graded_PIM_int_hankel_f(k, s1, w1, ...
 %         t1_mid, select, t1_grid, C1, C2);
@@ -101,7 +101,7 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
 
     % computing second half
     S11(:, 2*length(t1_bf_grid)-n-1) = graded_PIM_int_hankel_f(k, L1 - s1, ...
-        w1(select), t1_mid(select), 1, t1_grid(grid_select), C1, C2);
+        w1(select), t1_mid_q(select), 1, t1_grid(grid_select), C1, C2);
 
     S21(:, n) = midpoint_hankel_f_diff_screen(k, x2_col, y2_col, x1_1_q(select),...
         y1_1_q(select), w1(select), 1);
@@ -149,8 +149,8 @@ end
 
 for n = 1:length(t2_bf_grid) - 1  % basis function loop
 
-    select1 = (t2_bf_grid(n) <= t2_mid ); 
-    select2 = (t2_bf_grid(n+1) > t2_mid);
+    select1 = (t2_bf_grid(n) <= t2_mid_q ); 
+    select2 = (t2_bf_grid(n+1) > t2_mid_q);
     select =  (select1 == select2);
     grid_select = find(select); 
     ii = max(grid_select); 
@@ -158,12 +158,12 @@ for n = 1:length(t2_bf_grid) - 1  % basis function loop
     clear select1 select2
 
         % first half
-    S22(:, n) = graded_PIM_int_hankel_f(k, s2, w2(select), t2_mid(select), 1, ...
+    S22(:, n) = graded_PIM_int_hankel_f(k, s2, w2(select), t2_mid_q(select), 1, ...
         t2_grid(grid_select), C1, C2);
 
      % second half
     S22(:, 2*length(t2_bf_grid)-n - 1) = graded_PIM_int_hankel_f(k, L2 - s2, ...
-        w2(select), t2_mid(select), 1, t2_grid(grid_select), C1, C2);
+        w2(select), t2_mid_q(select), 1, t2_grid(grid_select), C1, C2);
 
 %     first half
     S12(:, n) = midpoint_hankel_f_diff_screen(k, x1_col, y1_col, x2_1_q(select),...
