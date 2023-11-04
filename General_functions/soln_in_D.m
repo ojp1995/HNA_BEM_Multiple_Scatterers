@@ -15,5 +15,5 @@ for q = 1:length(Y1)
 
     dist = sqrt( (X1 - Y1(q)).^2 + (X2 - Y2(q)).^2);
 
-    us = us - 1i*w(q)*besselh(0, k*dist)*phi(q)/4;
+    us = us + 1i*w(q)*besselh(0, k*dist)*phi(q)/4;
 end
