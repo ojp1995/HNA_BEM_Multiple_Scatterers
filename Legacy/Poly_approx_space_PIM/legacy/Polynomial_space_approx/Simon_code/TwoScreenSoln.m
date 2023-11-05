@@ -14,12 +14,12 @@ clear all
 format compact
 k = 5 % the wavenumber
 r1start = [-2*pi, 2*pi]; r1end = [0, 0];
-r2start = [4*pi, 0]; r2end = [7*pi, 3*pi];
+r2start = [2*pi, 0]; r2end = [5*pi, 3*pi];
 L1 = sqrt( (r1end(2) - r1start(2))^2 + ( r1end(1) - r1start(1) )^2 )
 L2 = sqrt( (r2end(2) - r2start(2))^2 + ( r2end(1) - r2start(1) )^2 )
 
 
-C_wl = 1/640;
+C_wl = 1/20;
 
 d = [0,-1]; % the direction of the incident wave
 N1 = ceil(k*L1./(C_wl*2*pi)); N2 = ceil(k*L2./(C_wl*2*pi));% the number of boundary elements on screens 1 and 2
@@ -68,12 +68,14 @@ X = linspace(Xlim(1),Xlim(2),NX);
 Y = linspace(Ylim(1),Ylim(2),NY);
 [XX,YY] = meshgrid(X,Y);
 u = ui(XX,YY,k,d(1),d(2)) + us(XX,YY,k,x,y,h,phi);
-field_plot(3,XX,YY,u,'u',true)
+% field_plot(3,XX,YY,u,'u',true)
+figure()
+pcolor(XX, YY, real(u))
 hold on
 plot([r1start(1),r1end(1)],[r1start(2),r1end(2)])
 plot([r2start(1),r2end(1)],[r2start(2),r2end(2)])
 hold off
 
-SC_alin1_phi1_phi2_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1 = phi;
-
-save('SC_alin1_phi1_phi2_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1')
+% SC_alin1_phi1_phi2_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1 = phi;
+% 
+% save('SC_alin1_phi1_phi2_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1')

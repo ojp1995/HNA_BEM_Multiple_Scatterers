@@ -124,5 +124,5 @@ phi23 = phi2;
 % save('SCphi12_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1')
 % forgot I only need to save one lot of data and the rest follows.
 
-newSCphi23_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1 = phi23;
-save('newSCphi23_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1')
+% newSCphi23_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1 = phi23;
+% save('newSCphi23_g1_n2pi_2pi_0_0_G2_4pi_0_7pi_3pi_Cwl640_d0_m1')

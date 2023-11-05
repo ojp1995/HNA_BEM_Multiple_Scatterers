@@ -17,7 +17,7 @@ alpha = 4;
 
 C_wl= 1/20;
 
-k = 80;  % wavenumber
+k = 10;  % wavenumber
 
 theta = 0;
 
@@ -45,7 +45,7 @@ C2 = pi;
 % G2_data.x_col = [ G2_data.x_1_q(1:end) ; flip(G2_data.x_2_q(1:end)) ];
 % G2_data.y_col = [ G2_data.y_1_q(1:end) ; flip(G2_data.y_2_q(1:end)) ];
 
-N_bf = [10, 20, 40, 80, 160, 320, 640, 1280];
+N_bf = [10, 20, 40] %, 80, 160, 320, 640, 1280];
 
 for j = 1:length(N_bf)
     tic
