@@ -38,7 +38,7 @@ G2 = [ 2*pi, 0, 5*pi, 3*pi];
 % G2 = [pi/4, 2*pi, 3*pi, 2*pi];
 L2 = sqrt( (G2(3) - G2(1))^2 + (G2(4) - G2(2))^2 );  % length of G2
 
-C_wl= 1/40
+C_wl= 1/20
 
 k = 10;  % wavenumber
 
@@ -282,7 +282,7 @@ figure(); pcolor(X, Y, real(us1_0)); shading interp; colorbar; title('scattered 
 toc
 
 tic
-[us2_1, x2, y2] = scattered_domain( G2, aj_2_r(:, 1), k, X, Y, N2);
+% [us2_1, x2, y2] = scattered_domain( G2, aj_2_r(:, 1), k, X, Y, N2);
 [us2_1, x1, y1, x2, y2] = scattered_domain2( G1, G2, aj_1_r(:, 1), aj_2_r(:, 1), k, X, Y, N1, N2);
 figure(); pcolor(X, Y, real(us2_1)); shading interp; colorbar; title('scattered field 1 rereflections ')
 toc

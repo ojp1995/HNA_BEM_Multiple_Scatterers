@@ -130,11 +130,26 @@ us_G2_r = soln_in_D(XX, YY, [G2_data.x_1_q ; flip(G2_data.x_2_q)],...
     [G2_data.y_1_q ; flip(G2_data.y_2_q)], k, ...
     [G2_data.w; flip(G2_data.w)], phi_2);
 
-% phi_1_0 = graded_coeff_2_solution(aj_1_R(:, 1), G1_data.t_bf_grid,...
-%     G1_data.t_mid_q, G1_data.L);
-% 
-% phi_2_1 = graded_coeff_2_solution(aj_2_R(:, 1), G2_data.t_bf_grid,...
-%     G2_data.t_mid_q, G2_data.L);
+figure(); pcolor(XX, YY, real(ui - us_G2_r)); shading interp
+
+phi_1_0 = graded_coeff_2_solution(aj_1_R(:, 1), G1_data.t_bf_grid,...
+    G1_data.t_mid_q, G1_data.L);
+
+phi_2_1 = graded_coeff_2_solution(aj_2_R(:, 1), G2_data.t_bf_grid,...
+    G2_data.t_mid_q, G2_data.L);
+
+us_G1_slow_r0 = soln_in_D_slow(G1_data, phi_1_0, k, X1, X2);
+
+uTr0 = ui - us_G1_slow_r0;
+
+figure(); pcolor(XX, YY, real(uTr0)); shading interp
+title('R = 0')
+
+us_G2_slow_r1 = soln_in_D_slow(G2_data, phi_2_1, k, X1, X2);
+
+uTr1 = uTr0 - us_G2_slow_r1;
+figure(); pcolor(XX, YY, real(uTr1)); shading interp
+title('R = 1')
 % 
 % us_G1_r0 = soln_in_D(XX, YY, [G1_data.x_1_q ; flip(G1_data.x_2_q)],...
 %     [G1_data.y_1_q ; flip(G1_data.y_2_q)], k, ...
@@ -144,11 +159,24 @@ us_G2_r = soln_in_D(XX, YY, [G2_data.x_1_q ; flip(G2_data.x_2_q)],...
 %     [G2_data.y_1_q ; flip(G2_data.y_2_q)], k, ...
 %     [G2_data.w; flip(G2_data.w)], phi_2_1);
 
-% phi_1_2 = graded_coeff_2_solution(aj_1_R(:, 2), G1_data.t_bf_grid,...
-%     G1_data.t_mid_q, G1_data.L);
-% 
-% phi_2_3 = graded_coeff_2_solution(aj_2_R(:, 2), G2_data.t_bf_grid,...
-%     G2_data.t_mid_q, G2_data.L);
+phi_1_2 = graded_coeff_2_solution(aj_1_R(:, 2), G1_data.t_bf_grid,...
+    G1_data.t_mid_q, G1_data.L);
+
+phi_2_3 = graded_coeff_2_solution(aj_2_R(:, 2), G2_data.t_bf_grid,...
+    G2_data.t_mid_q, G2_data.L);
+
+us_G1_slow_r2 = soln_in_D_slow(G1_data, phi_1_2, k, X1, X2);
+
+uTr2 = uTr1 - us_G1_slow_r2;
+
+figure(); pcolor(XX, YY, real(uTr2)); shading interp
+title('R = 2')
+
+us_G2_slow_r3 = soln_in_D_slow(G2_data, phi_2_3, k, X1, X2);
+
+uTr3 = uTr2 - us_G2_slow_r3;
+figure(); pcolor(XX, YY, real(uTr3)); shading interp
+title('R = 3')
 % 
 % us_G1_r2 = soln_in_D(XX, YY, [G1_data.x_1_q ; flip(G1_data.x_2_q)],...
 %     [G1_data.y_1_q ; flip(G1_data.y_2_q)], k, ...
@@ -173,7 +201,7 @@ us_G2_r = soln_in_D(XX, YY, [G2_data.x_1_q ; flip(G2_data.x_2_q)],...
 %     [G2_data.w; flip(G2_data.w)], phi_2_5);
 
 ui = incident(k, theta, XX, YY);
-u = ui - (us_G1_r + us_G2_r)/sqrt(2);
+u = ui - (us_G1_r + us_G2_r);
 
 figure();
 pcolor(XX, YY, real(u))
