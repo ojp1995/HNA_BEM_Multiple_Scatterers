@@ -133,11 +133,17 @@ X2 = [-5 + y_min: 0.1 :5 + y_max];
 
 [XX, YY] = meshgrid(X1, X2);
 
+ui = incident(k, theta, XX, YY);
+
 phi_1 = graded_coeff_2_solution(aj_1, G1_data.t_bf_grid,...
     G1_data.t_mid_q, G1_data.L);
 
 phi_2 = graded_coeff_2_solution(aj_2, G2_data.t_bf_grid,...
     G2_data.t_mid_q, G2_data.L);
+
+us_slow = soln_in_D_2_slow(G1_data, phi_1, G2_data, phi_2, k, X1, X2);
+
+figure(); pcolor(XX, YY, real(ui - us_slow)); shading interp;
 
 us_G1 = soln_in_D(XX, YY, [G1_data.x_1_q ; flip(G1_data.x_2_q)],...
     [G1_data.y_1_q ; flip(G1_data.y_2_q)], k, ...
@@ -147,7 +153,7 @@ us_G2 = soln_in_D(XX, YY, [G2_data.x_1_q ; flip(G2_data.x_2_q)],...
     [G2_data.y_1_q ; flip(G2_data.y_2_q)], k, ...
     [G2_data.w; flip(G2_data.w)], phi_2);
 
-ui = incident(k, theta, XX, YY);
+
 u = ui - (us_G1 + us_G2);
 
 figure();

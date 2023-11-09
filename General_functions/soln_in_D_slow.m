@@ -13,6 +13,7 @@ yq2 = [G_data.y_1_q ; flip(G_data.y_2_q)];
 w = [G_data.w ; flip(G_data.w)];
 
 us = zeros(length(Y), length(X));
+% us = zeros(size(X));
 
 for ix = 1:length(X)
 

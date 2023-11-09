@@ -108,7 +108,7 @@ X2 = [-5 + y_min: 0.1 :5 + y_max];
 
 [XX, YY] = meshgrid(X1, X2);
 
-
+ui = incident(k, theta, XX, YY);
 
 % collocation nodes and phi evaluated at those nodes!
 phi_1 = graded_coeff_2_solution(aj_1_R(:, end), G1_data.t_bf_grid,...
@@ -116,6 +116,11 @@ phi_1 = graded_coeff_2_solution(aj_1_R(:, end), G1_data.t_bf_grid,...
 
 phi_2 = graded_coeff_2_solution(aj_2_R(:, end), G2_data.t_bf_grid,...
     G2_data.t_mid_q, G2_data.L);
+
+us = soln_in_D_2_slow(G1_data, phi_1, G2_data, phi_2, k, X1, X2);
+
+figure();
+pcolor(XX, YY, real(ui - us)); shading interp
 
 us_G1_slow = soln_in_D_slow(G1_data, phi_1, k, X1, X2);
 
