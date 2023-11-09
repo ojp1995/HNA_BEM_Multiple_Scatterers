@@ -12,9 +12,9 @@ G1_data.G = [-2*pi, 2*pi, 0, 0];
 G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
 
 Lgrad_coeff = 0.15;
-alpha = 2;
+alpha = 4;
 
-C_wl= 1/20;
+C_wl= 1/40;
 
 k = 10;  % wavenumber
 
@@ -25,8 +25,8 @@ C1 = 1;
 C2 = pi;
 
 % The support for the basis functions
-C_wl_bf1 = 1/2;
-C_wl_bf2 = 1/2;
+C_wl_bf1 = 1/20;
+C_wl_bf2 = 1/20;
 % basis function and collocation grid
 [G1_data.x_1_col, G1_data.y_1_col, G1_data.x_2_col, G1_data.y_2_col,...
     G1_data.t_bf_grid, G1_data.t_mid_col, ~, ~, G1_data.L] = discretistion_vars_graded(...
@@ -122,6 +122,7 @@ us = soln_in_D_2_slow(G1_data, phi_1, G2_data, phi_2, k, X1, X2);
 figure();
 pcolor(XX, YY, real(ui - us)); shading interp
 
+keyboard
 us_G1_slow = soln_in_D_slow(G1_data, phi_1, k, X1, X2);
 
 us_G2_slow = soln_in_D_slow(G2_data, phi_2, k, X1, X2);
