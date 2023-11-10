@@ -108,9 +108,9 @@ for n = 1:length(t1_bf_grid)- 1  % basis function loop
     
     % this needs separate quadrature points, can't reuse as in S11 case.
     % Select may also need to be changed.
-    xq = flip(x1_2_q); yq = flip(y1_2_q);
+%     xq = flip(x1_2_q); yq = flip(y1_2_q);
     S21(:, 2*length(t1_bf_grid)-n-1) = midpoint_hankel_f_diff_screen(k, ...
-        x2_col, y2_col, xq(select), yq(select), w1(select), 1);
+        x2_col, y2_col, x1_2_q(select), y1_2_q(select), w1(select), 1);
 
     
     % NOT tested, old, not composite rule
@@ -171,9 +171,9 @@ for n = 1:length(t2_bf_grid) - 1  % basis function loop
     
         % second half - As above, this is a bit of a special case, will
         % need more thought.
-    xq = flip(x2_2_q); yq = flip(y2_2_q);
+%     xq = flip(x2_2_q); yq = flip(y2_2_q);
     S12(:, 2*length(t2_bf_grid)-n - 1) =  midpoint_hankel_f_diff_screen(k, ...
-        x1_col, y1_col, xq(select), yq(select), w2(select), 1);
+        x1_col, y1_col, x2_2_q(select), y2_2_q(select), w2(select), 1);
 
 
 
