@@ -14,7 +14,7 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 Lgrad_coeff = 0.15;
 alpha = 2;
 
-C_wl= 1/20;
+C_wl= 1/5;
 
 k = 10;  % wavenumber
 
@@ -87,7 +87,7 @@ u_inc = [u_inc1 ; u_inc2];
 coeffs = A\u_inc;
 
 aj_1 = coeffs(1:2*length(G1_data.t_bf_grid) - 2);
-aj_2 = coeffs(2*length(G2_data.t_bf_grid) - 2+ 1: end);
+aj_2 = coeffs(2*length(G1_data.t_bf_grid) - 2+ 1: end);
 
 %%
 % now we need to find a way to plot these coefficients and also make sure
@@ -144,6 +144,8 @@ phi_2 = graded_coeff_2_solution(aj_2, G2_data.t_bf_grid,...
 us_slow = soln_in_D_2_slow(G1_data, phi_1, G2_data, phi_2, k, X1, X2);
 
 figure(); pcolor(XX, YY, real(ui - us_slow)); shading interp;
+
+keyboard 
 
 us_G1 = soln_in_D(XX, YY, [G1_data.x_1_q ; flip(G1_data.x_2_q)],...
     [G1_data.y_1_q ; flip(G1_data.y_2_q)], k, ...
