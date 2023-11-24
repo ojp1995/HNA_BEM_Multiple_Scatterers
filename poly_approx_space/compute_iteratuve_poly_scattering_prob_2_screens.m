@@ -61,7 +61,7 @@ if bndy_plot == true
     figure();
     for r = 1:R_max
         txt1 = ['r = ', mat2str(2*r-2)];
-        plot(G1_data.s/G1_data.L, phi_1_r(:, r), 'DisplayName', txt1);
+        plot(G1_data.s(10:end-10)/G1_data.L, phi_1_r(10:end-10, r), 'DisplayName', txt1);
         hold on
     
     end
@@ -69,18 +69,21 @@ if bndy_plot == true
     xlabel('$x/L_{1}$')
     ylabel('$\phi_{1}^{(r)}$')
     title('Iterative approximation to $\phi_{1}$ ')
+    xlim([-0.05 1.05])
     
     figure();
     for r = 1:R_max
         txt1 = ['r = ', mat2str(2*r - 1)];
-        plot(G2_data.s/G2_data.L, phi_2_r(:, r), 'DisplayName', txt1);
+        plot(G2_data.s(10:end-10)/G2_data.L, phi_2_r(10:end-10, r), 'DisplayName', txt1);
         hold on
+        
     
     end
     legend show
     xlabel('$x/L_{2}$')
     ylabel('$\phi_{2}^{(r)}$')
     title('Iterative approximation to $\phi_{2}$ ')
+    xlim([-0.05 1.05])
 end
 
 % produce plot in Domain - Optional argument
