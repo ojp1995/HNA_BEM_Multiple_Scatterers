@@ -41,6 +41,63 @@ G1_data = get_graded_quad_points(G1_data, C_wl_quad, k, ...
 G2_data = get_graded_quad_points(G2_data, C_wl_quad, k, ...
     Lgrad_coeff, alpha);
 
+
+
+tol1 = max([G1_data.w; 1e-2]);
+tol2 = max([G2_data.w; 1e-2]);
+
+[G1grid_quad] = align_quad_grid(G1_data.t_bf_grid, G1_data.t_grid, tol1);
+
+[G2grid_quad] = align_quad_grid(G2_data.t_bf_grid, G2_data.t_grid, tol2);
+
+% Now need to get the nodes from this grid and the weights and the 2d
+% versions as well
+
+% G1 midpoints (parameterised) and weights
+for j = 1:(length(G1grid_quad)-1)
+    G1t_mid(j) = (G1grid_quad(j+1) + G1grid_quad(j))/2;
+    G1w(j) = G1grid_quad(j+1) - G1grid_quad(j);
+end
+
+% constructing 2D points
+G1x_1_1 = G1_data.G(1) + G1t_mid*(G1_data.G(3) - G1_data.G(1))/G1_data.L;
+G1y_1_1 = G1_data.G(2) + G1t_mid*(G1_data.G(4) - G1_data.G(2))/G1_data.L;
+
+G1x_1_2 = G1_data.G(1) + (G1_data.L - G1t_mid)*(G1_data.G(3) - G1_data.G(1))/G1_data.L;
+G1y_1_2 = G1_data.G(2) + (G1_data.L - G1t_mid)*(G1_data.G(4) - G1_data.G(2))/G1_data.L;
+
+% G2 midpoints (parameterised) and weights
+for j = 1:(length(G2grid_quad)-1)
+    G2t_mid(j) = (G2grid_quad(j+1) + G2grid_quad(j))/2;
+    G2w(j) = G2grid_quad(j+1) - G2grid_quad(j);
+end
+
+% constructing 2D points
+G2x_1_1 = G2_data.G(1) + G2t_mid*(G2_data.G(3) - G2_data.G(1))/G2_data.L;
+G2y_1_1 = G2_data.G(2) + G2t_mid*(G2_data.G(4) - G2_data.G(2))/G2_data.L;
+
+G2x_1_2 = G2_data.G(1) + (G2_data.L - G2t_mid)*(G2_data.G(3) - G2_data.G(1))/G2_data.L;
+G2y_1_2 = G2_data.G(2) + (G2_data.L - G2t_mid)*(G2_data.G(4) - G2_data.G(2))/G2_data.L;
+
+
+G1_data.t_grid = G1grid_quad;
+G1_data.t_mid_q = G1t_mid;
+G1_data.w = G1w;
+G1_data.x_1_q = G1x_1_1;
+G1_data.y_1_q = G1y_1_1;
+G1_data.x_2_q = G1x_1_2;
+G1_data.y_2_q = G1y_1_2;
+
+
+G2_data.t_grid = G2grid_quad;
+G2_data.t_mid_q = G2t_mid;
+G2_data.w = G2w;
+G2_data.x_1_q = G2x_1_1;
+G2_data.y_1_q = G2y_1_1;
+G2_data.x_2_q = G2x_1_2;
+G2_data.y_2_q = G2y_1_2;
+
+
 % collocation points
 G1_data = manipulate_collocation_points_graded(G1_data);
 G2_data = manipulate_collocation_points_graded(G2_data);
