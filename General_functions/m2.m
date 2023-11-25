@@ -18,5 +18,8 @@ dist = abs(s - nq);
 z = 1i*besselh(0, k*dist)/4 ...
     - m1(k, s, nq, C1, C2).*log(k*dist); 
 
-z(select) = 1i/4  - 2*(log(1/2) + (-psi(1)))/pi;
+z(select) = 1i/4  - (log(1/2) + (-psi(1)))/(2*pi);
+
+% here is the problem, the analytical solution is not quite right, it is
+% closer that it was but is slightly over estimating.
 
