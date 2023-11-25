@@ -19,7 +19,7 @@ for j = 1:length(s)
 
     dist = abs(s(j) - nq);
 
-    I(j, 1) = sum((m1(k, s(j), nq, C1, C2).*w1_weights(k, s(j), t_lower,...
-        t_upper) + w.*m2(k, s(j), nq, C1, C2)).*fnq );
+    I(j, 1) = sum((m1(k, s(j), nq, C1, C2).*(w1_weights(k, s(j), t_lower,...
+        t_upper).') + w.*m2(k, s(j), nq, C1, C2)).*fnq );
 
 end

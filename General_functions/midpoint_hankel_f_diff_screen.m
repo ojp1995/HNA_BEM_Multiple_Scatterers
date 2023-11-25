@@ -21,7 +21,7 @@ function I = midpoint_hankel_f_diff_screen(k, x1, x2, y1t, y2t, h, fnq)
 for s = 1:length(x1)
     dist = sqrt( ( x1(s) - y1t ).^2  + (x2(s) - y2t).^2 );
     
-    I(s, 1) = 1i*sum(h.*besselh(0, k*dist).*fnq)/4;
+    I(s, 1) = 1i*sum(h(:).*besselh(0, k*dist(:)).*fnq)/4;
 
 end
 
