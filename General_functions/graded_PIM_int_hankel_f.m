@@ -17,9 +17,9 @@ t_upper = tq(2:end);
 I = zeros(length(s), 1);
 for j = 1:length(s)
 
-    dist = abs(s(j) - nq);
+%     dist = abs(s(j) - nq);
 
     I(j, 1) = sum((m1(k, s(j), nq, C1, C2).*(w1_weights(k, s(j), t_lower,...
-        t_upper).') + w.*m2(k, s(j), nq, C1, C2)).*fnq );
+        t_upper)) + w.*m2(k, s(j), nq, C1, C2)).*fnq );
 
 end
