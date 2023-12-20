@@ -22,7 +22,7 @@ C_wl_bf2 = 1/10;
 
 C_wl_quad= 1/20;
 
-R_max = 20;
+R_max = 15;
 
 k = 10;
 
@@ -31,11 +31,37 @@ C1 = 1;
 C2 = pi;
 
 
+
 % solve
 [G1_data, G2_data, aj_1_R, aj_2_R, us] = ...
     compute_iteratuve_poly_scattering_prob_2_screens(G1_data, G2_data, ...
     k, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, C_wl_quad, R_max, theta, ...
-    C1, C2, true, true);
+    C1, C2, true, false);
+
+%%
+% compute error wrt to iterations
+C_wl_quad_err = 1/40;
+G1_err_data = get_graded_quad_points(G1_data, C_wl_quad_err, k, ...
+    Lgrad_coeff, alpha);
+G2_err_data = get_graded_quad_points(G2_data, C_wl_quad_err, k, ...
+    Lgrad_coeff, alpha);
+
+err_L1_G1 = L1_err_wrt_it_poly_it_bndy(G1_data, G1_err_data, aj_1_R, R_max);
+
+err_L1_G2 = L1_err_wrt_it_poly_it_bndy(G2_data, G2_err_data, aj_2_R, R_max);
+
+R_phi1 = [0:2:2*(R_max - 2)];
+R_phi2 = [1:2:2*(R_max - 1)];
+
+figure()
+semilogy(R_phi1, err_L1_G1, 'DisplayName', '$\phi_{1}^{(r)}$')
+hold on
+semilogy(R_phi2, err_L1_G2, 'DisplayName', '$\phi_{2}^{(r)}$ error')
+legend show
+xlabel('Number of iterations, r')
+ylabel('$\Vert \phi_{j}^{(R)} - \phi_{j}^{(r)} \Vert_{L^{1}((0, L_{j}))} / \Vert \phi_{j}^{(R)} \Vert_{L^{1}((0, L_{j}))}$')
+title('$L^{1}$ error for an increasing number of iterations of $\phi_{j}^{(r)}$')
+
 
 
 % G1_data = get_bf_graded_grid(G1_data, C_wl_bf1, k, Lgrad_coeff, alpha);
