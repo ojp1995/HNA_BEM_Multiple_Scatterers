@@ -22,7 +22,9 @@ for j = 1:length(x1)
 
     dist_dot_n = ( (x1(j) - y1t)*n(1) + (x2(j) - y2t)*n(2) );
 
-    I(j, 1) = 1i*k*h*sum(besselh(1, 1, k*dist).*dist_dot_n.*fnq./dist)/2;
+    I(j, 1) = 1i*k*sum(h.*besselh(1, 1, k*dist).*dist_dot_n.*fnq./dist)/2;
+
+%     I(j, 1) = 1i*k*h*sum(besselh(1, 1, k*dist).*dist_dot_n.*fnq./dist)/2;
 
     %dist_dot_n_test(j) = dist_dot_n;
 
