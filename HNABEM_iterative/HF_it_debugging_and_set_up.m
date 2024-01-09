@@ -5,12 +5,19 @@ addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
 %% Geometrical set up specific to HNABEMLAB set up
+% % Test 1
+% vertices1 = [-2*pi 2*pi;
+%     0, 0];
+% 
+% vertices2 = [2*pi 0;
+%     5*pi 3*pi];
 
+% % Test 4
 vertices1 = [-2*pi 2*pi;
     0, 0];
 
 vertices2 = [2*pi 0;
-    5*pi 3*pi];
+    2*pi 3*pi];
 
 Gamma1=Screen(vertices1);
 Gamma2=Screen(vertices2);
@@ -39,6 +46,8 @@ C2 = pi;
 Lgrad_coeff = 0.15;
 alpha = 2;
 
+G1_data.col_points = col_points1;
+G2_data.col_points = col_points2;
 
 G1_data.G = [vertices1(1, 1), vertices1(1, 2), vertices1(2, 1), vertices1(2, 2)];
 G2_data.G = [vertices2(1, 1), vertices2(1, 2), vertices2(2, 1), vertices2(2, 2)];
@@ -73,7 +82,46 @@ G1_data = get_graded_quad_points_HF_it(G1_data, C_wl_quad_outer,...
 G2_data = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
 
+[v_N1cell, v_N2cell, phi1_r, phi2_r] = HF_iterative_solve(kwave, ...
+    theta, R_max, G1_data, G2_data, VHNA1, colMatrix1, VHNA2, colMatrix2...
+    ,vertices1, vertices2, d, C1, C2);
 
+
+%% plotting
+figure()
+for r = 1:R_max
+    txt1 = ['r = ', mat2str(2*r-2)];
+    plot(G1_data.t_mid_q_comb_outer/G1_data.L, phi1_r{r}, ...
+        'DisplayName', txt1)
+    hold on
+
+end
+xlim([-0.05 1.05])
+ylim([-30 30])
+xlabel('$x/L_{1}$')
+ylabel('$\phi_{1}^{(r)}$')
+title('HF iterative method $\phi_{1}^{(r)}$')
+legend show
+
+figure()
+for r = 1:R_max-1
+    txt2 = ['r = ', mat2str(2*r-1)];
+    plot(G2_data.t_mid_q_comb_outer/G2_data.L, phi2_r{r}, ...
+        'DisplayName', txt2)
+    hold on
+
+end
+xlim([-0.05 1.05])
+ylim([-30 30])
+xlabel('$x/L_{2}$')
+ylabel('$\phi_{2}^{(r)}$')
+title('HF iterative method $\phi_{2}^{(r)}$')
+legend show
+
+
+%% Old step by step
+warning('Old code that was used for initial work and debugging')
+keyboard
 %% Move onto computing the solve
 
 % 0th iteration, will be able to compare the computation of the RHS to the
