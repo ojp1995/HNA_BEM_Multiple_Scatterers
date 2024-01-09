@@ -128,7 +128,7 @@ v_N1_0 = ProjectionFunction(coeff1_0, VHNA1);
 [coeff1_0, v_N1_0.coeffs(), v_N1.coeffs()]
 
 %% construct the solution
-phi1_0 = @(x) v_N1_0.eval(x, 1) - 2*duidn(vertices1, G1_data.L, kwave, ...
+phi1_0 = @(x) v_N1_0.eval(x, 1) + 2*duidn(vertices1, G1_data.L, kwave, ...
     d, x);
 
 figure();
@@ -136,7 +136,7 @@ plot(G1_data.t_mid_q_comb_outer/G1_data.L, phi1_0(G1_data.t_mid_q_comb_outer))
 hold on
 plot(G1_data.t_mid_q_comb_outer/G1_data.L, ...
     v_N1.eval(G1_data.t_mid_q_comb_outer, 1) ...
-    - GOA1.eval(G1_data.t_mid_q_comb_outer, 1), '--')
+    + GOA1.eval(G1_data.t_mid_q_comb_outer, 1), '--')
 xlim([-0.05 1.05])
 ylim([-30 30])
 
@@ -205,16 +205,39 @@ K21_phi1_0_half2 = midpoint_dphikdn_f_diff_screen(kwave,...
     G1_data.L - G1_data.y_1_q_inner, ...
     phi1_0(G1_data.L - G1_data.t_mid_q_inner), G2_data.n);
 
-% comparison
+K21phi1_0_half2_mannually_scalled = ...
+    recalled_midpoint_dphikdn_f_diff_screen(kwave, ...
+    G2_data.x_q_comb_outer, G2_data.y_q_comb_outer, ...
+    G1_data.w_inner, G1_data.x_1_q_inner, ...
+    G1_data.y_1_q_inner, ...
+    phi1_0(G1_data.L - G1_data.t_mid_q_inner), G2_data.n, G1_data.L);
+
+%% Not very convinced lets see how matlab solves it
+% anon functions for integration variables and kernel
+G1x = @(t) G1_data.G(1) + t.*(G1_data.G(3) - G1_data.G(1))/G1_data.L;
+G1y = @(t) G1_data.G(2) + t.*(G1_data.G(4) - G1_data.G(2))/G1_data.L;
+
+dphik_kernel = @(t) 1i*kwave*besselh(1, 1, kwave*sqrt( (G2_data.x_q_comb_outer  - ...
+    G1x(t)).^2 + (G2_data.x_q_comb_outer - G1y(t)).^2 ) ).*((G2_data.x_q_comb_outer  - ...
+    G1x(t))*G2_data.n(1) + (G2_data.x_q_comb_outer - G1y(t))*G2_data.n(2))...
+    .*phi1_0(t)./(2* ...
+    sqrt( (G2_data.x_q_comb_outer  -  G1x(t)).^2 + (G2_data.x_q_comb_outer - G1y(t)).^2) );
+
+
+mat_K21phi1_0 = integral(@(t) dphik_kernel(t), 0, G1_data.L, 'ArrayValued', true);
+%% comparison
 figure(); 
 plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(K21_phi1_0_half1_nonscaled), 'DisplayName', 'Non-scaled, 1st half');
 hold on
 plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(K21_phi1_0_half1), '--', 'DisplayName', 'scaled, 1st half');
+plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(mat_K21phi1_0), '-.', 'DisplayName', 'Matlab 1st half interval')
 figure(); 
 plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(K21_phi1_0_half2_nonscaled), 'DisplayName', 'Non-scaled, 2nd half');
 hold on
 plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(K21_phi1_0_half2), '--', 'DisplayName', 'scaled, 2nd half half');
-
+plot(G2_data.t_mid_q_comb_outer/G2_data.L, K21phi1_0_half2_mannually_scalled, '-.', 'DisplayName', 'manually scalled')
+plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(mat_K21phi1_0), '-.', 'DisplayName', 'Matlab 2nd half interval')
+legend show
 Psi_2_1 = 2*G2_data.alpha*duidn(vertices2, G2_data.L, kwave, d, ...
     G2_data.t_mid_q_comb_outer) + K21_phi1_0; %+ K21_phi1_0_half1 + K21_phi1_0_half2;
 
@@ -225,6 +248,8 @@ S22Psi2_1 = graded_PIM_int_hankel_f(kwave, col_points2,...
 
 RHS2_1 = incident(kwave, theta, G2_data.x_col, G2_data.y_col) ...
     - S21_phi1_0 - S22Psi2_1;
+figure();
+plot(col_points2/G2_data.L, RHS2_1 )
 
 %% solve
 coeff2_1 = colMatrix2\RHS2_1;
@@ -234,7 +259,9 @@ v_N2_1 = ProjectionFunction(coeff2_1, VHNA2);
 %% compute solution
 % phi2_1 = @(x) v_N2_1.eval(x, 1) 
 
-phi2_1 = v_N2_1.eval(G2_data.t_mid_q_comb_outer, 1) + Psi_2_1;
+phi2_1 = v_N2_1.eval(G2_data.t_mid_q_comb_outer, 1) +...
+    2*G2_data.alpha*duidn(vertices2, G2_data.L, kwave, d, ...
+    G2_data.t_mid_q_comb_outer) + K21_phi1_0;
 
 figure()
 plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(phi2_1))
