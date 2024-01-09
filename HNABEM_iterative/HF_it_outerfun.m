@@ -299,6 +299,48 @@ phi2_1_inner = v_N2_1.eval(G2_data.t_mid_q_comb_inner, 1) +...
     G1_data.w_comb_inner, G1_data.x_q_comb_inner, ...
     G1_data.y_q_comb_inner, phi1_0_inner, G2_data.n);
 
+% Compute S12phi2_1, x are the collocation points, integration variables
+% out outer variables
+
+S12_phi2_1 = midpoint_hankel_f_diff_screen(kwave, G1_data.x_col, ...
+    G1_data.y_col, G2_data.x_q_comb_outer, G2_data.y_q_comb_outer, ...
+    G2_data.w_comb_outer, phi2_1_outer);
+
+% Now compute K12 phi2_1, x are G1_outer variables, y are G2_inner
+% variables
+K12_phi2_1 =  midpoint_dphikdn_f_diff_screen(kwave, ...
+    G1_data.x_q_comb_outer, G1_data.y_q_comb_outer, ...
+    G2_data.w_comb_inner, G2_data.x_q_comb_inner, ...
+    G2_data.y_q_comb_inner, phi2_1_inner, G1_data.n);
+
+
+Psi_1_2 = 2*G1_data.alpha*duidn(vertices1, G1_data.L, kwave, d, ...
+    G1_data.t_mid_q_comb_outer) + K12_phi2_1;
+
+S11Psi1_2 = graded_PIM_int_hankel_f(kwave, col_points1,...
+    G1_data.w_comb_outer, G1_data.t_mid_q_comb_outer, Psi_1_2, ...
+    G1_data.t_grid_comb_outer, C1, C2);
+
+RHS1_2 = incident(kwave, theta, G1_data.x_col, G1_data.y_col) ...
+    - S12_phi2_1 - S11Psi1_2;
+
+%% solve
+coeff1_2 = colMatrix1\RHS1_2;
+
+v_N1_2 = ProjectionFunction(coeff1_2, VHNA1);
+
+%% compute solution
+% phi2_1 = @(x) v_N2_1.eval(x, 1) 
+
+phi1_2 = v_N1_2.eval(G1_data.t_mid_q_comb_outer, 1) +...
+    2*G1_data.alpha*duidn(vertices1, G1_data.L, kwave, d, ...
+    G1_data.t_mid_q_comb_outer) + K12_phi2_1;
+
+figure()
+plot(G1_data.t_mid_q_comb_outer/G1_data.L, real(phi1_2))
+xlim([-0.05 1.05])
+ylim([-30 30])
+
 
 
 
