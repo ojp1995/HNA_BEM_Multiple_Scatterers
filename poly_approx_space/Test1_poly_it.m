@@ -4,7 +4,7 @@
 clear all
 
 addpath('../General_functions/')  % access to solvers needed
-
+tic
 % introducing the screens, storing the data in a struct object 
 
 G1_data.G = [-2*pi, 2*pi, 0, 0];
@@ -24,7 +24,7 @@ C_wl_quad= 1/20;
 
 R_max = 15;
 
-k = 10;
+k = 40;
 
 theta = 0;
 C1 = 1;
@@ -37,6 +37,8 @@ C2 = pi;
     compute_iteratuve_poly_scattering_prob_2_screens(G1_data, G2_data, ...
     k, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, C_wl_quad, R_max, theta, ...
     C1, C2, false, false);
+
+toc
 
 %% Plot of relevant iterative solutions on bndy
 it_of_interest = [1, 2, R_max];

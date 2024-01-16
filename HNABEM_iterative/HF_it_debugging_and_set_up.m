@@ -3,7 +3,7 @@
 addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
-
+tic
 %% Geometrical set up specific to HNABEMLAB set up
 % % Test 1
 % vertices1 = [-2*pi 2*pi;
@@ -17,12 +17,12 @@ vertices1 = [-2*pi 2*pi;
     0, 0];
 
 vertices2 = [2*pi 0;
-    2*pi 3*pi];
+    5*pi 3*pi];
 
 Gamma1=Screen(vertices1);
 Gamma2=Screen(vertices2);
 
-kwave=10;
+kwave=40;
 theta = 0;
 d = [sin(theta) -cos(theta) ];
 uinc=planeWave(kwave,d);
@@ -86,12 +86,12 @@ G2_data = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
     theta, R_max, G1_data, G2_data, VHNA1, colMatrix1, VHNA2, colMatrix2...
     ,vertices1, vertices2, d, C1, C2);
 
-
+toc
 %% plotting
 figure()
 for r = 1:R_max
     txt1 = ['r = ', mat2str(2*r-2)];
-    plot(G1_data.t_mid_q_comb_outer/G1_data.L, phi1_r{r}, ...
+    plot(G1_data.t_mid_q_comb_outer/G1_data.L, real(phi1_r{r}), ...
         'DisplayName', txt1)
     hold on
 
@@ -106,7 +106,7 @@ legend show
 figure()
 for r = 1:R_max-1
     txt2 = ['r = ', mat2str(2*r-1)];
-    plot(G2_data.t_mid_q_comb_outer/G2_data.L, phi2_r{r}, ...
+    plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(phi2_r{r}), ...
         'DisplayName', txt2)
     hold on
 

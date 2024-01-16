@@ -10,6 +10,7 @@ addpath('../General_functions/')
 G1_data.G = [-2*pi, 2*pi, 0, 0];
 
 G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+% G2_data.G = [-2, -4, 4, 0]
 
 Lgrad_coeff = 0.15;
 alpha = 2;
@@ -121,6 +122,10 @@ us = soln_in_D_2_slow(G1_data, phi_1, G2_data, phi_2, k, X1, X2);
 
 figure();
 pcolor(XX, YY, real(ui - us)); shading interp
+hold on
+plot([G1_data.G(1),G1_data.G(3)],[ G1_data.G(2),G1_data.G(4)], 'LineWidth', 3)
+plot([G2_data.G(1),G2_data.G(3)],[ G2_data.G(2),G2_data.G(4)], 'LineWidth', 3)
+shading interp
 
 keyboard
 us_G1_slow = soln_in_D_slow(G1_data, phi_1, k, X1, X2);

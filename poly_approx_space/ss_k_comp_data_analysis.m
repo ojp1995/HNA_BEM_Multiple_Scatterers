@@ -31,7 +31,7 @@ N_bf = [10, 20, 40, 80, 160, 320, 640, 1280];
 
 figure(); 
 for j = 1:length(k)
-    semilogx(N_bf(1:end), err_phi_1(j, :), 'DisplayName', strcat('k = ', num2str(k(j))))
+    loglog(N_bf(1:end), err_phi_1(j, :), 'DisplayName', strcat('k = ', num2str(k(j))))
     hold on
 end
 
