@@ -5,20 +5,31 @@ addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
-vertices1 = [0 0;
-    3*pi 2*pi];
+theta_rot = -pi/4;
 
-vertices2 = [pi -2;
-    3*pi -1];
+rot_mat = [cos(theta_rot) -sin(theta_rot);
+    sin(theta_rot) cos(theta_rot)];
+
+theta = 0;
+
+vert1x = rot_mat*[0,0].';
+vert1y = rot_mat*[3*pi 2*pi].';
+vertices1 = [vert1x.'; vert1y.'];
+
+
+vert2x = rot_mat*[pi -2].';
+vert2y = rot_mat*[3*pi -1].';
+vertices2 = [vert2x.'; vert2y.'];
+
 
 R_max = 20;
 
 kwave=10;
-theta = pi/4;
+% theta = pi/4;
 
-C_wl_quad_outer = 1/20;
+C_wl_quad_outer = 1/10;
 
-C_wl_quad_inner = 1/30;
+C_wl_quad_inner = 1/15;
 
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell] = ...
     HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
