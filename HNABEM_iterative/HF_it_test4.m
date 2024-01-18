@@ -1,4 +1,4 @@
-% Test 1 HF iterative solve
+% Test 4 HF iterative knife edge
 
 clear all
 addpath('../General_functions/')
@@ -9,12 +9,12 @@ vertices1 = [-2*pi 2*pi;
     0, 0];
 
 vertices2 = [2*pi 0;
-    5*pi 3*pi];
+    2*pi 3*pi];
 
-R_max = 20;
+R_max = 15;
 
 kwave=10;
-theta = pi/16;
+theta = pi/4;
 
 C_wl_quad_outer = 1/20;
 

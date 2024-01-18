@@ -1,20 +1,20 @@
-% Test 1 HF iterative solve
+% Test 5b HF iterative solve near trapping
 
 clear all
 addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
-vertices1 = [-2*pi 2*pi;
-    0, 0];
+vertices1 = [0 0;
+    6*pi 0];
 
-vertices2 = [2*pi 0;
-    5*pi 3*pi];
+vertices2 = [1 2;
+    6*pi 1];
 
 R_max = 20;
 
 kwave=10;
-theta = pi/16;
+theta = pi/4;
 
 C_wl_quad_outer = 1/20;
 

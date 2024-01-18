@@ -1,4 +1,4 @@
-% Test 1 HF iterative solve
+% Test 3 HF iterative solve partial shadowing
 
 clear all
 addpath('../General_functions/')
@@ -8,13 +8,13 @@ addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 vertices1 = [-2*pi 2*pi;
     0, 0];
 
-vertices2 = [2*pi 0;
-    5*pi 3*pi];
+vertices2 = [-4*pi -2*pi;
+    2*pi 0];
 
 R_max = 20;
 
 kwave=10;
-theta = pi/16;
+theta = 0;
 
 C_wl_quad_outer = 1/20;
 
