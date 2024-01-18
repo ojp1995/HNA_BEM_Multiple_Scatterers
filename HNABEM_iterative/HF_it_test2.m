@@ -81,5 +81,33 @@ legend show
 
 %% plotting in domain
 
-[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
-    phi1_r{end}, phi2_r{end});
+% rotating back to expected framework
+theta_rot = pi/4;
+
+rot_mat = [cos(theta_rot) -sin(theta_rot);
+    sin(theta_rot) cos(theta_rot)];
+
+theta = pi/4;
+
+vert1x = rot_mat*[G1_data.G(1) G1_data.G(2)].';
+vert1y = rot_mat*[G1_data.G(3) G1_data.G(4)].';
+vertices1 = [vert1x.'; vert1y.'];
+
+
+vert2x = rot_mat*[G2_data.G(1) G2_data.G(2)].';
+vert2y = rot_mat*[G2_data.G(3) G2_data.G(4)].';
+vertices2 = [vert2x.'; vert2y.'];
+
+G1_data.G = [vert1x.' vert1y.'];
+
+G2_data.G = [vert2x.' vert2y.'];
+
+G1_data_domain = get_graded_quad_points_HF_it(G1_data, C_wl_quad_outer,...
+    C_wl_quad_inner, kwave, 0.15, 2);
+
+G2_data_domain = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
+    C_wl_quad_inner, kwave, 0.15, 2);
+
+[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data_domain,...
+    G2_data_domain, phi1_r{end}, phi2_r{end});
+
