@@ -1,5 +1,7 @@
 % Iterative method in a HNA space
 % Paths to general functions and BEAM_HNABEMLAB
+clear all
+
 addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
@@ -22,8 +24,10 @@ vertices2 = [2*pi 0;
 Gamma1=Screen(vertices1);
 Gamma2=Screen(vertices2);
 
-kwave=40;
-theta = 0;
+R_max = 5;
+
+kwave=10;
+theta = pi/16;
 d = [sin(theta) -cos(theta) ];
 uinc=planeWave(kwave,d);
 
@@ -72,9 +76,9 @@ G2_data.alpha = -sign(dot(d, G2_data.n));
 
 
 % outer quadrature, for Sij phij and Sjj Psij
-C_wl_quad_outer = 1/20;  % number of quad points per wl
+C_wl_quad_outer = 1/10;  % number of quad points per wl
 % Inner quadrature, for computing Psij
-C_wl_quad_inner = 1/30;  % number of quad points per wl
+C_wl_quad_inner = 1/15;  % number of quad points per wl
 
 G1_data = get_graded_quad_points_HF_it(G1_data, C_wl_quad_outer,...
     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
@@ -118,6 +122,11 @@ ylabel('$\phi_{2}^{(r)}$')
 title('HF iterative method $\phi_{2}^{(r)}$')
 legend show
 
+%% plotting in domain
+keyboard
+
+[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
+    phi1_r{end}, phi2_r{end});
 
 %% Old step by step
 warning('Old code that was used for initial work and debugging')
