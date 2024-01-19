@@ -25,7 +25,7 @@ R_max = 15;
 
 k = 10;
 
-theta = 0;
+theta = pi/4;
 C1 = 1;
 C2 = pi;
 
@@ -34,7 +34,7 @@ C2 = pi;
 [G1_data, G2_data, aj_1_R, aj_2_R, us, phi_1_r, phi_2_r] = ...
     compute_iteratuve_poly_scattering_prob_2_screens(G1_data, G2_data, ...
     k, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, C_wl_quad, R_max, theta, ...
-    C1, C2, false, false);
+    C1, C2, false, true);
 
 toc
 %% Plot of relevant iterative solutions on bndy
