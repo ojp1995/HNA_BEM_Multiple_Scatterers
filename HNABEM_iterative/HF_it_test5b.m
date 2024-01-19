@@ -20,9 +20,12 @@ C_wl_quad_outer = 1/20;
 
 C_wl_quad_inner = 1/30;
 
-[G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell] = ...
+Lgrad_coeff = 0.2;
+alpha = 2;
+
+[G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
     HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
-    C_wl_quad_outer, C_wl_quad_inner);
+    C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
 
 %% err calc
 
@@ -39,7 +42,8 @@ legend show
 
 %% plotting on bndy
 figure()
-for r = 1:R_max
+
+for r = [1, 2, R_max]
     txt1 = ['r = ', mat2str(2*r-2)];
     plot(G1_data.t_mid_q_comb_outer/G1_data.L, real(phi1_r{r}), ...
         'DisplayName', txt1)
@@ -54,7 +58,7 @@ title('HF iterative method $\phi_{1}^{(r)}$')
 legend show
 
 figure()
-for r = 1:R_max-1
+for r = [1, 2, R_max]
     txt2 = ['r = ', mat2str(2*r-1)];
     plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(phi2_r{r}), ...
         'DisplayName', txt2)
@@ -69,6 +73,32 @@ title('HF iterative method $\phi_{2}^{(r)}$')
 legend show
 
 %% plotting in domain
+
+% theta_rot = theta;
+% 
+% rot_mat = [cos(theta_rot) -sin(theta_rot);
+%     sin(theta_rot) cos(theta_rot)];
+% 
+% 
+% vert1x = rot_mat*[G1_data.G(1) G1_data.G(2)].';
+% vert1y = rot_mat*[G1_data.G(3) G1_data.G(4)].';
+% vertices1 = [vert1x.'; vert1y.'];
+% 
+% 
+% vert2x = rot_mat*[G2_data.G(1) G2_data.G(2)].';
+% vert2y = rot_mat*[G2_data.G(3) G2_data.G(4)].';
+% vertices2 = [vert2x.'; vert2y.'];
+% 
+% G1_data.G = [vert1x.' vert1y.'];
+% 
+% G2_data.G = [vert2x.' vert2y.'];
+% 
+% G1_data_domain = get_graded_quad_points_HF_it(G1_data, C_wl_quad_outer,...
+%     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
+% 
+% G2_data_domain = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
+%     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
+% 
 
 [u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
     phi1_r{end}, phi2_r{end});

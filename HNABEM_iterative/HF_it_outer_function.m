@@ -1,7 +1,29 @@
-function [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell] = ...
+function [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
     HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
-    C_wl_quad_outer, C_wl_quad_inner)
+    C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha)
 % The outer function to computer the iterative method given minimal inputs
+
+% work around to rotate problem so that angle is 0, i.e., coming virtically
+% down
+% if theta ~= 0 
+% 
+%     theta_rot = -theta;
+% 
+%     rot_mat = [cos(theta_rot) -sin(theta_rot);
+%     sin(theta_rot) cos(theta_rot)];
+% 
+%     vert1x = rot_mat*[vertices1(1, :)].';
+%     vert1y = rot_mat*[vertices1(2, :)].';
+%     vertices1 = [vert1x.'; vert1y.'];
+%     
+%     
+%     vert2x = rot_mat*[vertices2(1, :)].';
+%     vert2y = rot_mat*[vertices2(2, :)].';
+%     vertices2 = [vert2x.'; vert2y.'];
+% 
+%     theta = 0;
+% 
+% end
 
 % converting so suitable for Andrews solver
 Gamma1=Screen(vertices1);
@@ -22,7 +44,7 @@ OverSample = 1.25; %choose amount to oversample by (40% here)
 
 % andrew solve
 [v_N1, GOA1, colMatrix1, colRHS1, col_points1,...
-v_N2, GOA2, colMatrix2, colRHS2, col_points2, VHNA1, VHNA2] ...
+v_N2, GOA2, colMatrix2, colRHS2, col_points2, VHNA1, VHNA2, Xstruct1, Xstruct2] ...
     = AG_code_pulling_out_info(pMax, cL, sigmaGrad, nLayers, OverSample, ...
     Gamma1, Gamma2, kwave, uinc );
 
@@ -30,8 +52,8 @@ v_N2, GOA2, colMatrix2, colRHS2, col_points2, VHNA1, VHNA2] ...
 C1 = 1;
 C2 = pi;
 
-Lgrad_coeff = 0.15;
-alpha = 2;
+% Lgrad_coeff = 0.15;
+% alpha = 2;
 
 G1_data.col_points = col_points1;
 G2_data.col_points = col_points2;
