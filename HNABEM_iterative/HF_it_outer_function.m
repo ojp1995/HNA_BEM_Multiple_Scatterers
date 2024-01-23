@@ -84,6 +84,10 @@ G1_data = get_graded_quad_points_HF_it(G1_data, C_wl_quad_outer,...
 G2_data = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
 
+%% compute whether on the positive or negative side of the screen
+
+G2_data = get_coeff_for_different_sides_of_screen(G1_data, G2_data);
+G1_data = get_coeff_for_different_sides_of_screen(G2_data, G1_data);
 
 %% Iterative solve
 [v_N1cell, v_N2cell, phi1_r, phi2_r] = HF_iterative_solve(kwave, ...
