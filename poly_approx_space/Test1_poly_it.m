@@ -26,7 +26,7 @@ R_max = 15;
 
 k = 10;
 
-theta = pi/16;
+theta = 0;
 C1 = 1;
 C2 = pi;
 

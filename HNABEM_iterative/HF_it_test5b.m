@@ -16,9 +16,9 @@ R_max = 20;
 kwave=10;
 theta = pi/4;
 
-C_wl_quad_outer = 1/20;
+C_wl_quad_outer = 1/15;
 
-C_wl_quad_inner = 1/30;
+C_wl_quad_inner = 1/20;
 
 Lgrad_coeff = 0.2;
 alpha = 2;

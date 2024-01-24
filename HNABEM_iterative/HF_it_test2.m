@@ -41,7 +41,7 @@ C_wl_quad_outer = 1/10;
 
 C_wl_quad_inner = 1/15;
 
-Lgrad_coeff = 0.2;
+Lgrad_coeff = 0.15;
 alpha = 2;
 
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
@@ -100,6 +100,11 @@ legend show
 
 %% plotting in domain
 
+[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data,...
+    G2_data, phi1_r{end}, phi2_r{end});
+
+
+
 % rotating back to expected framework
 % theta_rot = pi/4;
 % 
@@ -126,7 +131,4 @@ legend show
 % 
 % G2_data_domain = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
 %     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
-
-[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data,...
-    G2_data, phi1_r{end}, phi2_r{end});
 
