@@ -19,11 +19,11 @@ R_max = 20;
 kwave=10;
 theta = 0;
 
-C_wl_quad_outer = 1/10;
+C_wl_quad_outer = 1/20;
 
-C_wl_quad_inner = 1/15;
+C_wl_quad_inner = 1/30;
 
-Lgrad_coeff = 0.2;
+Lgrad_coeff = 0.15;
 alpha = 2;
 
 %% HNA solve
@@ -38,41 +38,54 @@ addpath('../poly_approx_space/')
 C1 = 1;
 C2 = pi;
 
-C_wl_bf1 = 1/10;
-C_wl_bf2 = 1/10;
+C_wl_bf1 = 1/20;
+C_wl_bf2 = 1/20;
 
 C_wl_quad= 1/20;
 
 G1_data_poly.G = G1_data.G;
 G2_data_poly.G = G2_data.G;
 
-[G1_data_poly, G2_data_poly, aj_1_R, aj_2_R, us, phi_1_r, phi_2_r] = ...
-    compute_iteratuve_poly_scattering_prob_2_screens(G1_data_poly, ...
-    G2_data_poly, kwave, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, ...
-    C_wl_quad, R_max, theta, C1, C2, false, false);
+[aj1, aj2, uinc, G1_data_poly, G2_data_poly] = ...
+    compute_2_screen_direct_poly(G1_data_poly, G2_data_poly, kwave, ...
+    theta, C1, C2,  C_wl_bf1, C_wl_bf2, C_wl_quad, Lgrad_coeff, alpha);
+
+% [G1_data_poly, G2_data_poly, aj_1_R, aj_2_R, us, phi_1_r, phi_2_r] = ...
+%     compute_iteratuve_poly_scattering_prob_2_screens(G1_data_poly, ...
+%     G2_data_poly, kwave, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, ...
+%     C_wl_quad, R_max, theta, C1, C2, false, false);
 
 %% Computing poly phi at the same points as 
-for r = 1:R_max
-    phi_1_poly(:, r) = graded_coeff_2_solution(aj_1_R(:, r), ...
+phi_1_poly = graded_coeff_2_solution(aj1, ...
         G1_data_poly.t_bf_grid, G1_data.t_mid_q_outer, ...
         G1_data_poly.L);
 
-    phi_2_poly(:, r) = graded_coeff_2_solution(aj_2_R(:, r), ...
-        G2_data_poly.t_bf_grid, G2_data.t_mid_q_outer, ...
-        G2_data_poly.L);
-    
-    
+phi_2_poly= graded_coeff_2_solution(aj2, ...
+    G2_data_poly.t_bf_grid, G2_data.t_mid_q_outer, ...
+    G2_data_poly.L);
 
-end
+
+% for r = 1:R_max
+%     phi_1_poly(:, r) = graded_coeff_2_solution(aj_1_R(:, r), ...
+%         G1_data_poly.t_bf_grid, G1_data.t_mid_q_outer, ...
+%         G1_data_poly.L);
+% 
+%     phi_2_poly(:, r) = graded_coeff_2_solution(aj_2_R(:, r), ...
+%         G2_data_poly.t_bf_grid, G2_data.t_mid_q_outer, ...
+%         G2_data_poly.L);
+%     
+%     
+% 
+% end
 
 %% plot to see a visual inspection
 it_of_interest = [1, 2, R_max];
 figure()
 for r = 1:length(it_of_interest)
-    txt = ['Polynomial r = ', mat2str(2*it_of_interest(r) - 2)];
-    plot(G1_data.t_mid_q_comb_outer(10: end - 10)/G1_data.L,...
-        real(phi_1_poly(10: end - 10, it_of_interest(r))),...
-        'DisplayName', txt)
+%     txt = ['Polynomial r = ', mat2str(2*it_of_interest(r) - 2)];
+%     plot(G1_data.t_mid_q_comb_outer(10: end - 10)/G1_data.L,...
+%         real(phi_1_poly(10: end - 10, it_of_interest(r))),...
+%         'DisplayName', txt)
     hold on
 
     txt1 = ['HNA r = ', mat2str(2*it_of_interest(r) - 2)];
@@ -81,6 +94,10 @@ for r = 1:length(it_of_interest)
         '--', 'DisplayName', txt1)
 
 end
+txt = 'Polynomial';
+plot(G1_data.t_mid_q_comb_outer(10: end - 10)/G1_data.L,...
+        real(phi_1_poly(10: end - 10)),...
+        'DisplayName', txt)
 legend show
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
@@ -89,10 +106,10 @@ xlim([-0.05 1.05])
 
 figure()
 for r = 1:length(it_of_interest)
-    txt = ['Polynomial r = ', mat2str(2*it_of_interest(r) - 1)];
-    plot(G2_data.t_mid_q_comb_outer(10: end - 10)/G2_data.L, ...
-        real(phi_2_poly(10: end - 10, it_of_interest(r))),...
-        'DisplayName', txt)
+%     txt = ['Polynomial r = ', mat2str(2*it_of_interest(r) - 1)];
+%     plot(G2_data.t_mid_q_comb_outer(10: end - 10)/G2_data.L, ...
+%         real(phi_2_poly(10: end - 10, it_of_interest(r))),...
+%         'DisplayName', txt)
     hold on
 
     txt1 = ['HNA r = ', mat2str(2*it_of_interest(r) - 1)];
@@ -101,11 +118,62 @@ for r = 1:length(it_of_interest)
         '--', 'DisplayName', txt1)
 
 end
+txt = 'Polynomial';
+plot(G2_data.t_mid_q_comb_outer(10: end - 10)/G2_data.L, ...
+        real(phi_2_poly(10: end - 10)),...
+        'DisplayName', txt)
 legend show
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
 title('Iterative approximation to $\phi_{2}$ ')
 xlim([-0.05 1.05])
+
+%% error plots - poly is true soltuions
+
+% polynomial computation
+% C_wl_quad_err = 1/40;
+% err_quadG1 = get_graded_quad_points(G1_data, C_wl_quad_err, kwave, ...
+%     Lgrad_coeff, alpha);
+% err_quadG2 = get_graded_quad_points(G2_data, C_wl_quad_err, kwave, ...
+%     Lgrad_coeff, alpha);
+% 
+% phi_1_poly_for_err = graded_coeff_2_solution(aj1, ...
+%         G1_data_poly.t_bf_grid, err_quadG1.t_mid_q_outer, ...
+%         G1_data_poly.L);
+% 
+% phi_2_poly_for_err = graded_coeff_2_solution(aj2, ...
+%     G2_data_poly.t_bf_grid, err_quadG2.t_mid_q_outer, ...
+%     G2_data_poly.L);
+
+err_phi1 = zeros(R_max - 1, 1);
+err_phi2 = zeros(R_max - 1, 1);
+
+
+for r = 1:R_max - 1
+
+    err_phi1(r) = sum(abs(phi_1_poly - phi1_r{r})./abs(phi_1_poly)...
+        .*G1_data.w_comb_outer);
+
+    err_phi2(r) = sum(abs(phi_2_poly - phi2_r{r})./abs(phi_2_poly)...
+        .*G2_data.w_comb_outer);
+
+end
+
+figure()
+semilogy([0:2:(2*R_max - 3)], err_phi1, 'DisplayName', 'HNA $L^{1}$ error of $\phi_{1}^{(r)}$')
+hold on
+% semilogy([0:2:(2*R_max - 3)], err1_poly_HNA_true, 'DisplayName', 'Poly $L^{1}$ error of $\phi_{1}^{(r)}$')
+% semilogy([0:2:(2*R_max - 3)], err_L1_G1, 'DisplayName', 'poly comp poly $\phi_{1}^{(r)}$ error')
+
+% Gamma_2
+semilogy([1:2:(2*R_max - 2)], err_phi2, 'DisplayName', 'HNA $L^{1}$ error of $\phi_{2}^{(r)}$')
+% semilogy([1:2:(2*R_max - 2)], err2_poly_HNA_true, 'DisplayName', 'poly $L^{1}$ error of $\phi_{2}^{(r)}$')
+% semilogy([1:2:(2*R_max - 2)], err_L1_G2, 'DisplayName', 'poly comp poly $\phi_{2}^{(r)}$ error')
+
+xlabel('r')
+ylabel('Relative $L^{1}$ error, poly solver true solution')
+legend show
+
 
 
 %% error plots - taking HNA as true solution
