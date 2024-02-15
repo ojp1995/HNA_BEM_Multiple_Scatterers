@@ -27,43 +27,43 @@ x_intersect = (-m2*G2_data.G(3) + G2_data.G(4) + m1*G1_data.G(3) ...
 
 if G2_data.G(1) < x_intersect && x_intersect < G2_data.G(3)
 
-    positive_side_outer = zeros(length(G1_data.x_q_comb_outer), 1);
-    negative_side_outer = zeros(length(G1_data.x_q_comb_outer), 1);
+    positive_side_outer = zeros(length(G2_data.x_q_comb_outer), 1);
+    negative_side_outer = zeros(length(G2_data.x_q_comb_outer), 1);
 
-    positive_side_inner = zeros(length(G1_data.x_q_comb_inner), 1);
-    negative_side_inner = zeros(length(G1_data.x_q_comb_inner), 1);
+    positive_side_inner = zeros(length(G2_data.x_q_comb_inner), 1);
+    negative_side_inner = zeros(length(G2_data.x_q_comb_inner), 1);
 
-    positive_side_outer = (x_intersect <= G1_data.x_q_comb_outer); 
-    negative_side_outer = (x_intersect > G1_data.x_q_comb_outer);
+    positive_side_outer = (x_intersect <= G2_data.x_q_comb_outer); 
+    negative_side_outer = (x_intersect > G2_data.x_q_comb_outer);
 
     G2_data.beta_outer = positive_side_outer - negative_side_outer;
 
-    positive_side_inner = (x_intersect <= G1_data.x_q_comb_inner); 
-    negative_side_inner = (x_intersect > G1_data.x_q_comb_inner);
+    positive_side_inner = (x_intersect <= G2_data.x_q_comb_inner); 
+    negative_side_inner = (x_intersect > G2_data.x_q_comb_inner);
 
     G2_data.beta_inner = positive_side_inner - negative_side_inner;
 
 elseif m1 == m2  % parallel screen case
 
-    if G2_data.G(1) == G2_data.G(3)  % parallel x
+    if G2_data.G(1) == G2_data.G(3)  % parallel x (similar to | |)
 
         if G2_data.G(2) > G1_data.G(2)  % Gamma2 above Gamma1
-            G2_data.beta_outer = ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
         else
             % Gamma2 below Gamma1
-            G2_data.beta_outer = -ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = -ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1);
         end
 
-    elseif G2_data.G(2) == G2_data.G(4)  % parallel y
-        if G2_data.G(1) > G1_data.G(1)  % Gamma2 to the right of (facing front) Gamma1
-            G2_data.beta_outer = ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = ones(length(G1_data.x_q_comb_inner), 1);
+    elseif G2_data.G(2) == G2_data.G(4)  % parallel y (similar to =)
+        if G2_data.G(2) > G1_data.G(2)  % Gamma2 to the right of (facing front) Gamma1
+            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1);
         else
             % Gamma2 to the left of (behind) Gamma1
-            G2_data.beta_outer = -ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = -ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
         end
 
     else  % case that parallel off angle
@@ -82,13 +82,13 @@ else  % in the case that it is either all acting on positive or negative
 
         if min(G2_data.G(2), G2_data.G(4)) < max(G1_data.G(2), G1_data.G(4)) % Gamma 2 below Gamma1
 
-            G2_data.beta_outer = -ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = -ones(length(G1_data.x_q_comb_inner), 1); 
+            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1); 
 
         else
             % Gamma2 is above Gamma1
-            G2_data.beta_outer = ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
         end
 
         
@@ -104,13 +104,13 @@ else  % in the case that it is either all acting on positive or negative
         % is Gamma 2 below Gamma1
         if min(G2_data.G(2), G2_data.G(4)) < max(G1_data.G(2), G1_data.G(4))
             
-            G2_data.beta_outer = -ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = -ones(length(G1_data.x_q_comb_inner), 1); 
+            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1); 
 
         else
             % Gamma2 is above Gamma1
-            G2_data.beta_outer = ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
 
         end
 
@@ -120,8 +120,8 @@ else  % in the case that it is either all acting on positive or negative
 
         if dot(G2_data.n, G1_data.n) <= 0
             % screens are facing each other
-            G2_data.beta_outer = ones(length(G1_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = ones(length(G1_data.x_q_comb_inner), 1);
+            G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
 
         else
             % screens are not facing each other
