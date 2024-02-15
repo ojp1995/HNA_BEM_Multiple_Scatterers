@@ -157,10 +157,11 @@ title('$L^{1}$ error for an increasing number of iterations of $\phi_{j}^{(r)}$'
 % end
 % 
 % % produce plot in Domain - Optional argument
-% 
+% % 
+% Domain_plot= true
 % if Domain_plot == true
 %     [u, ui, us] = produce_plot_in_D(G1_data, G2_data, aj_1_R,...
 %     aj_2_R);
 % 
 % end
-% 
+

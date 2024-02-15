@@ -6,10 +6,10 @@ addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
 vertices1 = [0 0;
-    6*pi, 0];
+    2*pi, 0];
 
 vertices2 = [1 1;
-    1 + 6*pi 1];
+    2 + 2*pi 1];
 
 R_max = 20;
 

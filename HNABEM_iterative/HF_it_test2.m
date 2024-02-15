@@ -24,10 +24,10 @@ addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 vertices1 = [0 0;
    3*pi 2*pi];
 
-vertices2 = [pi -2;
+vertices2 = [ pi -2;
     3*pi -1];
 
-theta = pi/4;
+theta = 3*pi/8;
 
 
 

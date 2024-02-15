@@ -11,7 +11,7 @@ vertices1 = [0 0;
 vertices2 = [1 2;
     6*pi 1];
 
-R_max = 20;
+R_max = 150;
 
 kwave=10;
 theta = pi/4;

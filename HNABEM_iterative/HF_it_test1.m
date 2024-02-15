@@ -13,7 +13,7 @@ vertices2 = [2*pi 0;
 
 R_max = 20;
 
-kwave=10;
+kwave=5;
 theta = 0;
 
 C_wl_quad_outer = 1/10;
@@ -99,5 +99,5 @@ G2_data_domain = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
 
 
-[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
-    phi1_r{end}, phi2_r{end});
+%[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
+ %   phi1_r{end}, phi2_r{end});
