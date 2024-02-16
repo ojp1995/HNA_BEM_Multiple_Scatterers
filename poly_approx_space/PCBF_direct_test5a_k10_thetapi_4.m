@@ -32,9 +32,9 @@ aj2_coeff = {};
 
 for n = 1:length(bf_dof_per_wl)
 
-    G1_data.G = [-2*pi, 2*pi, 0, 0];
+    G1_data.G = [0, 0, 2*pi, 0];
 
-    G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+    G2_data.G = [1, 1, 2+2*pi, 1];  
     
     tic
     [aj1_coeff{n}, aj2_coeff{n}, ~, G1_data, G2_data] = ...
@@ -51,9 +51,9 @@ end
 
 % Create mesh we want to evaluate points at
 
-G1_data.G = [-2*pi, 2*pi, 0, 0];
+G1_data.G = [0, 0, 2*pi, 0];
 
-G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+G2_data.G = [1, 1, 2+2*pi, 1]; 
 
 G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(1), k, ...
     Lgrad_coeff, alpha);
@@ -67,9 +67,9 @@ t2_plot = linspace(0.05, G2_data.L/2, 3000);
 
 for n = 1:length(bf_dof_per_wl)
     % first compute the mesh
-    G1_data.G = [-2*pi, 2*pi, 0, 0];
+    G1_data.G = [0, 0, 2*pi, 0];
 
-    G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+    G2_data.G = [1, 1, 2+2*pi, 1];  
 
     G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(n), k, ...
         Lgrad_coeff, alpha);

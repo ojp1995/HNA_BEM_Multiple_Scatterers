@@ -1,7 +1,7 @@
 % outer function to compute convergence of two screens using the piecewise
 % constant basis functions direct solver, i.e., not an iterative method
 
-% Test 4
+% Test 3 - iterative
 
 clear all
 
@@ -10,7 +10,7 @@ addpath('../General_functions/')  % access to solvers needed
 % geometry set up
 G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-G2_data.G = [2*pi, 0, 2*pi, 3*pi]; 
+G2_data.G = [-4*pi, -2*pi, 2*pi, 0]; 
 
 % coefficients needed for creating grid for basis functions and quadrature
 % points
@@ -23,7 +23,7 @@ theta = 0;
 C1 = 1;
 C2 = pi;
 
-bf_dof_per_wl = [1/5, 1/10, 1/20, 1/40, 1/80, 1/160];
+bf_dof_per_wl = [1/5, 1/10, 1/20, 1/40, 1/80];
 
 % creating empty cells for coefficients
 aj1_coeff = {};
@@ -34,14 +34,13 @@ for n = 1:length(bf_dof_per_wl)
 
     G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-    G2_data.G = [2*pi, 0, 2*pi, 3*pi]; 
-
+    G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
     
     tic
-    [aj1_coeff{n}, aj2_coeff{n}, ~, G1_data, G2_data] = ...
-    compute_2_screen_direct_poly(G1_data, G2_data, k, theta, C1, C2, ...
-    bf_dof_per_wl(n), bf_dof_per_wl(n), bf_dof_per_wl(n), Lgrad_coeff,...
-    alpha);
+    [G1_data, G2_data, aj1_coeff{n}, aj2_coeff{n}, ~, ~, ~] = ...
+    compute_iteratuve_poly_scattering_prob_2_screens(G1_data, G2_data, ...
+    k, Lgrad_coeff, alpha, bf_dof_per_wl(n), bf_dof_per_wl(n), ...
+    bf_dof_per_wl(n), R_max, theta, C1, C2, false, false);
     toc
 
     clear G1_data G2_data
@@ -54,8 +53,8 @@ end
 
 G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-G2_data.G = [2*pi, 0, 2*pi, 3*pi]; 
- 
+G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
+
 
 G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(1), k, ...
     Lgrad_coeff, alpha);
@@ -71,8 +70,7 @@ for n = 1:length(bf_dof_per_wl)
     % first compute the mesh
     G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-    G2_data.G = [2*pi, 0, 2*pi, 3*pi]; 
- 
+    G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
 
     G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(n), k, ...
         Lgrad_coeff, alpha);
@@ -137,7 +135,7 @@ info_needed.L_grad_coeff = Lgrad_coeff;
 info_needed.alpha = alpha;
 info_needed.bf_dof_per_wl = bf_dof_per_wl;
 
-save('PC_direct_test4_k10_theta0', 'aj1_coeff', 'aj2_coeff', 'info_needed')
+save('it_PC_direct_test3_k10_theta0', 'aj1_coeff', 'aj2_coeff', 'info_needed')
 
 
 

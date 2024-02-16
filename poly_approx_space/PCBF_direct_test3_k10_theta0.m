@@ -34,7 +34,7 @@ for n = 1:length(bf_dof_per_wl)
 
     G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-    G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+    G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
     
     tic
     [aj1_coeff{n}, aj2_coeff{n}, ~, G1_data, G2_data] = ...
@@ -53,7 +53,8 @@ end
 
 G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
+
 
 G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(1), k, ...
     Lgrad_coeff, alpha);
@@ -69,7 +70,7 @@ for n = 1:length(bf_dof_per_wl)
     % first compute the mesh
     G1_data.G = [-2*pi, 2*pi, 0, 0];
 
-    G2_data.G = [2*pi, 0, 5*pi, 3*pi]; 
+    G2_data.G = [-4*pi, -2*pi, 2*pi, 0];
 
     G1_data = get_bf_graded_grid(G1_data, bf_dof_per_wl(n), k, ...
         Lgrad_coeff, alpha);
