@@ -136,7 +136,7 @@ info_needed.L_grad_coeff = Lgrad_coeff;
 info_needed.alpha = alpha;
 info_needed.bf_dof_per_wl = bf_dof_per_wl;
 
-save('it_PC_direct_test1_k10_theta0', 'aj1_coeff', 'aj2_coeff', 'info_needed')
+% save('it_PC_direct_test1_k10_theta0', 'aj1_coeff', 'aj2_coeff', 'info_needed')
 
 
 
