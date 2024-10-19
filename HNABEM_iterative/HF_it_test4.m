@@ -24,7 +24,7 @@ Lgrad_coeff = 0.2;
 alpha = 2;
 
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
-    HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
+    HF_it_outer_function_precompute_matrix(kwave, vertices1, vertices2, R_max, theta, ...
     C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
 
 %% err calc
@@ -39,6 +39,8 @@ semilogy([1:2:(2*R_max - 2)], err2, 'DisplayName', '$L^{1}$ error of $\phi_{2}^{
 xlabel('r')
 ylabel('Relative $L^{1}$ error')
 legend show
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the HNA iterative method - knife edge')
+
 
 %% plotting on bndy
 figure()
@@ -53,7 +55,7 @@ xlim([-0.05 1.05])
 ylim([-30 30])
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('HF iterative method $\phi_{1}^{(r)}$')
+title('HNA iterative method $\phi_{1}^{(r)}$ - knife edge')
 legend show
 
 figure()
@@ -68,7 +70,7 @@ xlim([-0.05 1.05])
 ylim([-30 30])
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('HF iterative method $\phi_{2}^{(r)}$')
+title('HF iterative method $\phi_{2}^{(r)}$ - knife edge')
 legend show
 
 %% plotting in domain

@@ -27,7 +27,7 @@ vertices1 = [0 0;
 vertices2 = [ pi -2;
     3*pi -1];
 
-theta = 3*pi/8;
+theta = pi/4;
 
 
 
@@ -44,10 +44,11 @@ C_wl_quad_inner = 1/15;
 Lgrad_coeff = 0.15;
 alpha = 2;
 
+tic
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
-    HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
+    HF_it_outer_function_precompute_matrix(kwave, vertices1, vertices2, R_max, theta, ...
     C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
-
+toc
 %% err calc
 
 err1 = HF_it_L1_err_wrt_R(phi1_r{end}, phi1_r, R_max, G1_data.w_comb_outer);
@@ -60,11 +61,12 @@ semilogy([1:2:(2*R_max - 2)], err2, 'DisplayName', '$L^{1}$ error of $\phi_{2}^{
 xlabel('r')
 ylabel('Relative $L^{1}$ error')
 legend show
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the HNA iterative method - shadowing')
 
 %% Isolating the grid points
-for j = 1:length(Xstruct1)
-    grid_points1(j) = Xstruct1(j).x;
-end
+% for j = 1:length(Xstruct1)
+%     grid_points1(j) = Xstruct1(j).x;
+% end
 
 %% plotting on bndy
 figure()
@@ -75,12 +77,12 @@ for r = [1, 2, R_max]
     hold on
 
 end
-plot(grid_points1./G1_data.L, ones(length(grid_points1), 1), 'ko')
+% plot(grid_points1./G1_data.L, ones(length(grid_points1), 1), 'ko')
 xlim([-0.05 1.05])
 ylim([-30 30])
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('HF iterative method $\phi_{1}^{(r)}$')
+title('HNA iterative method $\phi_{1}^{(r)}$ - shadowing')
 legend show
 
 figure()
@@ -92,10 +94,10 @@ for r = [1, 2, R_max]
 
 end
 xlim([-0.05 1.05])
-ylim([-30 30])
+ylim([-5 20])
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('HF iterative method $\phi_{2}^{(r)}$')
+title('HNA iterative method $\phi_{2}^{(r)}$ - shadowing')
 legend show
 
 %% plotting in domain

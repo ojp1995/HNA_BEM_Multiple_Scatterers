@@ -6,10 +6,10 @@ addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
 vertices1 = [0 0;
-    6*pi 0];
+    pi 0];
 
-vertices2 = [1 2;
-    6*pi 1];
+vertices2 = [1/2 3/2;
+    pi 1];
 
 R_max = 150;
 
@@ -24,7 +24,7 @@ Lgrad_coeff = 0.2;
 alpha = 2;
 
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
-    HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
+    HF_it_outer_function_precompute_matrix(kwave, vertices1, vertices2, R_max, theta, ...
     C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
 
 %% err calc
@@ -39,6 +39,8 @@ semilogy([1:2:(2*R_max - 2)], err2, 'DisplayName', '$L^{1}$ error of $\phi_{2}^{
 xlabel('r')
 ylabel('Relative $L^{1}$ error')
 legend show
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the HNA iterative method - funnel screens')
+
 
 %% plotting on bndy
 figure()
@@ -51,10 +53,11 @@ for r = [1, 2, R_max]
 
 end
 xlim([-0.05 1.05])
-ylim([-30 30])
+ylim([-50 50])
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('HF iterative method $\phi_{1}^{(r)}$')
+title('HNA iterative method $\phi_{1}^{(r)}$ - funnel screens')
+
 legend show
 
 figure()
@@ -66,10 +69,11 @@ for r = [1, 2, R_max]
 
 end
 xlim([-0.05 1.05])
-ylim([-30 30])
+ylim([-50 50])
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('HF iterative method $\phi_{2}^{(r)}$')
+title('HNA iterative method $\phi_{2}^{(r)}$ - funnel screens')
+
 legend show
 
 %% plotting in domain

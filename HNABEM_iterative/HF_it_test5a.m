@@ -5,27 +5,33 @@ addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
+
 vertices1 = [0 0;
     2*pi, 0];
 
 vertices2 = [1 1;
-    2 + 2*pi 1];
+    (2*pi + 2) 1];
 
-R_max = 20;
+R_max = 6500;
 
 kwave=10;
 theta = pi/4;
 
-C_wl_quad_outer = 1/20;
+C_wl_quad_outer = 1/10;
 
-C_wl_quad_inner = 1/30;
+C_wl_quad_inner = 1/15;
 
-Lgrad_coeff = 0.2;
+Lgrad_coeff = 0.15;
 alpha = 2;
 
+tic
 [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
     HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
     C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
+toc
+% [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
+%     HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
+%     C_wl_quad_outer, C_wl_quad_inner, Lgrad_coeff, alpha);
 
 %% err calc
 
@@ -38,40 +44,49 @@ hold on
 semilogy([1:2:(2*R_max - 2)], err2, 'DisplayName', '$L^{1}$ error of $\phi_{2}^{(r)}$')
 xlabel('r')
 ylabel('Relative $L^{1}$ error')
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the HNA iterative method - parallel screens')
+xlim([(0 - R_max/10), (2*R_max + R_max/10)])
 legend show
 
 %% plotting on bndy
 figure()
-for r = 1:R_max
-    txt1 = ['r = ', mat2str(2*r-2)];
-    plot(G1_data.t_mid_q_comb_outer/G1_data.L, real(phi1_r{r}), ...
+it_of_interest = [1000, 3000, R_max];
+for r = 1:length(it_of_interest)
+    txt1 = ['r = ', mat2str(2*it_of_interest(r)-2)];
+    plot(G1_data.t_mid_q_comb_outer/G1_data.L, real(phi1_r{it_of_interest(r)}), ...
         'DisplayName', txt1)
     hold on
 
 end
 xlim([-0.05 1.05])
-ylim([-30 30])
+ylim([-50 50])
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('HF iterative method $\phi_{1}^{(r)}$')
+title('HNA iterative method $\phi_{1}^{(r)}$ - parallel screens')
+
+
 legend show
 
 figure()
-for r = 1:R_max-1
-    txt2 = ['r = ', mat2str(2*r-1)];
-    plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(phi2_r{r}), ...
+for r = 1:length(it_of_interest)
+    txt2 = ['r = ', mat2str(2*it_of_interest(r)-1)];
+    plot(G2_data.t_mid_q_comb_outer/G2_data.L, real(phi2_r{it_of_interest(r)}), ...
         'DisplayName', txt2)
     hold on
 
 end
 xlim([-0.05 1.05])
-ylim([-30 30])
+ylim([-50 50])
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('HF iterative method $\phi_{2}^{(r)}$')
+title('HNA iterative method $\phi_{2}^{(r)}$ - parallel screens')
+
+
 legend show
 
 %% plotting in domain
+[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
+    phi1_r{end}, phi2_r{end});
 
 % theta_rot = theta;
 % 
@@ -98,5 +113,4 @@ legend show
 % G2_data_domain = get_graded_quad_points_HF_it(G2_data, C_wl_quad_outer,...
 %     C_wl_quad_inner, kwave, Lgrad_coeff, alpha);
 
-[u, ui, us] = HF_itproduce_plot_in_D(kwave, theta, G1_data, G2_data,...
-    phi1_r{end}, phi2_r{end});
+ 

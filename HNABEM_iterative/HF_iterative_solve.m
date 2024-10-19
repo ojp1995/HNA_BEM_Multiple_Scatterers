@@ -41,9 +41,11 @@ v_N1cell{1} = ProjectionFunction(coeff1_0, VHNA1);
 % First compute phi1_0 at outer and inner nodes
 v_N1_r = v_N1cell{1};
 phi1_r_outer = v_N1_r.eval(G1_data.t_mid_q_comb_outer, 1) ...
-    + 2*G1_data.alpha*duidn(G1_data, G1_data.L, kwave, d, G1_data.t_mid_q_comb_outer);
+    + 2*G1_data.alpha*duidn(G1_data, G1_data.L, kwave, d, ...
+    G1_data.t_mid_q_comb_outer);
 phi1_r_inner = v_N1_r.eval(G1_data.t_mid_q_comb_inner, 1) ...
-    + 2*G1_data.alpha*duidn(G1_data, G1_data.L, kwave, d, G1_data.t_mid_q_comb_inner);
+    + 2*G1_data.alpha*duidn(G1_data, G1_data.L, kwave, d, ...
+    G1_data.t_mid_q_comb_inner);
 
 phi1_r{1} = phi1_r_outer;
 % now lets compute S21 phi1_0
@@ -196,7 +198,7 @@ v_N2_r = v_N2cell{r};
         G1_data.y_q_comb_inner, G1_data.beta_inner.*phi1_r_inner, G2_data.n);
 
     
-    phi2_r{r} = phi2_r_outer; % saving for output
+phi2_r{r} = phi2_r_outer; % saving for output
 
 
 

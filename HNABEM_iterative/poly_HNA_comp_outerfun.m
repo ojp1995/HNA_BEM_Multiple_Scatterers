@@ -3,14 +3,14 @@
 % paths needed for HNA solve
 
 clear all
-addpath('../General_functions/') 
+addpath('../General_functions/')
 addpath('../../BEAM_HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
 % loading in data from piecewise constant direct solver
 addpath('../poly_approx_space/')
 
-load('PC_direct_test1_k10_theta0.mat')
+load('PC_direct_test5a_k10_thetapi_4')
 
 G1_data.G = info_needed.G1;
 G2_data.G = info_needed.G2;
@@ -30,7 +30,7 @@ vertices1 = [G1_data.G(1) G1_data.G(2);
 vertices2 = [G2_data.G(1) G2_data.G(2);
     G2_data.G(3) G2_data.G(4)];
 
-R_max = 20;
+R_max = 6500;
 
 C_wl_quad_outer = bf_dof_per_wl;
 
@@ -52,9 +52,12 @@ v_N2_HNA_cell = {};
 
 %% HNA solve
 for n = 1:length(bf_dof_per_wl)
+    tic
     [G1_data, G2_data, phi1_r, phi2_r, v_N1cell, v_N2cell, Xstruct1, Xstruct2] = ...
         HF_it_outer_function(kwave, vertices1, vertices2, R_max, theta, ...
         C_wl_quad_outer(n), C_wl_quad_inner(n), Lgrad_coeff, alpha);
+
+    toc
 
     G1_data_HNA{n} = G1_data;
     G2_data_HNA{n} = G2_data;
@@ -67,8 +70,8 @@ for n = 1:length(bf_dof_per_wl)
 
 end
 
-% save('test1_HNA_pmax4_overlap2', 'G1_data_HNA', 'G2_data_HNA', ...
-%     'phi1_HNA', 'phi2_HNA', 'v_N1_HNA_cell', 'v_N2_HNA_cell')
+save('test5a_HNA_pmax6_overlap2_dof5_80', 'G1_data_HNA', 'G2_data_HNA', ...
+     'phi1_HNA', 'phi2_HNA') %, 'v_N1_HNA_cell', 'v_N2_HNA_cell')
 
 %% compute piecewise constant at same points as polynomials
 HNA_choice = 5;
@@ -78,22 +81,54 @@ G2_data_poly.G = G2_data.G;
 
 k = kwave;
 
-for n = 1:length(bf_dof_per_wl)
+%% error computation
 
-    G1_data_poly =  get_bf_graded_grid(G1_data_poly, bf_dof_per_wl(n), k, ...
-        Lgrad_coeff_poly, alpha_poly);
+% we want to compare each solution of the HNA method, so first lets loop
+% through that
 
-    G2_data_poly =  get_bf_graded_grid(G2_data_poly, bf_dof_per_wl(n), k, ...
-        Lgrad_coeff_poly, alpha_poly);
+for j = 1:length(bf_dof_per_wl)
 
-    phi_1_poly(n, :) = graded_coeff_2_solution(aj1_coeff{n}, ...
-        G1_data_poly.t_bf_grid, G1_data_HNA{HNA_choice}.t_mid_q_outer, ...
-        G1_data_poly.L);
+    % we want to compare each of these solutions to the various PC direct
+    % solutions to try and see convergence. To do that we need to compute
+    % the appropriate grid
 
-    phi_2_poly(n, :) = graded_coeff_2_solution(aj2_coeff{n}, ...
-        G2_data_poly.t_bf_grid, G2_data_HNA{HNA_choice}.t_mid_q_outer, ...
-        G2_data_poly.L);
+
+
+    % now we need to compute each of the solutions
+
+    for n = 1:length(bf_dof_per_wl)
+
+        G1_data_poly =  get_bf_graded_grid(G1_data_poly, bf_dof_per_wl(n), k, ...
+            Lgrad_coeff_poly, alpha_poly);
+        
+        G2_data_poly =  get_bf_graded_grid(G2_data_poly, bf_dof_per_wl(n), k, ...
+            Lgrad_coeff_poly, alpha_poly);
+
+        phi_1_poly = graded_coeff_2_solution(aj1_coeff{n}, ...
+            G1_data_poly.t_bf_grid, G1_data_HNA{j}.t_mid_q_outer, ...
+            G1_data_poly.L);
+
+        phi_2_poly = graded_coeff_2_solution(aj2_coeff{n}, ...
+            G2_data_poly.t_bf_grid, G2_data_HNA{j}.t_mid_q_outer, ...
+            G2_data_poly.L);
+
+        % now compute the error
+        err_1(j, n) = sum((abs(phi_1_poly - phi1_HNA{j}{end})./...
+        abs(phi_1_poly)).*G1_data_HNA{j}.w_comb_outer);
+
+        err_2(j, n) = sum((abs(phi_2_poly - phi2_HNA{j}{end})./...
+            abs(phi_2_poly)).*G2_data_HNA{j}.w_comb_outer);
+
+    end
+
 end
+
+err_1
+err_2
+
+keyboard
+
+%% old to certain degree
 
 % plot seelction of HNA and best of polynomial
 
