@@ -26,3 +26,5 @@ hold on
 plot([G1_data.G(1),G1_data.G(3)],[ G1_data.G(2),G1_data.G(4)], 'LineWidth', 3)
 plot([G2_data.G(1),G2_data.G(3)],[ G2_data.G(2),G2_data.G(4)], 'LineWidth', 3)
 shading interp
+axis equal
+colorbar

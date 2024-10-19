@@ -7,9 +7,17 @@ x_max = max([G1_data.G(1), G1_data.G(3), G2_data.G(1), G2_data.G(3)]);
 y_min = min([G1_data.G(2), G1_data.G(4), G2_data.G(2), G2_data.G(4)]);
 y_max = max([G1_data.G(2), G1_data.G(4), G2_data.G(2), G2_data.G(4)]);
 
+% xy_min = min(x_min, y_min);
+% xy_max = max(x_max, y_max);
+% 
+% X1 = -5 + xy_min: 0.1 :5 + xy_max;
+% 
+% X2 = -5 + xy_min: 0.1 :5 + xy_max;
+
 X1 = -5 + x_min: 0.1 :5 + x_max;
 
 X2 = -5 + y_min: 0.1 :5 + y_max;
+
 
 [XX, YY] = meshgrid(X1, X2);
 
@@ -32,3 +40,5 @@ hold on
 plot([G1_data.G(1),G1_data.G(3)],[ G1_data.G(2),G1_data.G(4)], 'LineWidth', 3)
 plot([G2_data.G(1),G2_data.G(3)],[ G2_data.G(2),G2_data.G(4)], 'LineWidth', 3)
 shading interp
+axis equal
+colorbar

@@ -58,12 +58,12 @@ elseif m1 == m2  % parallel screen case
 
     elseif G2_data.G(2) == G2_data.G(4)  % parallel y (similar to =)
         if G2_data.G(2) > G1_data.G(2)  % Gamma2 to the right of (facing front) Gamma1
-            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
-            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1);
-        else
-            % Gamma2 to the left of (behind) Gamma1
             G2_data.beta_outer = ones(length(G2_data.x_q_comb_outer), 1);
             G2_data.beta_inner = ones(length(G2_data.x_q_comb_inner), 1);
+        else
+            % Gamma2 to the left of (behind) Gamma1
+            G2_data.beta_outer = -ones(length(G2_data.x_q_comb_outer), 1);
+            G2_data.beta_inner = -ones(length(G2_data.x_q_comb_inner), 1);
         end
 
     else  % case that parallel off angle

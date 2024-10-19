@@ -28,7 +28,11 @@ end
 err = zeros(R_max - 1, 1);
 for r = 1:R_max - 1
 
-    err(r) = (abs(phi1(end, :) - phi1(r, :))./abs(phi1(end, :)))...
-        *[err_quad.w ; flip(err_quad.w)];
+%     err(r) = (abs(phi1(end, :) - phi1(r, :))./abs(phi1(end, :)))...
+%         *[err_quad.w ; flip(err_quad.w)];
 
+    err(r) = (abs(phi1(end, :) - phi1(r, :))*[err_quad.w ; flip(err_quad.w)])...
+        ./(abs(phi1(end, :)))*[err_quad.w ; flip(err_quad.w)];
 end
+
+
