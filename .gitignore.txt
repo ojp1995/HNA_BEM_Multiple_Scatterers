@@ -1,2 +1,6 @@
 # gitignore folder
-.asv
+*.asv
+*.mat
+*.png
+
+
