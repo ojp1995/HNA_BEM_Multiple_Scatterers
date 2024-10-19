@@ -108,6 +108,17 @@ G2_data = manipulate_collocation_points_graded(G2_data);
     compute_matrices_for_iterative_solve(G1_data, G2_data, k, ...
     G1_data.t_bf_grid, G2_data.t_bf_grid, theta, C1, C2 );
 
+% computing the condition number of the over all matrix
+a = inv(S11)*(S12*(inv(S22)*S21));
+b = inv(S22)*(S21*(inv(S11)*S12));
+
+K_tilde_mat = zeros(length(S11) + length(S22));
+K_tilde_mat(1:length(S11), 1:length(S11)) = a;
+K_tilde_mat(length(S11)+1:length(S11) + length(S22),length(S11) + 1: length(S11) + length(S22)) = b;
+
+cond_Ktilde_mat = norm(K_tilde_mat.^R_max);
+
+
 % iterative solve
 [aj_1_R, aj_2_R, phi_1_r, phi_2_r] = iterative_poly_graded_PIM_solve(...
     S11, S12, S21, S22, u_inc1, u_inc2, R_max, G1_data.t_bf_grid, ...

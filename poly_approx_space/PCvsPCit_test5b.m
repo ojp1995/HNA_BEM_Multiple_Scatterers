@@ -7,7 +7,7 @@ addpath('../General_functions/')
 % Now we want to load each dataset, starting with the direct polynomial
 % solver
 
-load('PC_direct_test5a_k10_thetapi_4.mat')
+load('PC_direct_test5b_k10_thetapi_4_short.mat')
 
 % PCD - Piecewise constant direct solver
 aj1_coeff_PCD = aj1_coeff;
@@ -24,12 +24,12 @@ k = info_needed.k;
 bf_dof_per_wl = info_needed.bf_dof_per_wl;
 
 % Now load in iterative method
-load('it_PC_direct_test5a_k10_thetapi_4_6k.mat')
+load('it_PC_direct_test5b_k10_thetapi_4_short.mat')
 
 aj1_it_coeff = aj1_coeff;
 aj2_it_coeff = aj2_coeff;
 
-R_max = 6000;
+R_max = 150;
 
 % Now we need to compute the points we want to evaluate phi at for each of
 % them

@@ -7,7 +7,7 @@ addpath('../General_functions/')
 % Now we want to load each dataset, starting with the direct polynomial
 % solver
 
-load('PC_direct_test2_k10_theta3pi_8.mat')
+load('PC_direct_test2_k10_theta_pi_4.mat')
 
 % PCD - Piecewise constant direct solver
 aj1_coeff_PCD = aj1_coeff;
@@ -24,7 +24,7 @@ k = info_needed.k;
 bf_dof_per_wl = info_needed.bf_dof_per_wl;
 
 % Now load in iterative method
-load('it_PC_direct_test2_k10_theta3pi_8.mat')
+load('it_PC_direct_test2_k10_theta_pi_4.mat')
 
 aj1_it_coeff = aj1_coeff;
 aj2_it_coeff = aj2_coeff;
@@ -81,6 +81,8 @@ figure()
 plot([x1_plotting (G1_data_PCD.L - flip(x1_plotting))]/G1_data_PCD.L, real(phi1_PCD_plotting),...
     'DisplayName', 'PC Direct 80 dof per wl')
 
+
+
 figure()
 plot([x2_plotting (G2_data_PCD.L - flip(x2_plotting))]/G2_data_PCD.L, real(phi2_PCD_plotting),...
     'DisplayName', 'PC Direct 80 dof per wl')
@@ -88,7 +90,7 @@ plot([x2_plotting (G2_data_PCD.L - flip(x2_plotting))]/G2_data_PCD.L, real(phi2_
 %% comparison to iterative solver
 err_1 = zeros(length(bf_dof_per_wl), R_max);
 err_2 = zeros(length(bf_dof_per_wl), R_max);
-
+%%
 for n = 1:length(bf_dof_per_wl)  % looping over the basis functions first
     % create the meshes for this number of dof
     G1_data_it = get_bf_graded_grid(G1_data, bf_dof_per_wl(n), k, ...
@@ -105,12 +107,20 @@ for n = 1:length(bf_dof_per_wl)  % looping over the basis functions first
 %         G2_data_it.t_bf_grid, G2_err_quad.t_mid_col, ...
 %         G2_data_PCD.L);
 
+    %% sanity check
 
     for r = 1:R_max  % now computing the value of phi at the quadrature points to then integrate
 
         phi_1_it = graded_coeff_2_solution(aj1_it_coeff{n}(:, r), ...
         G1_data_it.t_bf_grid, G1_err_quad.t_mid_col, ...
         G1_data_it.L);
+
+%         figure()
+%     plot([G1_err_quad.t_mid_col.' (G1_err_quad.L - G1_err_quad.t_mid_col).'], real(phi1_PCD_for_err),...
+%         'DisplayName', 'PC Direct 80 dof per wl')
+%     hold on
+%     plot([G1_err_quad.t_mid_col.' (G1_err_quad.L - G1_err_quad.t_mid_col).'], phi_1_it, 'DisplayName', 'Iterative approximation')
+%     legend show
 
         phi_2_it = graded_coeff_2_solution(aj2_it_coeff{n}(:, r), ...
         G2_data_it.t_bf_grid, G2_err_quad.t_mid_col, ...
@@ -120,6 +130,11 @@ for n = 1:length(bf_dof_per_wl)  % looping over the basis functions first
         err_1(n, r) = sum( (abs(phi_1_it - phi1_PCD_for_err)...
             ./abs(phi1_PCD_for_err)).*[G1_err_quad.w ;...
             flip(G1_err_quad.w)] );
+
+        err_1_test(n, r) = sum( (abs(phi_1_it - phi1_PCD_for_err)).*[G1_err_quad.w ;...
+            flip(G1_err_quad.w)])...
+            ./sum(abs(phi1_PCD_for_err).*[G1_err_quad.w ;...
+            flip(G1_err_quad.w)]) ;
 
          
         err_2(n, r) = sum( (abs(phi_2_it - phi2_PCD_for_err)...

@@ -6,9 +6,9 @@ addpath('../General_functions/')  % access to solvers needed
 
 % introducing the screens, storing the data in a struct object 
 
-G1_data.G = [0, 0, 6*pi, 0];
+G1_data.G = [0, 0, 2*pi, 0];
 
-G2_data.G = [1, 1, 1+ 6*pi, 1]; 
+G2_data.G = [1, 1, 2 + 2*pi, 1]; 
 
 % coefficients needed for creating grid for basis functions and quadrature
 % points
@@ -21,7 +21,7 @@ C_wl_bf2 = 1/10;
 
 C_wl_quad= 1/20;
 
-R_max = 300;
+R_max = 6200;
 
 k = 10;
 
@@ -34,10 +34,10 @@ C2 = pi;
 [G1_data, G2_data, aj_1_R, aj_2_R, us, phi_1_r, phi_2_r] = ...
     compute_iteratuve_poly_scattering_prob_2_screens(G1_data, G2_data, ...
     k, Lgrad_coeff, alpha, C_wl_bf1, C_wl_bf2, C_wl_quad, R_max, theta, ...
-    C1, C2, false, false);
+    C1, C2, false, true);
 
 %% Plot of relevant iterative solutions on bndy
-it_of_interest = [1, 2, R_max];
+it_of_interest = [R_max-5000, R_max - 1000, R_max];
 figure()
 for r = 1:length(it_of_interest)
     txt = ['r = ', mat2str(2*it_of_interest(r) - 2)];
@@ -50,7 +50,7 @@ end
 legend show
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('Iterative approximation to $\phi_{1}$ ')
+title('PC iterative approximation to $\phi_{1}$ - parallel screens')
 xlim([-0.05 1.05])
 
 figure()
@@ -60,12 +60,12 @@ for r = 1:length(it_of_interest)
         real(phi_2_r(10: end - 10, it_of_interest(r))),...
         'DisplayName', txt)
     hold on
-
+ 
 end
 legend show
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('Iterative approximation to $\phi_{2}$ ')
+title('PC iterative approximation to $\phi_{2}$ - parallel screens')
 xlim([-0.05 1.05])
 
 %% compute error wrt to iterations
@@ -89,5 +89,5 @@ semilogy(R_phi2, err_L1_G2, 'DisplayName', '$\phi_{2}^{(r)}$ error')
 legend show
 xlabel('Number of iterations, r')
 ylabel('$\Vert \phi_{j}^{(R)} - \phi_{j}^{(r)} \Vert_{L^{1}((0, L_{j}))} / \Vert \phi_{j}^{(R)} \Vert_{L^{1}((0, L_{j}))}$')
-title('$L^{1}$ error for an increasing number of iterations of $\phi_{j}^{(r)}$')
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the PC iterative method - parallel screens')
 

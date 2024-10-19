@@ -7,7 +7,7 @@ addpath('../General_functions/')
 % Now we want to load each dataset, starting with the direct polynomial
 % solver
 
-load('PC_direct_test1_k10_theta0.mat')
+load('PC_direct_test5b_k10_thetapi_4_short.mat')
 
 % PCD - Piecewise constant direct solver
 aj1_coeff_PCD = aj1_coeff;
@@ -24,12 +24,13 @@ k = info_needed.k;
 bf_dof_per_wl = info_needed.bf_dof_per_wl;
 
 % Now load in iterative method
-load('it_PC_direct_test1_k10_theta0.mat')
+load(['it_PC_direct_test5b_k10_thetapi_4_short.mat'])
 
 aj1_it_coeff = aj1_coeff;
 aj2_it_coeff = aj2_coeff;
 
-R_max = 15;
+[coeff_len, R_max] = size(aj1_it_coeff{1});
+% R_max = length(aj1_it_coeff{1});
 
 % Now we need to compute the points we want to evaluate phi at for each of
 % them
@@ -106,7 +107,7 @@ for n = 1:length(bf_dof_per_wl)  % looping over the basis functions first
 %         G2_data_PCD.L);
 
 
-    for r = 1:R_max  % now computing the value of phi at the quadrature points to then integrate
+    for r = R_max-10:R_max  % now computing the value of phi at the quadrature points to then integrate
 
         phi_1_it = graded_coeff_2_solution(aj1_it_coeff{n}(:, r), ...
         G1_data_it.t_bf_grid, G1_err_quad.t_mid_col, ...
@@ -121,10 +122,20 @@ for n = 1:length(bf_dof_per_wl)  % looping over the basis functions first
             ./abs(phi1_PCD_for_err)).*[G1_err_quad.w ;...
             flip(G1_err_quad.w)] );
 
+        err_1_test(n, r) = sum( (abs(phi_1_it - phi1_PCD_for_err)).*[G1_err_quad.w ;...
+            flip(G1_err_quad.w)])...
+            ./sum(abs(phi1_PCD_for_err).*[G1_err_quad.w ;...
+            flip(G1_err_quad.w)]) ;
+
          
         err_2(n, r) = sum( (abs(phi_2_it - phi2_PCD_for_err)...
             ./abs(phi2_PCD_for_err)).*[G2_err_quad.w ;...
             flip(G2_err_quad.w)] );
+
+        err_2_test(n, r) = sum( (abs(phi_2_it - phi2_PCD_for_err)).*[G2_err_quad.w ;...
+            flip(G2_err_quad.w)])...
+            ./sum(abs(phi2_PCD_for_err).*[G2_err_quad.w ;...
+            flip(G2_err_quad.w)]) ;
 
     end
 

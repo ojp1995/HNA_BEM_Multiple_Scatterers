@@ -25,7 +25,7 @@ R_max = 15;
 
 k = 10;
 
-theta = pi/4;
+theta = 0;
 C1 = 1;
 C2 = pi;
 
@@ -51,7 +51,7 @@ end
 legend show
 xlabel('$x/L_{1}$')
 ylabel('$\phi_{1}^{(r)}$')
-title('Iterative approximation to $\phi_{1}$ ')
+title('PC iterative approximation to $\phi_{1}$ - knife edge')
 xlim([-0.05 1.05])
 
 figure()
@@ -66,7 +66,7 @@ end
 legend show
 xlabel('$x/L_{2}$')
 ylabel('$\phi_{2}^{(r)}$')
-title('Iterative approximation to $\phi_{2}$ ')
+title('PC iterative approximation to $\phi_{2}$ - knife edge')
 xlim([-0.05 1.05])
 
 %% compute error wrt to iterations
@@ -90,4 +90,4 @@ semilogy(R_phi2, err_L1_G2, 'DisplayName', '$\phi_{2}^{(r)}$ error')
 legend show
 xlabel('Number of iterations, r')
 ylabel('$\Vert \phi_{j}^{(R)} - \phi_{j}^{(r)} \Vert_{L^{1}((0, L_{j}))} / \Vert \phi_{j}^{(R)} \Vert_{L^{1}((0, L_{j}))}$')
-title('$L^{1}$ error for an increasing number of iterations of $\phi_{j}^{(r)}$')
+title('$L^{1}$ error of $\phi_{j}^{(r)}$ with respect to the number of iterations, using the PC iterative method - knife edge')

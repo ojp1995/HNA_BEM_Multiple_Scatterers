@@ -23,7 +23,7 @@ theta = 0;
 C1 = 1;
 C2 = pi;
 
-bf_dof_per_wl = [1/5, 1/10, 1/20, 1/40, 1/80];
+bf_dof_per_wl = 1/10%[1/5, 1/10, 1/20, 1/40, 1/80];
 
 % creating empty cells for coefficients
 aj1_coeff = {};
@@ -136,6 +136,8 @@ end
 % 
 % save('PC_direct_test1_k10_theta0', 'aj1_coeff', 'aj2_coeff', 'info_needed')
 
+
+%% comparison to higher order
 
 
 
