@@ -15,7 +15,7 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 % coefficients needed for creating grid for basis functions and quadrature
 % points
 Lgrad_coeff = 0.15;
-alpha = 2;
+alpha = 4;
 
 k = 10;
 
@@ -23,7 +23,7 @@ theta = 0;
 C1 = 1;
 C2 = pi;
 
-bf_dof_per_wl = 1/10%[1/5, 1/10, 1/20, 1/40, 1/80];
+bf_dof_per_wl = [1/5]%[1/5, 1/10, 1/20, 1/40, 1/80];
 
 % creating empty cells for coefficients
 aj1_coeff = {};

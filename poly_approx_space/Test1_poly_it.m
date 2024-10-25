@@ -14,11 +14,11 @@ G2_data.G = [2*pi, 0, 5*pi, 3*pi];
 % coefficients needed for creating grid for basis functions and quadrature
 % points
 Lgrad_coeff = 0.15;
-alpha = 2;
+alpha = 1;
 
 % creating basis function information
-C_wl_bf1 = 1/10;
-C_wl_bf2 = 1/10;
+C_wl_bf1 = 1/2;
+C_wl_bf2 = 1/2;
 
 C_wl_quad= 1/20;
 
