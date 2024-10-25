@@ -2,7 +2,7 @@
 
 clear all
 addpath('../General_functions/')
-addpath('../../BEAM_HNABEMLAB/')
+addpath('../../HNABEMLAB/')
 addPathsHNA  % allows HNABEM to find all of the relevatn subfolders
 
 % theta_rot = -pi/4;
